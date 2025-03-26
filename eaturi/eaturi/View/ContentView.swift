@@ -6,10 +6,10 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var isFilterModalPresented = false
     @State private var selectedFilters: [String] = []
-    @State private var cartItems: [UUID: Int] = [:] // Dictionary to track total item count
+    @State private var cartItems: [UUID: Int] = [:]
     @State private var isCartVisible = false
     @State private var isCategoryReached = false
-    @State private var selectedFoodItem: FoodItem?
+    @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
     
     var totalCalories: Int {
@@ -26,27 +26,19 @@ struct ContentView: View {
             return total + (price * entry.value)
         }
     }
-    
-    @State var categories = ["Ayam", "Telur", "Nasi", "Sayur", "Mie", "Gorengan", "Lainnya"]
     @State var foodItems = [
-        FoodItem(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g"),
-        FoodItem(name: "Nasi Goreng", image: "ayam_asam_manis", price: "Rp20.000", calories: "300", protein: "20g", carbs: "50g", fiber: "5g", fat: "15g"),
-        FoodItem(name: "Mie Goreng", image: "mie_goreng", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
-        FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g"),
-        FoodItem(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
-        FoodItem(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g")
+        FoodModel(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g", isPopular: false, categories: ["Ayam", "Asam Manis"]),
+        FoodModel(name: "Nasi Goreng", image: "ayam_asam_manis", price: "Rp20.000", calories: "300", protein: "20g", carbs: "50g", fiber: "5g", fat: "15g", isPopular: true, categories: ["Nasi"]),
+        FoodModel(name: "Mie Goreng", image: "mie_goreng", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g", isPopular: true, categories: ["Mie"]),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g", isPopular: true, categories: ["Telur"]),
+        FoodModel(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g",isPopular: false, categories: ["Mie"]),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g",isPopular: true, categories: ["Telur"])
     ]
     
-    @State var popularMenus = [
-        PopularMenu(name: "Telur Balado", image: "telur_balado", price: "Rp. 15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g"),
-        PopularMenu(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp. 18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g"),
-        PopularMenu(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp. 25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g")
-    ]
-    
-    let rows = [
-        GridItem(.fixed(200)),
-        GridItem(.fixed(200))
-    ]
+    var popularMenus: [FoodModel] {
+        foodItems.filter { $0.isPopular }
+    }
+
     
     var body: some View {
         ZStack {
@@ -69,9 +61,7 @@ struct ContentView: View {
                         // Here we call CategoryView.
                         // Note: We removed 'private' from selectedFoodItem binding in CategoryView.
                         CategoryView(searchText: $searchText,
-                                     popularMenus: $popularMenus,
                                      isCategoryReached: $isCategoryReached,
-                                     categories: $categories,
                                      foodItems: $foodItems,
                                      selectedFilters: $selectedFilters,
                                      selectedFoodItem: $selectedFoodItem,

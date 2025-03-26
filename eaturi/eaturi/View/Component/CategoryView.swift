@@ -9,50 +9,71 @@ import SwiftUI
 
 struct CategoryView: View {
     @Binding var searchText: String
-    @Binding var popularMenus: [PopularMenu]
     @Binding var isCategoryReached: Bool
-    @Binding var categories: [String]
-    @Binding var foodItems: [FoodItem]
+    @Binding var foodItems: [FoodModel]
     @Binding var selectedFilters: [String]
-    // FIX: Remove the 'private' access control from this binding
-    @Binding var selectedFoodItem: FoodItem?
+    @Binding var selectedFoodItem: FoodModel?
     @Binding var showDetailModal: Bool
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
+    
+    var categories : [String] {
+        Set(foodItems.flatMap(\.categories)).sorted()
+    }
     
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-    var filteredFoodItems: [FoodItem] {
+    var popularMenus: [FoodModel] {
+        foodItems.filter { $0.isPopular }
+    }
+    
+    var filteredFoodItems: [FoodModel] {
         var items = foodItems
         
+        // Filter by search text
         if !searchText.isEmpty {
             items = items.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
         
-        if !selectedFilters.isEmpty {
+        // Define nutritional filter keywords
+        let nutritionalFilters = ["Low Carb", "Low Calorie", "High Protein", "Low Fat", "High Fiber"]
+        
+        // Separate nutritional and category filters
+        let selectedNutritionalFilters = selectedFilters.filter { nutritionalFilters.contains($0) }
+        let availableCategories = Set(foodItems.flatMap { $0.categories })
+        let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
+        
+        // Apply nutritional filters if any
+        if !selectedNutritionalFilters.isEmpty {
             items = items.filter { item in
                 var match = true
-                
-                if selectedFilters.contains("Low Carb") && !(Int(item.carbs.replacingOccurrences(of: "g", with: "")) ?? 0 < 20) {
+                if selectedNutritionalFilters.contains("Low Carb") && !(Int(item.carbs.replacingOccurrences(of: "g", with: "")) ?? 0 < 20) {
                     match = false
                 }
-                if selectedFilters.contains("Low Calorie") && !(Int(item.calories) ?? 0 < 250) {
+                if selectedNutritionalFilters.contains("Low Calorie") && !(Int(item.calories) ?? 0 < 250) {
                     match = false
                 }
-                if selectedFilters.contains("High Protein") && !(Int(item.protein.replacingOccurrences(of: "g", with: "")) ?? 0 > 20) {
+                if selectedNutritionalFilters.contains("High Protein") && !(Int(item.protein.replacingOccurrences(of: "g", with: "")) ?? 0 > 20) {
                     match = false
                 }
-                if selectedFilters.contains("Low Fat") && !(Int(item.fat.replacingOccurrences(of: "g", with: "")) ?? 0 < 10) {
+                if selectedNutritionalFilters.contains("Low Fat") && !(Int(item.fat.replacingOccurrences(of: "g", with: "")) ?? 0 < 10) {
                     match = false
                 }
-                if selectedFilters.contains("High Fiber") && !(Int(item.fiber.replacingOccurrences(of: "g", with: "")) ?? 0 > 5) {
+                if selectedNutritionalFilters.contains("High Fiber") && !(Int(item.fiber.replacingOccurrences(of: "g", with: "")) ?? 0 > 5) {
                     match = false
                 }
-                
                 return match
+            }
+        }
+        
+        // Apply category filters if any
+        if !selectedCategoryFilters.isEmpty {
+            items = items.filter { item in
+                // Keep item if at least one of its categories matches a selected category
+                !Set(item.categories).intersection(selectedCategoryFilters).isEmpty
             }
         }
         
@@ -70,20 +91,24 @@ struct CategoryView: View {
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 15) {
-                        ForEach($popularMenus) { item in
-                            HStack {
-                                PopularCardView(item: item)
-                            }
-                            .padding()
-                            .frame(width: 200, height: 100)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(10)
+                        ForEach(popularMenus, id: \.id) { item in
+                            PopularCardView(item: .constant(item))
+                                .padding()
+                                .frame(width: 200, height: 100)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                .onTapGesture {
+                                    selectedFoodItem = item
+                                    showDetailModal = true
+                                }
                         }
+                        
                     }
                     .padding(.leading, 20)
                     .frame(maxHeight: 120)
                 }
                 .padding(.bottom, 12)
+                
                 
                 GeometryReader { geometry in
                     VStack {
@@ -108,11 +133,15 @@ struct CategoryView: View {
                             Text(category)
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 10)
-                                .background(Color.gray.opacity(0.1))
+                                .background(selectedFilters.contains(category) ? Color.colorSecondary : Color.gray.opacity(0.1))
                                 .foregroundColor(Color.black)
                                 .cornerRadius(20)
                                 .onTapGesture {
-                                    print("\(category) selected")
+                                    if let index = selectedFilters.firstIndex(of: category) {
+                                        selectedFilters.remove(at: index)
+                                    } else {
+                                        selectedFilters.append(category)
+                                    }
                                 }
                         }
                     }
@@ -233,12 +262,18 @@ struct CategoryView: View {
                     }
                     .padding(.horizontal)
                 }
-                .sheet(isPresented: $showDetailModal) {
-                    if let item = selectedFoodItem {
-                        FoodDetailView(item: item, isPresented: $showDetailModal)
-                    }
+                .sheet(item: $selectedFoodItem) { item in
+                    FoodDetailView(item: item, isPresented: $showDetailModal)
+                        .presentationDetents([.fraction(0.9)])
+                        .presentationCornerRadius(40)
+                        .presentationDragIndicator(.visible)
                 }
+                
             }
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }

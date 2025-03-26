@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ContentCardView: View {
-    @Binding var item: FoodItem
+    @Binding var item: FoodModel
     @Binding private var isCartVisible: Bool
-    @State private var selectedFoodItem: FoodItem?
+    @State private var selectedFoodItem: FoodModel?
     @Binding private var showDetailModal: Bool
     @Binding private var cartItems: [UUID: Int] // use Dictionary to track total item
     var body: some View {
