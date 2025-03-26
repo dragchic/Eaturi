@@ -1,15 +1,27 @@
-//
-//  FoodDetailView.swift
-//  eaturi
-//
-//  Created by Raphael Gregorius on 26/03/25.
-//
-
 import SwiftUI
 
 struct FoodDetailView: View {
     let item: FoodModel
     @Binding var isPresented: Bool
+    @Binding var cartItems: [UUID: Int]
+    @Binding var isCartVisible: Bool
+    @Binding var showDetailModal: Bool
+    @State private var quantity: Int
+    
+    init(item: FoodModel,
+         isPresented: Binding<Bool>,
+         cartItems: Binding<[UUID: Int]>,
+         isCartVisible: Binding<Bool>,
+         showDetailModal: Binding<Bool>) {
+        self.item = item
+        _isPresented = isPresented
+        _cartItems = cartItems
+        _isCartVisible = isCartVisible
+        _showDetailModal = showDetailModal
+        
+        // Initialize quantity from existing cart items, or default to 0
+        _quantity = State(initialValue: cartItems.wrappedValue[item.id] ?? 0)
+    }
     
     var body: some View {
         VStack {
@@ -20,9 +32,11 @@ struct FoodDetailView: View {
                 .frame(maxWidth: 320, maxHeight: 260)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.bottom, 10)
+            
             Text(item.name)
                 .font(.title2)
                 .fontWeight(.bold)
+            
             Text("Harga: \(item.price)")
                 .font(.headline)
                 .foregroundColor(.orange)
@@ -32,82 +46,75 @@ struct FoodDetailView: View {
                 .font(.title3)
                 .fontWeight(.bold)
                 .padding(.bottom, 5)
-            HStack{
-                VStack{
-                    Text("Calories")
-                        .font(.caption)
-                    Text("\(item.calories)")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                .frame(width: 70, height: 100)
-                VStack{
-                    Text("Protein")
-                        .font(.caption)
-                    Text("\(item.protein)")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                .frame(width: 70, height: 100)
-                VStack{
-                    Text("Fiber")
-                        .font(.caption)
-                    Text("\(item.fiber)")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                .frame(width: 70, height: 100)
-                VStack{
-                    Text("Fat")
-                        .font(.caption)
-                    Text("\(item.fat)")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                .frame(width: 70, height: 100)
-                VStack{
-                    Text("Carbs")
-                        .font(.caption)
-                    Text("\(item.carbs)")
-                        .font(.caption)
-                        .foregroundColor(.orange)
-                }
-                .frame(width: 70, height: 100)
+            
+            HStack {
+                NutritionInfoView(label: "Calories", value: item.calories)
+                NutritionInfoView(label: "Protein", value: item.protein)
+                NutritionInfoView(label: "Fiber", value: item.fiber)
+                NutritionInfoView(label: "Fat", value: item.fat)
+                NutritionInfoView(label: "Carbs", value: item.carbs)
             }
-            Button {
+            
+            HStack(spacing: 10) {
+                QuantityControl(
+                    quantity: $quantity,
+                    onIncrement: { quantity += 1 },
+                    onDecrement: {
+                        if quantity > 0 {
+                            quantity -= 1
+                        }
+                    }
+                )
+                .padding(.vertical, 10)
                 
-            } label: {
-                Text("Add to MyLunch")
-                   .font(.headline)
-                   .foregroundColor(.white)
-                   .padding()
-                   .frame(maxWidth: .infinity) // Allows the button to expand
-                   .background(Color.colorPrimary)
-                   .cornerRadius(.infinity)
+                Button {
+                    if quantity > 0 {
+                        cartItems[item.id] = quantity
+                        isCartVisible = true
+                    }
+                    
+                    // Always dismiss the modal
+                    isPresented = false
+                    showDetailModal = false
+                } label: {
+                    Text("Add to MyLunch")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.colorPrimary)
+                        .cornerRadius(.infinity)
+                }
+                .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
             }
-            .frame(maxWidth: UIScreen.main.bounds.width * 0.7) // 80% of the screen width
         }
         .padding()
         .background(Color.white)
         .cornerRadius(20)
         .presentationDetents([.height(500)])
+        // Add a way to dismiss the modal
+        .gesture(
+            DragGesture()
+                .onEnded { _ in
+                    isPresented = false
+                    showDetailModal = false
+                }
+        )
     }
 }
 
-#Preview {
-    FoodDetailView(
-        item: FoodModel(
-            name: "Ayam Goreng Asam Manis",
-            image: "ayam_asam_manis",
-            price: "25000",
-            calories: "200",
-            protein: "30",
-            carbs: "10",
-            fiber: "30",
-            fat: "10",
-            isPopular: true,
-            categories: ["Ayam", "Bahan Asam Manis"]
-        ),
-        isPresented: .constant(true)
-    )
+struct NutritionInfoView: View {
+    var label: String
+    var value: String
+    
+    var body: some View {
+        VStack {
+            Text(label)
+                .font(.caption)
+            Text(value)
+                .font(.caption)
+                .foregroundColor(.orange)
+        }
+        .frame(width: 70, height: 100)
+    }
 }

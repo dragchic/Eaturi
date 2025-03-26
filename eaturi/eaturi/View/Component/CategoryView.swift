@@ -1,10 +1,3 @@
-//
-//  CategoryView.swift
-//  eaturi
-//
-//  Created by Raphael Gregorius on 26/03/25.
-//
-
 import SwiftUI
 
 struct CategoryView: View {
@@ -177,7 +170,7 @@ struct CategoryView: View {
                 // Show the food grid (filtered items) when there are results
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 17) {
-                        ForEach(filteredFoodItems) { item in
+                        ForEach(filteredFoodItems) { item in  // Corrected line
                             VStack(alignment: .leading, spacing: 3) {
                                 ZStack(alignment: .bottomTrailing) {
                                     Image(item.image)
@@ -191,9 +184,13 @@ struct CategoryView: View {
                                         }
                                     
                                     if let quantity = cartItems[item.id] {
-                                        HStack(spacing: 5) {
-                                            Button(action: {
-                                                if quantity > 1 {
+                                        QuantityControl(
+                                            quantity: .constant(quantity),
+                                            onIncrement: {
+                                                cartItems[item.id] = quantity + 1
+                                            },
+                                            onDecrement: {
+                                                if quantity > 0 {
                                                     cartItems[item.id] = quantity - 1
                                                 } else {
                                                     cartItems.removeValue(forKey: item.id)
@@ -201,30 +198,8 @@ struct CategoryView: View {
                                                         isCartVisible = false
                                                     }
                                                 }
-                                            }) {
-                                                Image(systemName: "minus")
-                                                    .padding(6)
-                                                    .background(Color.white)
-                                                    .clipShape(Circle())
-                                                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
                                             }
-                                            
-                                            Text("\(quantity)")
-                                                .font(.headline)
-                                            
-                                            Button(action: {
-                                                cartItems[item.id] = quantity + 1
-                                            }) {
-                                                Image(systemName: "plus")
-                                                    .padding(6)
-                                                    .background(Color.white)
-                                                    .clipShape(Circle())
-                                                    .overlay(Circle().stroke(Color.blue, lineWidth: 1))
-                                            }
-                                        }
-                                        .padding(4)
-                                        .background(Color.white)
-                                        .cornerRadius(30)
+                                        )
                                         .padding(4)
                                     } else {
                                         Button(action: {
@@ -263,12 +238,25 @@ struct CategoryView: View {
                     .padding(.horizontal)
                 }
                 .sheet(item: $selectedFoodItem) { item in
-                    FoodDetailView(item: item, isPresented: $showDetailModal)
-                        .presentationDetents([.fraction(0.9)])
-                        .presentationCornerRadius(40)
-                        .presentationDragIndicator(.visible)
+                    FoodDetailView(
+                        item: item,
+                        isPresented: $showDetailModal,
+                        cartItems: $cartItems,
+                        isCartVisible: $isCartVisible,
+                        showDetailModal: $showDetailModal
+                    )
+                    .presentationDetents([.fraction(0.9)])
+                    .presentationCornerRadius(40)
+                    .presentationDragIndicator(.visible)
+                    // Add this modifier to allow dismissing by swiping down
+                    .interactiveDismissDisabled(false)
+                    // Add an onChange to reset selectedFoodItem when modal is dismissed
+                    .onChange(of: showDetailModal) { oldValue, newValue in
+                        if !newValue {
+                            selectedFoodItem = nil
+                        }
+                    }
                 }
-                
             }
         }
     }

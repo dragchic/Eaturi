@@ -1,50 +1,40 @@
-//
-//  QuantityControl.swift
-//  eaturi
-//
-//  Created by Raphael Gregorius on 26/03/25.
-//
-
 import SwiftUI
 
 struct QuantityControl: View {
     @Binding var quantity: Int
-    var onZeroQuantity: () -> Void
+    var onIncrement: () -> Void
+    var onDecrement: () -> Void
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 10) {
             Button(action: {
-                if quantity > 1 {
-                    quantity -= 1
-                } else{
-                    onZeroQuantity()
+                if quantity > 0 {
+                    onDecrement()
                 }
             }) {
                 Image(systemName: "minus")
-                    .font(.system(size: 20))
-                    .foregroundColor(.gray)
-                    .padding()
+                    .padding(8)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
             }
-            
+
             Text("\(quantity)")
                 .font(.headline)
-                .frame(width: 30)
-            
+                .frame(minWidth: 30, alignment: .center)
+
             Button(action: {
-                quantity += 1
+                onIncrement()
             }) {
                 Image(systemName: "plus")
-                    .font(.system(size: 20))
-                    .foregroundColor(.blue)
-                    .padding()
+                    .padding(8)
+                    .background(Color.white)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.blue, lineWidth: 1))
             }
         }
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(20)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-        )
-        .padding(5)
+        .padding(6)
+        .background(Color.white)
+        .cornerRadius(30)
     }
 }
