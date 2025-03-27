@@ -4,7 +4,6 @@
 //
 //  Created by Raphael Gregorius on 26/03/25.
 //
-
 import SwiftUI
 
 struct PopularCardView: View {
@@ -25,7 +24,7 @@ struct PopularCardView: View {
                         .font(.headline)
                         .fontWeight(.medium)
                         .lineLimit(1)
-                    Text(item.price)
+                    Text("Rp\(item.price)")
                         .font(.subheadline)
                         .foregroundColor(.red)
                     Text("Calories: \(item.calories)")
@@ -37,9 +36,4 @@ struct PopularCardView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-}
-
-
-#Preview {
-    MainTabView()
 }

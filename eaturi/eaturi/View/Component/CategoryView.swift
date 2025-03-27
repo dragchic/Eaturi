@@ -10,8 +10,8 @@ struct CategoryView: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     
-    var categories : [String] {
-        Set(foodItems.flatMap(\.categories)).sorted()
+    var categories: [String] {
+        Set(foodItems.flatMap { $0.categories }).sorted()
     }
     
     let columns = [
@@ -43,19 +43,19 @@ struct CategoryView: View {
         if !selectedNutritionalFilters.isEmpty {
             items = items.filter { item in
                 var match = true
-                if selectedNutritionalFilters.contains("Low Carb") && !(Int(item.carbs.replacingOccurrences(of: "g", with: "")) ?? 0 < 20) {
+                if selectedNutritionalFilters.contains("Low Carb") && !(item.carbs < 20) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("Low Calorie") && !(Int(item.calories) ?? 0 < 250) {
+                if selectedNutritionalFilters.contains("Low Calorie") && !(item.calories < 250) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("High Protein") && !(Int(item.protein.replacingOccurrences(of: "g", with: "")) ?? 0 > 20) {
+                if selectedNutritionalFilters.contains("High Protein") && !(item.protein > 20) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("Low Fat") && !(Int(item.fat.replacingOccurrences(of: "g", with: "")) ?? 0 < 10) {
+                if selectedNutritionalFilters.contains("Low Fat") && !(item.fat < 10) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("High Fiber") && !(Int(item.fiber.replacingOccurrences(of: "g", with: "")) ?? 0 > 5) {
+                if selectedNutritionalFilters.contains("High Fiber") && !(item.fiber > 5) {
                     match = false
                 }
                 return match
@@ -65,7 +65,6 @@ struct CategoryView: View {
         // Apply category filters if any
         if !selectedCategoryFilters.isEmpty {
             items = items.filter { item in
-                // Keep item if at least one of its categories matches a selected category
                 !Set(item.categories).intersection(selectedCategoryFilters).isEmpty
             }
         }
@@ -75,7 +74,6 @@ struct CategoryView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            // If searchText is empty, display the popular menus and categories
             if searchText.isEmpty {
                 Text("Popular")
                     .font(.title2)
@@ -95,28 +93,18 @@ struct CategoryView: View {
                                     showDetailModal = true
                                 }
                         }
-                        
                     }
                     .padding(.leading, 20)
                     .frame(maxHeight: 120)
                 }
                 .padding(.bottom, 12)
                 
-                
-                GeometryReader { geometry in
-                    VStack {
-                        Text("Category")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .padding(.leading, 20)
-                            .onAppear {
-                                if geometry.frame(in: .global).minY <= 200 {
-                                    withAnimation {
-                                        isCategoryReached = true
-                                    }
-                                }
-                            }
-                    }
+                // Category header using a simple VStack instead of GeometryReader
+                VStack {
+                    Text("Category")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .padding(.leading, 20)
                 }
                 .frame(height: 30)
                 
@@ -126,7 +114,7 @@ struct CategoryView: View {
                             Text(category)
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 10)
-                                .background(selectedFilters.contains(category) ? Color.colorSecondary : Color.gray.opacity(0.1))
+                                .background(selectedFilters.contains(category) ? Color.blue : Color.gray.opacity(0.1))
                                 .foregroundColor(Color.black)
                                 .cornerRadius(20)
                                 .onTapGesture {
@@ -142,7 +130,6 @@ struct CategoryView: View {
                 }
                 .frame(height: 70)
             } else {
-                // Show search results header if searchText is not empty
                 Text("Search Results")
                     .font(.title2)
                     .fontWeight(.semibold)
@@ -150,7 +137,6 @@ struct CategoryView: View {
                     .padding(.top, 10)
             }
             
-            // If there are no results for the search text, show a friendly message
             if !searchText.isEmpty && filteredFoodItems.isEmpty {
                 VStack(spacing: 20) {
                     Image(systemName: "magnifyingglass")
@@ -167,10 +153,9 @@ struct CategoryView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 50)
             } else {
-                // Show the food grid (filtered items) when there are results
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 17) {
-                        ForEach(filteredFoodItems) { item in  // Corrected line
+                        ForEach(filteredFoodItems) { item in
                             VStack(alignment: .leading, spacing: 3) {
                                 ZStack(alignment: .bottomTrailing) {
                                     Image(item.image)
@@ -221,7 +206,7 @@ struct CategoryView: View {
                                     .fontWeight(.medium)
                                     .lineLimit(1)
                                 
-                                Text(item.price)
+                                Text("Rp\(item.price)")
                                     .font(.headline)
                                     .fontWeight(.bold)
                                 
@@ -248,10 +233,8 @@ struct CategoryView: View {
                     .presentationDetents([.fraction(0.9)])
                     .presentationCornerRadius(40)
                     .presentationDragIndicator(.visible)
-                    // Add this modifier to allow dismissing by swiping down
                     .interactiveDismissDisabled(false)
-                    // Add an onChange to reset selectedFoodItem when modal is dismissed
-                    .onChange(of: showDetailModal) { oldValue, newValue in
+                    .onChange(of: showDetailModal) { _, newValue in
                         if !newValue {
                             selectedFoodItem = nil
                         }

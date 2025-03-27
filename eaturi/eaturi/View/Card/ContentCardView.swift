@@ -12,7 +12,8 @@ struct ContentCardView: View {
     @Binding private var isCartVisible: Bool
     @State private var selectedFoodItem: FoodModel?
     @Binding private var showDetailModal: Bool
-    @Binding private var cartItems: [UUID: Int] // use Dictionary to track total item
+    @Binding private var cartItems: [UUID: Int]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             ZStack(alignment: .bottomTrailing) {
@@ -82,7 +83,7 @@ struct ContentCardView: View {
                 .fontWeight(.medium)
                 .lineLimit(1)
             
-            Text(item.price)
+            Text("Rp\(item.price)")
                 .font(.headline)
                 .fontWeight(.bold)
             

@@ -1,7 +1,5 @@
 import SwiftUI
 
-// INTERFACE
-
 struct ContentView: View {
     @State private var searchText: String = ""
     @State private var isFilterModalPresented = false
@@ -11,74 +9,84 @@ struct ContentView: View {
     @State private var isCategoryReached = false
     @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
-    
+    @State private var isCartViewActive = false  // Controls navigation to CartView
+
     var totalCalories: Int {
         cartItems.reduce(0) { total, entry in
             let item = foodItems.first { $0.id == entry.key }
-            return total + ((Int(item?.calories ?? "0") ?? 0) * entry.value)
+            return total + ((item?.calories ?? 0) * entry.value)
         }
     }
     
     var totalPrice: Int {
         cartItems.reduce(0) { total, entry in
             let item = foodItems.first { $0.id == entry.key }
-            let price = Int(item?.price.replacingOccurrences(of: "Rp", with: "").replacingOccurrences(of: ".", with: "") ?? "0") ?? 0
-            return total + (price * entry.value)
+            return total + ((item?.price ?? 0) * entry.value)
         }
     }
-    @State var foodItems = [
-        FoodModel(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: "Rp25.000", calories: "200", protein: "30g", carbs: "10g", fiber: "30g", fat: "10g", isPopular: false, categories: ["Ayam", "Asam Manis"]),
-        FoodModel(name: "Nasi Goreng", image: "ayam_asam_manis", price: "Rp20.000", calories: "300", protein: "20g", carbs: "50g", fiber: "5g", fat: "15g", isPopular: true, categories: ["Nasi"]),
-        FoodModel(name: "Mie Goreng", image: "mie_goreng", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g", isPopular: true, categories: ["Mie"]),
-        FoodModel(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g", isPopular: true, categories: ["Telur"]),
-        FoodModel(name: "Mie Goreng", image: "ayam_asam_manis", price: "Rp18.000", calories: "350", protein: "25g", carbs: "60g", fiber: "7g", fat: "12g",isPopular: false, categories: ["Mie"]),
-        FoodModel(name: "Telur Balado", image: "telur_balado", price: "Rp15.000", calories: "250", protein: "15g", carbs: "5g", fiber: "3g", fat: "8g",isPopular: true, categories: ["Telur"])
+    
+    @State var foodItems: [FoodModel] = [
+        FoodModel(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: 25000, calories: 200, protein: 30, carbs: 10, fiber: 30, fat: 10, isPopular: false, categories: ["Ayam", "Asam Manis"]),
+        FoodModel(name: "Nasi Goreng", image: "ayam_asam_manis", price: 20000, calories: 300, protein: 20, carbs: 50, fiber: 5, fat: 15, isPopular: true, categories: ["Nasi"]),
+        FoodModel(name: "Mie Goreng", image: "mie_goreng", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: true, categories: ["Mie"]),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"]),
+        FoodModel(name: "Mie Goreng", image: "ayam_asam_manis", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: false, categories: ["Mie"]),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"])
     ]
     
     var popularMenus: [FoodModel] {
         foodItems.filter { $0.isPopular }
     }
-
     
     var body: some View {
-        ZStack {
-            VStack {
-                // Header Section with Title and Search Bar
-                VStack(alignment: .leading) {
-                    Text("Start a \nHealthy Lifestyle")
-                        .font(.largeTitle)
-                        .foregroundColor(Color.black)
-                        .fontWeight(.bold)
-                        .padding(.leading, 30)
+        NavigationView {
+            ZStack {
+                VStack {
+                    // Header with title and search bar
+                    VStack(alignment: .leading) {
+                        Text("Start a \nHealthy Lifestyle")
+                            .font(.largeTitle)
+                            .foregroundColor(Color.black)
+                            .fontWeight(.bold)
+                            .padding(.leading, 30)
+                        
+                        // Search bar with filter button
+                        SearchBar(searchText: $searchText,
+                                  isFilterModalPresented: $isFilterModalPresented,
+                                  selectedFilters: $selectedFilters)
+                    }
                     
-                    // Search Bar with Filter Button
-                    SearchBar(searchText: $searchText, isFilterModalPresented: $isFilterModalPresented, selectedFilters: $selectedFilters)
-                }
-                
-                // Content ScrollView with CategoryView
-                ScrollViewReader { scrollProxy in
-                    ScrollView {
-                        // Here we call CategoryView.
-                        // Note: We removed 'private' from selectedFoodItem binding in CategoryView.
-                        CategoryView(searchText: $searchText,
-                                     isCategoryReached: $isCategoryReached,
-                                     foodItems: $foodItems,
-                                     selectedFilters: $selectedFilters,
-                                     selectedFoodItem: $selectedFoodItem,
-                                     showDetailModal: $showDetailModal,
-                                     cartItems: $cartItems,
-                                     isCartVisible: $isCartVisible)
+                    // Content ScrollView with CategoryView
+                    ScrollViewReader { scrollProxy in
+                        ScrollView {
+                            CategoryView(searchText: $searchText,
+                                         isCategoryReached: $isCategoryReached,
+                                         foodItems: $foodItems,
+                                         selectedFilters: $selectedFilters,
+                                         selectedFoodItem: $selectedFoodItem,
+                                         showDetailModal: $showDetailModal,
+                                         cartItems: $cartItems,
+                                         isCartVisible: $isCartVisible)
+                        }
                     }
                 }
-            }
-            
-            // Cart Popup Overlay
-            if isCartVisible && !cartItems.isEmpty {
-                VStack {
-                    CartPopUp(totalCalories: totalCalories, totalPrice: totalPrice)
-                        .padding(.top, 10)
+                
+                // NavigationLink for CartView (hidden)
+                NavigationLink(destination: CartView(totalCalories: totalCalories, totalPrice: totalPrice, cartItems: $cartItems, foodItems: $foodItems),
+                               isActive: $isCartViewActive,
+                               label: {
+                                   EmptyView()
+                               })
+                .hidden()
+                
+                // Cart popup overlay at bottom
+                if isCartVisible && !cartItems.isEmpty {
+                    CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
+                        isCartViewActive = true  // Trigger navigation to CartView when tapped
+                    }
+                    .padding(.top, 10)
+                    .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-                .frame(maxHeight: .infinity, alignment: .bottom)
             }
         }
     }
