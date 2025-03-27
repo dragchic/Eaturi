@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var cartItems: [UUID: Int] = [:]
     @State private var isCartVisible = false
     @State private var isCategoryReached = false
+    @State var categoryModels = CategoryModel.generateCategories()
     @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
     @State private var isCartViewActive = false  // Controls navigation to CartView
@@ -41,12 +42,23 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: Color("colorSecondary"), location: 0.0),
+                        .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
+                        .init(color: .white, location: 0.6)
+                    ]),
+                    startPoint: .topTrailing,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                
                 VStack {
                     // Header with title and search bar
                     VStack(alignment: .leading) {
-                        Text("Start a \nHealthy Lifestyle")
+                        Text("Let's Start a \nHealthy Lifestyle")
                             .font(.largeTitle)
-                            .foregroundColor(Color.black)
+                            .foregroundColor(Color("BlackGray"))
                             .fontWeight(.bold)
                             .padding(.leading, 30)
                         
@@ -55,12 +67,14 @@ struct ContentView: View {
                                   isFilterModalPresented: $isFilterModalPresented,
                                   selectedFilters: $selectedFilters)
                     }
+                    .padding(.top, 20)
                     
                     // Content ScrollView with CategoryView
                     ScrollViewReader { scrollProxy in
                         ScrollView {
                             CategoryView(searchText: $searchText,
                                          isCategoryReached: $isCategoryReached,
+                                         categoryModels: $categoryModels,
                                          foodItems: $foodItems,
                                          selectedFilters: $selectedFilters,
                                          selectedFoodItem: $selectedFoodItem,

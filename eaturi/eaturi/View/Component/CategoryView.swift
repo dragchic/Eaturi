@@ -3,6 +3,7 @@ import SwiftUI
 struct CategoryView: View {
     @Binding var searchText: String
     @Binding var isCategoryReached: Bool
+    @Binding var categoryModels: [CategoryModel]
     @Binding var foodItems: [FoodModel]
     @Binding var selectedFilters: [String]
     @Binding var selectedFoodItem: FoodModel?
@@ -10,9 +11,9 @@ struct CategoryView: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     
-    var categories: [String] {
-        Set(foodItems.flatMap { $0.categories }).sorted()
-    }
+//    var categories: [String] {
+//        Set(foodItems.flatMap { $0.categories }).sorted()
+//    }
     
     let columns = [
         GridItem(.flexible()),
@@ -76,17 +77,18 @@ struct CategoryView: View {
         VStack(alignment: .leading) {
             if searchText.isEmpty {
                 Text("Popular")
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    .font(.title3)
+                    .fontWeight(.bold)
                     .padding(.leading, 20)
+                    .padding(.top, 10)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 15) {
                         ForEach(popularMenus, id: \.id) { item in
                             PopularCardView(item: .constant(item))
                                 .padding()
-                                .frame(width: 200, height: 100)
-                                .background(Color.gray.opacity(0.1))
+                                .frame(width: 230, height: 90)
+                                .background(Color.white)
                                 .cornerRadius(10)
                                 .onTapGesture {
                                     selectedFoodItem = item
@@ -101,34 +103,58 @@ struct CategoryView: View {
                 
                 // Category header using a simple VStack instead of GeometryReader
                 VStack {
-                    Text("Category")
-                        .font(.title2)
-                        .fontWeight(.semibold)
+                    Text("Categories")
+                        .font(.title3)
+                        .fontWeight(.bold)
                         .padding(.leading, 20)
                 }
                 .frame(height: 30)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 15) {
-                        ForEach(categories, id: \.self) { category in
-                            Text(category)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 10)
-                                .background(selectedFilters.contains(category) ? Color.blue : Color.gray.opacity(0.1))
-                                .foregroundColor(Color.black)
-                                .cornerRadius(20)
-                                .onTapGesture {
-                                    if let index = selectedFilters.firstIndex(of: category) {
-                                        selectedFilters.remove(at: index)
-                                    } else {
-                                        selectedFilters.append(category)
+                        ForEach(categoryModels) { category in
+                            VStack (spacing:0){
+                                Image(category.image)
+                                    .resizable()
+                                    .frame(width: 52, height: 50)
+                                    .cornerRadius(20)
+//                                    .border(.red)
+                                Text(category.name)
+                                    .font(.footnote)
+//                                    .border(.red)
+//                                    .background(selectedFilters.contains(category.name) ? Color.blue : Color.gray.opacity(0.1))
+                                    .foregroundColor(Color.black)
+                                    .onTapGesture {
+                                        if let index = selectedFilters.firstIndex(of: category.name) {
+                                            selectedFilters.remove(at: index)
+                                        } else {
+                                            selectedFilters.append(category.name)
+                                        }
                                     }
+                            }
+                            .frame(width: 80, height: 75)
+                            .background(selectedFilters.contains(category.name) ? Color("categorySelected").opacity(0.7) : Color.white)
+                            .cornerRadius(20)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedFilters.contains(category.name) ? Color("Border") : Color.clear, lineWidth: 2)
+                            )
+                            .onTapGesture {
+                                if let index = selectedFilters.firstIndex(of: category.name) {
+                                    selectedFilters.remove(at: index)
+                                } else {
+                                    selectedFilters.append(category.name)
                                 }
+                            }
+                            
                         }
                     }
                     .padding(.horizontal, 30)
                 }
-                .frame(height: 70)
+                .frame(height: 90)
+                .padding(.bottom, 20)
+//                .cornerRadius(20)
+                .shadow(radius: 2)
             } else {
                 Text("Search Results")
                     .font(.title2)
@@ -193,7 +219,7 @@ struct CategoryView: View {
                                         }) {
                                             Image(systemName: "plus")
                                                 .padding(10)
-                                                .background(Color.blue)
+                                                .background(Color("colorPrimary"))
                                                 .foregroundColor(.white)
                                                 .clipShape(Circle())
                                                 .padding(8)

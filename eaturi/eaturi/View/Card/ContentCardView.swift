@@ -27,7 +27,9 @@ struct ContentCardView: View {
                         showDetailModal = true
                     }
                 
-                if let quantity = cartItems[item.id] {
+                let quantity = cartItems[item.id] ?? 0
+                
+                if quantity > 0{
                     HStack(spacing: 5) {
                         Button(action: {
                             if quantity > 1 {
@@ -56,7 +58,7 @@ struct ContentCardView: View {
                                 .padding(6)
                                 .background(Color.white)
                                 .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.blue, lineWidth: 1))
+                                .overlay(Circle().stroke(Color("colorPrimary"), lineWidth: 1))
                         }
                     }
                     .padding(4)
@@ -70,7 +72,7 @@ struct ContentCardView: View {
                     }) {
                         Image(systemName: "plus")
                             .padding(10)
-                            .background(Color.blue)
+                            .background(Color("colorPrimary"))
                             .foregroundColor(.white)
                             .clipShape(Circle())
                             .padding(8)
@@ -96,4 +98,8 @@ struct ContentCardView: View {
         .background(Color.white)
         .cornerRadius(12)
     }
+}
+
+#Preview {
+    MainTabView()
 }
