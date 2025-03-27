@@ -41,36 +41,49 @@ struct CartPopUp: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text("Your picked food")
-                .font(.headline)
-                .foregroundColor(.white)
-            
-            Text("Total Calories: \(totalCalories)")
-                .foregroundColor(.white)
-                .font(.caption)
-            
-            Text("Total Price: Rp\(totalPrice)")
-                .foregroundColor(.white)
-                .font(.caption)
-            
-            Text("Total Quantity: \(totalQuantity)")
-                .foregroundColor(.white)
-                .font(.caption)
-            
-            ForEach(cartItemDetails, id: \.item.id) { cartItem in
-                Text("\(cartItem.item.name) x\(cartItem.quantity)")
-                    .font(.caption2)
-                    .foregroundColor(.white.opacity(0.8))
+        HStack(spacing: 3) {
+            HStack{
+                VStack(alignment: .leading){
+                    Text("\(totalQuantity) items")
+                        .foregroundColor(.white)
+                        .font(.caption)
+                    
+                    
+                    HStack(spacing: 8) {
+                        Image(systemName: "flame.fill")
+                            .foregroundColor(.yellow)
+                        Text("\(totalCalories)")
+                            .font(.body)
+                            .foregroundColor(.white)
+                    }
+                }
+                
+                Spacer()
+                
+                HStack(spacing: 20){
+                    Text("Rp\(totalPrice)")
+                        .foregroundColor(.white)
+                        .font(.system(size: 16, weight: .medium))
+                    Image(systemName: "chevron.right.circle.fill")
+                        .resizable()
+                        .scaledToFit()             // Keep the aspect ratio
+                        .frame(width: 30, height: 30) // Adjust these values as needed for a larger image
+                        .foregroundStyle(.white)
+                }
             }
+            .padding(.leading,20)
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color.blue)
-        .cornerRadius(10)
+        .background(.colorPrimary)
+        .cornerRadius(.infinity)
         .padding(.horizontal)
         .onTapGesture {
             onTap()
         }
     }
+}
+
+#Preview {
+    MainTabView()
 }

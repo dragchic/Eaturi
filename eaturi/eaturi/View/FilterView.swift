@@ -52,7 +52,7 @@ struct FilterView: View {
                         Text(filter)
                             .padding()
                             .frame(height: 50)
-                            .background(activeFilters.contains(filter) ? Color.orange : Color.gray.opacity(0.1))
+                            .background(activeFilters.contains(filter) ? .colorPrimary : Color.gray.opacity(0.1))
                             .foregroundColor(activeFilters.contains(filter) ? .white : .black)
                             .cornerRadius(30)
                     }
@@ -80,7 +80,7 @@ struct FilterView: View {
                         .fontWeight(.semibold)
                         .padding()
                         .frame(width: 130, height: 40)
-                        .background(Color.orange)
+                        .background(.colorPrimary)
                         .cornerRadius(10)
                 }
             }

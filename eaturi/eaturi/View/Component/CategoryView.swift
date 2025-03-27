@@ -40,6 +40,12 @@ struct CategoryView: View {
         let availableCategories = Set(foodItems.flatMap { $0.categories })
         let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
         
+        // If the user has selected category filters but none match the available categories,
+        // return an empty array.
+        if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty {
+            return []
+        }
+        
         // Apply nutritional filters if any
         if !selectedNutritionalFilters.isEmpty {
             items = items.filter { item in
@@ -66,6 +72,7 @@ struct CategoryView: View {
         // Apply category filters if any
         if !selectedCategoryFilters.isEmpty {
             items = items.filter { item in
+                // Keep item if at least one of its categories matches one of the selected categories
                 !Set(item.categories).intersection(selectedCategoryFilters).isEmpty
             }
         }
@@ -113,40 +120,32 @@ struct CategoryView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 15) {
                         ForEach(categoryModels) { category in
-                            VStack (spacing:0){
+                            VStack(spacing: 0) {
                                 Image(category.image)
                                     .resizable()
                                     .frame(width: 52, height: 50)
                                     .cornerRadius(20)
-//                                    .border(.red)
-                                Text(category.name)
+                                Text(category.localName)  // Use localName here
                                     .font(.footnote)
-//                                    .border(.red)
-//                                    .background(selectedFilters.contains(category.name) ? Color.blue : Color.gray.opacity(0.1))
-                                    .foregroundColor(Color.black)
-                                    .onTapGesture {
-                                        if let index = selectedFilters.firstIndex(of: category.name) {
-                                            selectedFilters.remove(at: index)
-                                        } else {
-                                            selectedFilters.append(category.name)
-                                        }
-                                    }
+                                    .foregroundColor(.black)
                             }
                             .frame(width: 80, height: 75)
-                            .background(selectedFilters.contains(category.name) ? Color("categorySelected").opacity(0.7) : Color.white)
+                            .background(selectedFilters.contains(category.localName) ? Color("categorySelected").opacity(0.7) : Color.white)
                             .cornerRadius(20)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedFilters.contains(category.name) ? Color("Border") : Color.clear, lineWidth: 2)
+                                    .stroke(selectedFilters.contains(category.localName) ? Color("Border") : Color.clear, lineWidth: 2)
                             )
                             .onTapGesture {
-                                if let index = selectedFilters.firstIndex(of: category.name) {
-                                    selectedFilters.remove(at: index)
-                                } else {
-                                    selectedFilters.append(category.name)
+                                withAnimation {
+                                    if let index = selectedFilters.firstIndex(of: category.localName) {
+                                        selectedFilters.remove(at: index)
+                                    } else {
+                                        selectedFilters.append(category.localName)
+                                    }
+                                    print("\(selectedFilters) selected")
                                 }
                             }
-                            
                         }
                     }
                     .padding(.horizontal, 30)
@@ -201,7 +200,7 @@ struct CategoryView: View {
                                                 cartItems[item.id] = quantity + 1
                                             },
                                             onDecrement: {
-                                                if quantity > 0 {
+                                                if quantity > 1 {
                                                     cartItems[item.id] = quantity - 1
                                                 } else {
                                                     cartItems.removeValue(forKey: item.id)
@@ -236,10 +235,14 @@ struct CategoryView: View {
                                     .font(.headline)
                                     .fontWeight(.bold)
                                 
-                                Text("Calories: \(item.calories)")
-                                    .font(.caption)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.red)
+                                HStack{
+                                    Image(systemName:"flame.fill")
+                                        .foregroundStyle(.orange)
+                                    Text("\(item.calories) kcal")
+                                        .font(.caption)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                             .frame(width: 164)
                             .background(Color.white)
