@@ -8,31 +8,39 @@ struct QuantityControl: View {
     var body: some View {
         HStack(spacing: 10) {
             Button(action: onDecrement) {
-                Image(systemName: "minus.circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(.gray)
-                    .padding(8)
-                    .background(Color.white)
+                Image(systemName: "minus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.white)
+                    .padding(12) // Inner padding
+                    .background(Color("colorPrimary"))
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
             }
-            
+            .frame(width: 44, height: 44) // Ensure uniform size
+
             Text("\(quantity)")
                 .font(.headline)
-                .frame(minWidth: 30, alignment: .center)
-            
+                .frame(width: 30, alignment: .center)
+
             Button(action: onIncrement) {
-                Image(systemName: "plus.circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(.blue)
-                    .padding(8)
-                    .background(Color.white)
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+                    .foregroundColor(.white)
+                    .padding(12) // Inner padding
+                    .background(Color("colorPrimary"))
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.blue, lineWidth: 1))
             }
+            .frame(width: 44, height: 44)
         }
         .padding(6)
         .background(Color.white)
         .cornerRadius(30)
     }
+}
+
+#Preview {
+    MainTabView()
 }
