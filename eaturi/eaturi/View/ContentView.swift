@@ -4,18 +4,48 @@ struct ContentView: View {
     @State private var searchText: String = ""
     @State private var isFilterModalPresented = false
     @State private var selectedFilters: [String] = []
-    @State private var cartItems: [UUID: Int] = [:]
+    @Binding var cartItems: [UUID: Int]  // Changed from @State to @Binding
     @State private var isCartVisible = false
     @State private var isCategoryReached = false
     @State var categoryModels = CategoryModel.generateCategories()
     @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
-    @State private var isCartViewActive = false  // Controls navigation to CartView
+    @State private var isCartViewActive = false
+    @State private var navigationPath = NavigationPath()
 
+    // Expanded calculations for total nutritional values
     var totalCalories: Int {
         cartItems.reduce(0) { total, entry in
             let item = foodItems.first { $0.id == entry.key }
             return total + ((item?.calories ?? 0) * entry.value)
+        }
+    }
+    
+    var totalProtein: Int {
+        cartItems.reduce(0) { total, entry in
+            let item = foodItems.first { $0.id == entry.key }
+            return total + ((item?.protein ?? 0) * entry.value)
+        }
+    }
+    
+    var totalFat: Int {
+        cartItems.reduce(0) { total, entry in
+            let item = foodItems.first { $0.id == entry.key }
+            return total + ((item?.fat ?? 0) * entry.value)
+        }
+    }
+    
+    var totalCarbs: Int {
+        cartItems.reduce(0) { total, entry in
+            let item = foodItems.first { $0.id == entry.key }
+            return total + ((item?.carbs ?? 0) * entry.value)
+        }
+    }
+    
+    var totalFiber: Int {
+        cartItems.reduce(0) { total, entry in
+            let item = foodItems.first { $0.id == entry.key }
+            return total + ((item?.fiber ?? 0) * entry.value)
         }
     }
     
@@ -40,7 +70,7 @@ struct ContentView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
@@ -76,8 +106,8 @@ struct ContentView: View {
                         
                         // Search bar with filter button
                         SearchBar(searchText: $searchText,
-                                  isFilterModalPresented: $isFilterModalPresented,
-                                  selectedFilters: $selectedFilters)
+                                isFilterModalPresented: $isFilterModalPresented,
+                                selectedFilters: $selectedFilters)
                     }
                     .padding(.top, 20)
                     
@@ -85,33 +115,39 @@ struct ContentView: View {
                     ScrollViewReader { scrollProxy in
                         ScrollView {
                             CategoryView(searchText: $searchText,
-                                         isCategoryReached: $isCategoryReached,
-                                         categoryModels: $categoryModels,
-                                         foodItems: $foodItems,
-                                         selectedFilters: $selectedFilters,
-                                         selectedFoodItem: $selectedFoodItem,
-                                         showDetailModal: $showDetailModal,
-                                         cartItems: $cartItems,
-                                         isCartVisible: $isCartVisible)
+                                        isCategoryReached: $isCategoryReached,
+                                        categoryModels: $categoryModels,
+                                        foodItems: $foodItems,
+                                        selectedFilters: $selectedFilters,
+                                        selectedFoodItem: $selectedFoodItem,
+                                        showDetailModal: $showDetailModal,
+                                        cartItems: $cartItems,
+                                        isCartVisible: $isCartVisible)
                         }
                     }
                 }
                 
-                // NavigationLink for CartView (hidden)
-                NavigationLink(destination: CartView(totalCalories: totalCalories, totalPrice: totalPrice, cartItems: $cartItems, foodItems: $foodItems),
-                               isActive: $isCartViewActive,
-                               label: {
-                                   EmptyView()
-                               })
-                .hidden()
-                
                 // Cart popup overlay at bottom
                 if isCartVisible && !cartItems.isEmpty {
                     CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
-                        isCartViewActive = true  // Trigger navigation to CartView when tapped
+                        navigationPath.append("cart")
                     }
                     .padding(.top, 10)
                     .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+            }
+            .navigationDestination(for: String.self) { destination in
+                if destination == "cart" {
+                    CartView(
+                        totalCalories: totalCalories,
+                        totalProtein: totalProtein,
+                        totalFat: totalFat,
+                        totalCarbs: totalCarbs,
+                        totalFiber: totalFiber,
+                        totalPrice: totalPrice,
+                        cartItems: $cartItems,
+                        foodItems: $foodItems
+                    )
                 }
             }
         }
@@ -126,5 +162,5 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 }
 
 #Preview {
-    ContentView()
+    ContentView(cartItems: .constant([:]))
 }

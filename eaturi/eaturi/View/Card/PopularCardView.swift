@@ -45,8 +45,3 @@ struct PopularCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
-
-#Preview {
-    ContentView()
-}
-

@@ -6,55 +6,37 @@
 //
 import Foundation
 
-struct HistoryRecord: Identifiable, Hashable {
+struct HistoryRecord: Identifiable, Hashable, Encodable, Decodable {
     let id: UUID
     let date: Date
     let cart: [UUID: Int]
-    let foodItems: [FoodModel]
-    
-    // Total price computation using actual food items
-    var totalPrice: Int {
-        cart.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.price * entry.value)
-            }
-            return total
-        }
-    }
-    
-    // Total calories computation using actual food items
-    var totalCalories: Int {
-        cart.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.calories * entry.value)
-            }
-            return total
-        }
-    }
-    
-    // Formatted date description
-    var dateFormatted: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
-    
-    // Descriptive history record
-    var description: String {
-        "Purchased on \(dateFormatted): \(totalPrice) Rupiah, \(totalCalories) kcal"
-    }
+    var totalPrice: Int
+    var totalCalories: Int
+    var totalProtein: Int
+    var totalCarbs: Int
+    var totalFiber: Int
+    var totalFat: Int
     
     // Initializer with food items
     init(
         id: UUID = UUID(),
         date: Date,
         cart: [UUID: Int],
-        foodItems: [FoodModel]
+        totalPrice: Int,
+        totalCalories: Int,
+        totalProtein: Int,
+        totalCarbs: Int,
+        totalFiber: Int,
+        totalFat: Int
     ) {
         self.id = id
         self.date = date
         self.cart = cart
-        self.foodItems = foodItems
+        self.totalPrice = totalPrice
+        self.totalCalories = totalCalories
+        self.totalProtein = totalProtein
+        self.totalCarbs = totalCarbs
+        self.totalFiber = totalFiber
+        self.totalFat = totalFat
     }
 }

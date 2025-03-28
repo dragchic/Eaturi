@@ -126,7 +126,7 @@ struct NutritionInfoView: View {
         VStack(spacing: 15) {
             VStack(spacing: 10){
                 Image(imageName)
-                    .foregroundColor(.orange)
+                    .foregroundColor(.colorOren)
                     .frame(width:40, height: 40)
                     .background(Color(.white))
                     .cornerRadius(100)

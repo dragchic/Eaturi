@@ -237,7 +237,7 @@ struct CategoryView: View {
                                 
                                 HStack{
                                     Image(systemName:"flame.fill")
-                                        .foregroundStyle(.orange)
+                                        .foregroundStyle(.colorOren)
                                     Text("\(item.calories) kcal")
                                         .font(.caption)
                                         .fontWeight(.bold)

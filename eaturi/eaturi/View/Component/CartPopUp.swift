@@ -5,30 +5,25 @@ struct CartPopUp: View {
     @Binding var foodItems: [FoodModel]
     var onTap: () -> Void   // Closure to trigger navigation
 
-    // Total quantity of all items in the cart
-    private var totalQuantity: Int {
-        cartItems.values.reduce(0, +)
+    var totalQuantity : Int {
+        CartCalculationUtility.calculateTotalQuantity(
+            cartItems: cartItems
+        )
     }
     
-    // Total calories computed using Int values
-    private var totalCalories: Int {
-        cartItems.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.calories * entry.value)
-            }
-            return total
-        }
-    }
-    
-    // Total price computed using Int values
-    private var totalPrice: Int {
-        cartItems.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.price * entry.value)
-            }
-            return total
-        }
-    }
+    var totalCalories: Int {
+           CartCalculationUtility.calculateTotalCalories(
+               cartItems: cartItems,
+               foodItems: foodItems
+           )
+       }
+       
+   var totalPrice: Int {
+       CartCalculationUtility.calculateTotalPrice(
+           cartItems: cartItems,
+           foodItems: foodItems
+       )
+   }
     
     // Detailed list of cart items
     private var cartItemDetails: [(item: FoodModel, quantity: Int)] {
@@ -51,7 +46,7 @@ struct CartPopUp: View {
                     
                     HStack(spacing: 8) {
                         Image(systemName: "flame.fill")
-                            .foregroundColor(.yellow)
+                            .foregroundColor(.colorOren)
                         Text("\(totalCalories)")
                             .font(.body)
                             .foregroundColor(.white)
