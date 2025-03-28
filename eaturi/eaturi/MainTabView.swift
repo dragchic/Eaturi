@@ -1,84 +1,50 @@
-//
-//  MainTabView.swift
-//  eaturi
-//
-//  Created by Raphael Gregorius on 26/03/25.
-//
-
 import SwiftUI
+import SwiftData
 
 struct MainTabView: View {
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 0
-    @State private var dummyCart: [UUID: Int] = [:]
-    // Dummy cart data to pass as binding to HistoryView
-//    @State private var dummyCart: [UUID: Int] = [
-//        UUID(): 1,
-//        UUID(): 2,
-//        UUID(): 1
-//    ]
-    
-//    var body: some View {
-//        TabView {
-//            ContentView()
-//                .tabItem {
-//                    Image(systemName: "fork.knife")
-////                        .foregroundColor(Color("colorPrimary"))
-//                    Text("Home")
-//                }
-//            
-//            // Pass the binding to dummyCart into HistoryView
-//            HistoryView(products: $dummyCart)
-//                .tabItem {
-//                    Image(systemName: "list.bullet.clipboard")
-////                        .foregroundColor(Color("colorSecondary"))
-//                    Text("History")
-//                }
-//        }
-//        .tint(Color("colorPrimary"))
-//    }
-    
+    @State var cartItems: [UUID: Int] = [:]
+    @State var isCartVisible: Bool = false
+    @State var foodItems: [FoodModel] = FoodModel.sampleData()
+
     var body: some View {
-        VStack{
-            ZStack{
+        VStack {
+            ZStack {
                 switch selectedTab {
                 case 0:
-                    ContentView()
+                    ContentView(cartItems: $cartItems, isCartVisible: $isCartVisible, foodItems: $foodItems)
                 case 1:
-                    HistoryView(products: $dummyCart)
+                    HistoryView(onPickAgain: { selectedCart in
+                        cartItems = selectedCart
+                        isCartVisible = true
+                        selectedTab = 0
+                    })
                 default:
                     EmptyView()
                 }
             }
-            HStack{
-                Button{
+
+            HStack {
+                Button {
                     selectedTab = 0
                 } label: {
-                    CustomTabBarItem(
-                        icon: "house.fill",
-                        title: "Home",
-                        isSelected: selectedTab == 0,
-                        color: Color("colorPrimary")
-                    )
+                    CustomTabBarItem(icon: "house.fill", title: "Home", isSelected: selectedTab == 0, color: Color("colorPrimary"))
                 }
-                Button{
+                Button {
                     selectedTab = 1
                 } label: {
-                    CustomTabBarItem(
-                        icon: "list.bullet.clipboard",
-                        title: "History",
-                        isSelected: selectedTab == 1,
-                        color: Color("colorPrimary")
-                    )
+                    CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
                 }
             }
-            .frame(height: 85)
+            .frame(height: 90)
             .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 0))
             .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: -2)
         }
         .ignoresSafeArea(.all)
     }
 }
+
 
 struct CustomTabBarItem: View {
     let icon: String
@@ -87,7 +53,7 @@ struct CustomTabBarItem: View {
     let color: Color
     
     var body: some View {
-        VStack(spacing:5){
+        VStack(spacing: 5) {
             Rectangle()
                 .fill(isSelected ? color : Color.clear)
                 .frame(height: 5)
@@ -98,7 +64,7 @@ struct CustomTabBarItem: View {
                 .foregroundColor(isSelected ? color : .gray)
             Text(title)
                 .font(.caption)
-                .foregroundColor(isSelected ? color: .gray)
+                .foregroundColor(isSelected ? color : .gray)
             Spacer()
         }
         .frame(maxWidth: .infinity)
@@ -106,5 +72,11 @@ struct CustomTabBarItem: View {
 }
 
 #Preview {
-    MainTabView()
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
 }

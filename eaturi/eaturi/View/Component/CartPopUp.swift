@@ -5,32 +5,26 @@ struct CartPopUp: View {
     @Binding var foodItems: [FoodModel]
     var onTap: () -> Void   // Closure to trigger navigation
 
-    // Total quantity of all items in the cart
-    private var totalQuantity: Int {
-        cartItems.values.reduce(0, +)
+    var totalQuantity : Int {
+        CartCalculationUtility.calculateTotalQuantity(
+            cartItems: cartItems
+        )
     }
     
-    // Total calories computed using Int values
-    private var totalCalories: Int {
-        cartItems.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.calories * entry.value)
-            }
-            return total
-        }
-    }
+    var totalCalories: Int {
+           CartCalculationUtility.calculateTotalCalories(
+               cartItems: cartItems,
+               foodItems: foodItems
+           )
+       }
+       
+   var totalPrice: Int {
+       CartCalculationUtility.calculateTotalPrice(
+           cartItems: cartItems,
+           foodItems: foodItems
+       )
+   }
     
-    // Total price computed using Int values
-    private var totalPrice: Int {
-        cartItems.reduce(0) { total, entry in
-            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
-                return total + (foodItem.price * entry.value)
-            }
-            return total
-        }
-    }
-    
-    // Detailed list of cart items
     private var cartItemDetails: [(item: FoodModel, quantity: Int)] {
         cartItems.compactMap { key, value in
             if let foodItem = foodItems.first(where: { $0.id == key }) {
@@ -51,7 +45,7 @@ struct CartPopUp: View {
                     
                     HStack(spacing: 8) {
                         Image(systemName: "flame.fill")
-                            .foregroundColor(.yellow)
+                            .foregroundColor(.colorOren)
                         Text("\(totalCalories)")
                             .font(.body)
                             .foregroundColor(.white)
@@ -66,8 +60,8 @@ struct CartPopUp: View {
                         .font(.system(size: 16, weight: .medium))
                     Image(systemName: "chevron.right.circle.fill")
                         .resizable()
-                        .scaledToFit()             // Keep the aspect ratio
-                        .frame(width: 30, height: 30) // Adjust these values as needed for a larger image
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
                         .foregroundStyle(.white)
                 }
             }
@@ -82,8 +76,4 @@ struct CartPopUp: View {
             onTap()
         }
     }
-}
-
-#Preview {
-    MainTabView()
 }

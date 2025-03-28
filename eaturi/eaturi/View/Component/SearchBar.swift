@@ -8,7 +8,6 @@ struct SearchBar: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            // Search Field with magnifying glass and clear button
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
@@ -33,7 +32,6 @@ struct SearchBar: View {
             .background(Color.white)
             .cornerRadius(10)
             
-            // Filter Icon with a subtle scale animation on tap
             Button(action: {
                 withAnimation(.easeInOut(duration: 0.2)) {
                     isFilterModalPresented.toggle()
@@ -47,7 +45,6 @@ struct SearchBar: View {
             .sheet(isPresented: $isFilterModalPresented) {
                 FilterView(
                     onSelectFilter: { filters in
-                        // Append new filters (or replace as needed)
                         self.selectedFilters = filters
                         isFilterModalPresented = false
                     },
@@ -58,8 +55,4 @@ struct SearchBar: View {
         .padding(.horizontal)
         .padding(.bottom, 10)
     }
-}
-
-#Preview {
-    MainTabView()
 }

@@ -13,11 +13,11 @@ struct QuantityControl: View {
                     .scaledToFit()
                     .frame(width: 6, height: 6)
                     .foregroundColor(.white)
-                    .padding(12) // Inner padding
+                    .padding(12)
                     .background(Color("colorPrimary"))
                     .clipShape(Circle())
             }
-            .frame(width: 25, height: 25) // Ensure uniform size
+            .frame(width: 25, height: 25)
 
             Text("\(quantity)")
                 .font(.headline)
@@ -29,7 +29,7 @@ struct QuantityControl: View {
                     .scaledToFit()
                     .frame(width: 6, height: 6)
                     .foregroundColor(.white)
-                    .padding(12) // Inner padding
+                    .padding(12)
                     .background(Color("colorPrimary"))
                     .clipShape(Circle())
             }
@@ -39,8 +39,4 @@ struct QuantityControl: View {
         .background(Color.white)
         .cornerRadius(30)
     }
-}
-
-#Preview {
-    MainTabView()
 }

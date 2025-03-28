@@ -2,13 +2,16 @@
 //  HistoryView.swift
 //  KasturiFoodTracker
 //
-//  Created by Grachia Uliari on 18/03/25.
-//
 import SwiftUI
+import SwiftData
 
 struct HistoryView: View {
-    @Binding var products: [UUID: Int]
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \HistoryRecord.timestamp, order: .reverse)
+    private var historyRecords: [HistoryRecord]
     
+    var onPickAgain: ([UUID: Int]) -> Void
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -23,30 +26,28 @@ struct HistoryView: View {
                 )
                 .ignoresSafeArea(edges: .top)
                 VStack {
-                    ScrollView {
-                        HistoryCardView(products: products)
-                        HistoryCardView(products: products)
-                        HistoryCardView(products: products)
-                        HistoryCardView(products: products)
-                        HistoryCardView(products: products)
+                    if historyRecords.isEmpty {
+                        Text("No history records found")
+                            .foregroundColor(.gray)
+                            .padding()
+                    } else {
+                        ScrollView {
+                            ForEach(historyRecords) { record in
+                                HistoryCardView(record: record, onPickAgain: onPickAgain)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(record)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                            }
+                        }
                     }
                 }
                 .padding()
                 .navigationTitle("History")
             }
         }
-    }
-}
-
-struct HistoryView_Previews: PreviewProvider {
-    static let dummyProducts: [UUID: Int] = [
-        UUID(): 1,
-        UUID(): 2,
-        UUID(): 1,
-        UUID(): 3
-    ]
-    
-    static var previews: some View {
-        HistoryView(products: .constant(dummyProducts))
     }
 }
