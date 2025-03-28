@@ -25,7 +25,6 @@ struct HistoryView: View {
                     endPoint: .bottom
                 )
                 .ignoresSafeArea(edges: .top)
-
                 VStack {
                     if historyRecords.isEmpty {
                         Text("No history records found")
