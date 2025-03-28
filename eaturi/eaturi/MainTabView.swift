@@ -1,56 +1,50 @@
 import SwiftUI
+import SwiftData
 
 struct MainTabView: View {
+    @Environment(\.modelContext) private var modelContext // ✅ Inject SwiftData context
     @State private var selectedTab = 0
-    @StateObject private var historyManager = HistoryManager.shared
-    @State private var cartItems: [UUID: Int] = [:]
-    
+    @State var cartItems: [UUID: Int] = [:]
+    @State var isCartVisible: Bool = false
+    @State var foodItems: [FoodModel] = FoodModel.sampleData()
+
     var body: some View {
         VStack {
             ZStack {
                 switch selectedTab {
                 case 0:
-                    ContentView(cartItems: $cartItems)
-                        .environmentObject(historyManager)
+                    ContentView(cartItems: $cartItems, isCartVisible: $isCartVisible, foodItems: $foodItems)
                 case 1:
-                    HistoryView(historyRecords: $historyManager.historyRecords)
+                    HistoryView(onPickAgain: { selectedCart in
+                        cartItems = selectedCart
+                        isCartVisible = true
+                        selectedTab = 0
+                    })
                 default:
                     EmptyView()
                 }
             }
-            // Rest of your tab bar code remains the same
+
             HStack {
                 Button {
                     selectedTab = 0
                 } label: {
-                    CustomTabBarItem(
-                        icon: "house.fill",
-                        title: "Home",
-                        isSelected: selectedTab == 0,
-                        color: Color("colorPrimary")
-                    )
+                    CustomTabBarItem(icon: "house.fill", title: "Home", isSelected: selectedTab == 0, color: Color("colorPrimary"))
                 }
                 Button {
                     selectedTab = 1
                 } label: {
-                    CustomTabBarItem(
-                        icon: "list.bullet.clipboard",
-                        title: "History",
-                        isSelected: selectedTab == 1,
-                        color: Color("colorPrimary")
-                    )
+                    CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
                 }
             }
             .frame(height: 90)
             .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 0))
             .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: -2)
         }
         .ignoresSafeArea(.all)
     }
 }
 
-// CustomTabBarItem remains unchanged
 
 struct CustomTabBarItem: View {
     let icon: String

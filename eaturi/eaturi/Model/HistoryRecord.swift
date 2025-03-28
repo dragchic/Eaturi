@@ -1,15 +1,11 @@
-//
-//  HistoryModel.swift
-//  eaturi
-//
-//  Created by Raphael Gregorius on 27/03/25.
-//
+import SwiftData
 import Foundation
 
-struct HistoryRecord: Identifiable, Hashable, Encodable, Decodable {
-    let id: UUID
-    let date: Date
-    let cart: [UUID: Int]
+@Model
+class HistoryRecord {
+    @Attribute(.unique) var id: UUID
+    var timestamp: Date
+    var cartData: Data  // Storage for dictionary
     var totalPrice: Int
     var totalCalories: Int
     var totalProtein: Int
@@ -17,10 +13,27 @@ struct HistoryRecord: Identifiable, Hashable, Encodable, Decodable {
     var totalFiber: Int
     var totalFat: Int
     
-    // Initializer with food items
+    // Computed property for dictionary access
+    var cart: [UUID: Int] {
+        get {
+            do {
+                return try JSONDecoder().decode([UUID: Int].self, from: cartData)
+            } catch {
+                print("Error decoding cart: \(error)")
+                return [:]
+            }
+        }
+        set {
+            do {
+                cartData = try JSONEncoder().encode(newValue)
+            } catch {
+                print("Error encoding cart: \(error)")
+                cartData = Data()
+            }
+        }
+    }
+    
     init(
-        id: UUID = UUID(),
-        date: Date,
         cart: [UUID: Int],
         totalPrice: Int,
         totalCalories: Int,
@@ -29,9 +42,9 @@ struct HistoryRecord: Identifiable, Hashable, Encodable, Decodable {
         totalFiber: Int,
         totalFat: Int
     ) {
-        self.id = id
-        self.date = date
-        self.cart = cart
+        self.id = UUID()
+        self.timestamp = Date()
+        self.cartData = try! JSONEncoder().encode(cart)
         self.totalPrice = totalPrice
         self.totalCalories = totalCalories
         self.totalProtein = totalProtein

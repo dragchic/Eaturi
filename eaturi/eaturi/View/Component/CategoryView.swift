@@ -143,7 +143,6 @@ struct CategoryView: View {
                                     } else {
                                         selectedFilters.append(category.localName)
                                     }
-                                    print("\(selectedFilters) selected")
                                 }
                             }
                         }
@@ -271,8 +270,4 @@ struct CategoryView: View {
             }
         }
     }
-}
-
-#Preview {
-    MainTabView()
 }

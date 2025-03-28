@@ -59,7 +59,3 @@ struct SearchBar: View {
         .padding(.bottom, 10)
     }
 }
-
-#Preview {
-    MainTabView()
-}

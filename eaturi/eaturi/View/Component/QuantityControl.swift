@@ -40,7 +40,3 @@ struct QuantityControl: View {
         .cornerRadius(30)
     }
 }
-
-#Preview {
-    MainTabView()
-}

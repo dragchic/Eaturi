@@ -153,7 +153,3 @@ struct NutritionInfoView: View {
         }
     }
 }
-
-#Preview{
-    MainTabView()
-}

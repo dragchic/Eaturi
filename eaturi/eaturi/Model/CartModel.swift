@@ -34,3 +34,10 @@ struct CartModel {
         cartItems.removeAll()
     }
 }
+
+
+struct CartItem: Codable, Identifiable {
+    var id: UUID
+    var quantity: Int
+}
+

@@ -6,12 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct eaturiApp: App {
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            MainTabView(cartItems: [:])
+                // Ensure container is created BEFORE main view
+                .modelContainer(
+                    for: HistoryRecord.self,
+                    isAutosaveEnabled: true
+                )
         }
     }
 }

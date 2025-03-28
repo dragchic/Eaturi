@@ -1,58 +1,27 @@
 import SwiftUI
 
-struct FoodModel: Identifiable, Hashable {
+struct FoodModel: Identifiable {
     let id: UUID
-    var name: String
-    var image: String
-    var price: Int
-    var calories: Int
-    var protein: Int
-    var carbs: Int
-    var fiber: Int
-    var fat: Int
-    var isPopular: Bool
-    var categories: [String]
-    var description: String
-    
-    // Computed nutritional properties
-    var nutritionalScore: Double {
-        let proteinScore = Double(protein) * 4
-        let carbScore = Double(carbs) * 4
-        let fatScore = Double(fat) * 9
-        return (proteinScore + carbScore + fatScore) / Double(calories)
-    }
-    
-    // Descriptive nutritional information
-    var nutritionalDescription: String {
-        return "Protein: \(protein)g, Carbs: \(carbs)g, Fat: \(fat)g"
-    }
-    
-    // Default initializer
-    init(
-        id: UUID = UUID(),
-        name: String,
-        image: String,
-        price: Int,
-        calories: Int,
-        protein: Int,
-        carbs: Int,
-        fiber: Int,
-        fat: Int,
-        isPopular: Bool,
-        categories: [String],
-        description: String
-    ) {
-        self.id = id
-        self.name = name
-        self.image = image
-        self.price = price
-        self.calories = calories
-        self.protein = protein
-        self.carbs = carbs
-        self.fiber = fiber
-        self.fat = fat
-        self.isPopular = isPopular
-        self.categories = categories
-        self.description = description
+    let name: String
+    let image: String
+    let price: Int
+    let calories: Int
+    let protein: Int
+    let carbs: Int
+    let fiber: Int
+    let fat: Int
+    let isPopular: Bool
+    let categories: [String]
+    let description: String
+
+    static func sampleData() -> [FoodModel] {
+        return [
+            FoodModel(id: UUID(), name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: 25000, calories: 200, protein: 30, carbs: 10, fiber: 30, fat: 10, isPopular: false, categories: ["Ayam", "Asam Manis"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+            FoodModel(id: UUID(), name: "Nasi Goreng", image: "ayam_asam_manis", price: 20000, calories: 300, protein: 20, carbs: 50, fiber: 5, fat: 15, isPopular: true, categories: ["Nasi"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+            FoodModel(id: UUID(), name: "Mie Goreng", image: "mie_goreng", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: true, categories: ["Mie"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+            FoodModel(id: UUID(), name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+            FoodModel(id: UUID(), name: "Mie Goreng", image: "ayam_asam_manis", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: false, categories: ["Mie"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+            FoodModel(id: UUID(), name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal.")
+        ]
     }
 }

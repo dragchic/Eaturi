@@ -1,16 +1,15 @@
 import SwiftUI
 
 struct HistoryCardView: View {
-    let record: HistoryRecord // Use HistoryRecord instead of products dictionary
+    let record: HistoryRecord
+    let onPickAgain: ([UUID: Int]) -> Void // Closure to trigger navigation and cart update
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Date and item count (larger text)
-            Text(dateFormatter.string(from: record.date) + ", \(record.cart.count) items")
+            Text(dateFormatter.string(from: record.timestamp) + ", \(record.cart.count) items")
                 .font(.title2)
                 .foregroundColor(.secondary)
 
-            // Product images with dynamic display
             HStack(spacing: 12) {
                 let productIDs = Array(record.cart.keys)
                 let displayedProducts = productIDs.prefix(2)
@@ -27,11 +26,10 @@ struct HistoryCardView: View {
                 }
             }
 
-            // Calorie information and total price
             HStack {
                 HStack(spacing: 8) {
                     Image(systemName: "flame.fill")
-                        .foregroundColor(.orange) // Replace .colorOren with .orange or define it
+                        .foregroundColor(.orange)
                     Text("\(record.totalCalories) Kcalories")
                         .font(.body)
                         .foregroundColor(.black)
@@ -42,11 +40,10 @@ struct HistoryCardView: View {
                     .foregroundColor(Color("colorPrimary"))
             }
 
-            // Right-aligned "Pick Again" button
             HStack {
                 Spacer()
                 Button(action: {
-                    // Define the action for the button here (e.g., re-add items to cart)
+                    onPickAgain(record.cart) // Trigger the closure with the record's cart
                 }) {
                     Text("Pick Again")
                         .font(.headline)
@@ -64,7 +61,6 @@ struct HistoryCardView: View {
         .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
     }
     
-    // Date formatter for consistent display
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -94,17 +90,4 @@ struct AdditionalProductsView: View {
             .background(Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 8))
     }
-}
-
-#Preview {
-    HistoryCardView(record: HistoryRecord(
-        date: Date(),
-        cart: [UUID(): 1, UUID(): 2, UUID(): 1],
-        totalPrice: 150000,
-        totalCalories: 2000,
-        totalProtein: 50,
-        totalCarbs: 100,
-        totalFiber: 20,
-        totalFat: 30
-    ))
 }

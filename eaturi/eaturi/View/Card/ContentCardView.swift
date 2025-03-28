@@ -99,7 +99,3 @@ struct ContentCardView: View {
         .cornerRadius(12)
     }
 }
-
-#Preview {
-    MainTabView()
-}

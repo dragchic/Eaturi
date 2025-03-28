@@ -3,10 +3,15 @@
 //  KasturiFoodTracker
 //
 import SwiftUI
+import SwiftData
 
 struct HistoryView: View {
-    @Binding var historyRecords: [HistoryRecord] // Change to array of HistoryRecord
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \HistoryRecord.timestamp, order: .reverse)
+    private var historyRecords: [HistoryRecord]
     
+    var onPickAgain: ([UUID: Int]) -> Void
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -20,10 +25,24 @@ struct HistoryView: View {
                     endPoint: .bottom
                 )
                 .ignoresSafeArea(edges: .top)
+
                 VStack {
-                    ScrollView {
-                        ForEach(historyRecords) { record in
-                            HistoryCardView(record: record)
+                    if historyRecords.isEmpty {
+                        Text("No history records found")
+                            .foregroundColor(.gray)
+                            .padding()
+                    } else {
+                        ScrollView {
+                            ForEach(historyRecords) { record in
+                                HistoryCardView(record: record, onPickAgain: onPickAgain)
+                                    .contextMenu {
+                                        Button(role: .destructive) {
+                                            modelContext.delete(record) // Delete record
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                    }
+                            }
                         }
                     }
                 }
@@ -33,32 +52,7 @@ struct HistoryView: View {
         }
     }
 }
-//
-//struct HistoryView_Previews: PreviewProvider {
-//    static let dummyRecords: [HistoryRecord] = [
-//        HistoryRecord(
-//            date: Date(),
-//            cart: [UUID(): 1, UUID(): 2],
-//            totalPrice: 150000,
-//            totalCalories: 2000,
-//            totalProtein: 50,
-//            totalCarbs: 100,
-//            totalFiber: 20,
-//            totalFat: 30
-//        ),
-//        HistoryRecord(
-//            date: Date().addingTimeInterval(-86400), // Yesterday
-//            cart: [UUID(): 1, UUID(): 3],
-//            totalPrice: 200000,
-//            totalCalories: 2500,
-//            totalProtein: 60,
-//            totalCarbs: 120,
-//            totalFiber: 25,
-//            totalFat: 35
-//        )
-//    ]
-//    
-//    static var previews: some View {
-//        HistoryView(historyRecords: .constant(dummyRecords))
-//    }
-//}
+
+#Preview {
+    MainTabView()
+}
