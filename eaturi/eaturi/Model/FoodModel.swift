@@ -14,7 +14,5 @@ struct FoodModel: Identifiable, Hashable {
     var categories: [String]
     
     // Example computed description (if needed)
-    var description: String {
-        "\(name): \(calories) kcal, \(protein)g protein, \(carbs)g carbs, \(fat)g fat, \(fiber)g fiber."
-    }
+    var description: String
 }

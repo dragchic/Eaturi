@@ -11,10 +11,11 @@ struct SearchBar: View {
             // Search Field with magnifying glass and clear button
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.black)
-                TextField("What do you want to eat?", text: $searchText)
+                    .foregroundColor(.gray)
+                TextField("Search", text: $searchText)
                     .textFieldStyle(PlainTextFieldStyle())
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray)
+                
                 
                 if !searchText.isEmpty {
                     Button(action: {
@@ -29,7 +30,7 @@ struct SearchBar: View {
                 }
             }
             .padding(10)
-            .background(Color.gray.opacity(0.1))
+            .background(Color.white)
             .cornerRadius(10)
             
             // Filter Icon with a subtle scale animation on tap
@@ -41,7 +42,7 @@ struct SearchBar: View {
                 Image(systemName: "slider.horizontal.3")
                     .symbolVariant(.fill)
                     .font(.system(size: 26, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(Color("colorPrimary"))
             }
             .sheet(isPresented: $isFilterModalPresented) {
                 FilterView(

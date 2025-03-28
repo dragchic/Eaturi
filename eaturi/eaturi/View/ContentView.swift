@@ -7,6 +7,7 @@ struct ContentView: View {
     @State private var cartItems: [UUID: Int] = [:]
     @State private var isCartVisible = false
     @State private var isCategoryReached = false
+    @State var categoryModels = CategoryModel.generateCategories()
     @State private var selectedFoodItem: FoodModel?
     @State private var showDetailModal = false
     @State private var isCartViewActive = false  // Controls navigation to CartView
@@ -26,12 +27,12 @@ struct ContentView: View {
     }
     
     @State var foodItems: [FoodModel] = [
-        FoodModel(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: 25000, calories: 200, protein: 30, carbs: 10, fiber: 30, fat: 10, isPopular: false, categories: ["Ayam", "Asam Manis"]),
-        FoodModel(name: "Nasi Goreng", image: "ayam_asam_manis", price: 20000, calories: 300, protein: 20, carbs: 50, fiber: 5, fat: 15, isPopular: true, categories: ["Nasi"]),
-        FoodModel(name: "Mie Goreng", image: "mie_goreng", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: true, categories: ["Mie"]),
-        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"]),
-        FoodModel(name: "Mie Goreng", image: "ayam_asam_manis", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: false, categories: ["Mie"]),
-        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"])
+        FoodModel(name: "Ayam Goreng Asam Manis", image: "ayam_asam_manis", price: 25000, calories: 200, protein: 30, carbs: 10, fiber: 30, fat: 10, isPopular: false, categories: ["Ayam", "Asam Manis"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+        FoodModel(name: "Nasi Goreng", image: "ayam_asam_manis", price: 20000, calories: 300, protein: 20, carbs: 50, fiber: 5, fat: 15, isPopular: true, categories: ["Nasi"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+        FoodModel(name: "Mie Goreng", image: "mie_goreng", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: true, categories: ["Mie"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+        FoodModel(name: "Mie Goreng", image: "ayam_asam_manis", price: 18000, calories: 350, protein: 25, carbs: 60, fiber: 7, fat: 12, isPopular: false, categories: ["Mie"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal."),
+        FoodModel(name: "Telur Balado", image: "telur_balado", price: 15000, calories: 250, protein: 15, carbs: 5, fiber: 3, fat: 8, isPopular: true, categories: ["Telur"], description: "Savor the irresistible flavor, a perfectly stir-fried noodle dish packed with savory spices, fresh vegetables, and tender proteins for a truly satisfying meal.")
     ]
     
     var popularMenus: [FoodModel] {
@@ -41,12 +42,23 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: Color("colorSecondary"), location: 0.0),
+                        .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
+                        .init(color: .white, location: 0.6)
+                    ]),
+                    startPoint: .topTrailing,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                
                 VStack {
                     // Header with title and search bar
                     VStack(alignment: .leading) {
-                        Text("Start a \nHealthy Lifestyle")
+                        Text("Let's Start a \nHealthy Lifestyle")
                             .font(.largeTitle)
-                            .foregroundColor(Color.black)
+                            .foregroundColor(Color("BlackGray"))
                             .fontWeight(.bold)
                             .padding(.leading, 30)
                         
@@ -55,12 +67,14 @@ struct ContentView: View {
                                   isFilterModalPresented: $isFilterModalPresented,
                                   selectedFilters: $selectedFilters)
                     }
+                    .padding(.top, 20)
                     
                     // Content ScrollView with CategoryView
                     ScrollViewReader { scrollProxy in
                         ScrollView {
                             CategoryView(searchText: $searchText,
                                          isCategoryReached: $isCategoryReached,
+                                         categoryModels: $categoryModels,
                                          foodItems: $foodItems,
                                          selectedFilters: $selectedFilters,
                                          selectedFoodItem: $selectedFoodItem,
