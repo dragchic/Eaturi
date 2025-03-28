@@ -45,7 +45,7 @@ struct CartPopUp: View {
                     
                     HStack(spacing: 8) {
                         Image(systemName: "flame.fill")
-                            .foregroundColor(.colorOren)
+                            .foregroundColor(Color.colorOren)
                         Text("\(totalCalories)")
                             .font(.body)
                             .foregroundColor(.white)
