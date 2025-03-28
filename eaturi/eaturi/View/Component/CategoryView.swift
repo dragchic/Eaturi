@@ -245,7 +245,6 @@ struct CategoryView: View {
                                 }
                             }
                             .frame(width: 164)
-                            .background(Color.white)
                             .cornerRadius(12)
                         }
                     }

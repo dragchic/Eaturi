@@ -56,11 +56,23 @@ struct ContentView: View {
                 VStack {
                     // Header with title and search bar
                     VStack(alignment: .leading) {
-                        Text("Let's Start a \nHealthy Lifestyle")
+                        Text("Let's Start a")
                             .font(.largeTitle)
                             .foregroundColor(Color("BlackGray"))
                             .fontWeight(.bold)
                             .padding(.leading, 30)
+                        HStack (spacing:0){
+                            Text("Healthy")
+                                .font(.largeTitle)
+                                .foregroundColor(Color("colorPrimary"))
+                                .fontWeight(.bold)
+                                .padding(.leading, 30)
+                            Text("Lifestyle")
+                                .font(.largeTitle)
+                                .foregroundColor(Color("BlackGray"))
+                                .fontWeight(.bold)
+                                .padding(.leading, 10)
+                        }
                         
                         // Search bar with filter button
                         SearchBar(searchText: $searchText,

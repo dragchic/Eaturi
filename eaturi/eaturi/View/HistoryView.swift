@@ -21,7 +21,7 @@ struct HistoryView: View {
                     startPoint: .topTrailing,
                     endPoint: .bottom
                 )
-                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea(edges: .top)
                 VStack {
                     ScrollView {
                         HistoryCardView(products: products)

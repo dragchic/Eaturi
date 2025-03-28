@@ -11,13 +11,13 @@ struct QuantityControl: View {
                 Image(systemName: "minus")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 16, height: 16)
+                    .frame(width: 6, height: 6)
                     .foregroundColor(.white)
                     .padding(12) // Inner padding
                     .background(Color("colorPrimary"))
                     .clipShape(Circle())
             }
-            .frame(width: 44, height: 44) // Ensure uniform size
+            .frame(width: 25, height: 25) // Ensure uniform size
 
             Text("\(quantity)")
                 .font(.headline)
@@ -27,13 +27,13 @@ struct QuantityControl: View {
                 Image(systemName: "plus")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 16, height: 16)
+                    .frame(width: 6, height: 6)
                     .foregroundColor(.white)
                     .padding(12) // Inner padding
                     .background(Color("colorPrimary"))
                     .clipShape(Circle())
             }
-            .frame(width: 44, height: 44)
+            .frame(width: 25, height: 25)
         }
         .padding(6)
         .background(Color.white)
