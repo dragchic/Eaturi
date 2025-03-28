@@ -6,12 +6,13 @@
 //
 import SwiftUI
 
-struct CategoryModel: Identifiable {
+struct CategoryModel: Identifiable, Hashable {
     let id = UUID()
     var name: String
     var image: String
     var localName: String
     
+    // More flexible category generation method
     static func generateCategories() -> [CategoryModel] {
         return [
             CategoryModel(name: "Chicken", image: "chicken_thights", localName: "Ayam"),
@@ -22,8 +23,7 @@ struct CategoryModel: Identifiable {
             CategoryModel(name: "Fried", image: "fried", localName: "Gorengan"),
             CategoryModel(name: "Veggies", image: "veggies", localName: "Sayuran"),
             CategoryModel(name: "Sambal", image: "sambal", localName: "Sambal"),
-            CategoryModel(name: "Others", image: "others", localName: "Lainnya"),
+            CategoryModel(name: "Others", image: "others", localName: "Lainnya")
         ]
     }
 }
-

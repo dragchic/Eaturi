@@ -7,48 +7,54 @@
 import Foundation
 
 struct HistoryRecord: Identifiable, Hashable {
-    let id = UUID()
+    let id: UUID
     let date: Date
-    let cart: [UUID: Int] // Now using UUID as the key
+    let cart: [UUID: Int]
+    let foodItems: [FoodModel]
     
-    // Computed property: Total Price
+    // Total price computation using actual food items
     var totalPrice: Int {
-        // Here you would need a mechanism to look up the FoodModel details (e.g. price)
-        // For simplicity, assume a function lookupPrice(for:) exists
         cart.reduce(0) { total, entry in
-            total + (lookupPrice(for: entry.key) * entry.value)
+            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
+                return total + (foodItem.price * entry.value)
+            }
+            return total
         }
     }
     
-    // Computed property: Total Calories
+    // Total calories computation using actual food items
     var totalCalories: Int {
-        // Similar lookup for calories
         cart.reduce(0) { total, entry in
-            total + (lookupCalories(for: entry.key) * entry.value)
+            if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
+                return total + (foodItem.calories * entry.value)
+            }
+            return total
         }
     }
     
-    // Optional: a computed description string
-    var description: String {
-        "Purchased on \(dateFormatted): \(totalPrice) Rupiah, \(totalCalories) kcal"
-    }
-    
-    // Format the date as a string
+    // Formatted date description
     var dateFormatted: String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-}
-
-// Dummy functions for lookup (you need to implement these based on your data management)
-func lookupPrice(for id: UUID) -> Int {
-    // Look up the price for the FoodModel with this id
-    return 0
-}
-
-func lookupCalories(for id: UUID) -> Int {
-    // Look up the calories for the FoodModel with this id
-    return 0
+    
+    // Descriptive history record
+    var description: String {
+        "Purchased on \(dateFormatted): \(totalPrice) Rupiah, \(totalCalories) kcal"
+    }
+    
+    // Initializer with food items
+    init(
+        id: UUID = UUID(),
+        date: Date,
+        cart: [UUID: Int],
+        foodItems: [FoodModel]
+    ) {
+        self.id = id
+        self.date = date
+        self.cart = cart
+        self.foodItems = foodItems
+    }
 }
