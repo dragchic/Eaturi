@@ -20,6 +20,7 @@ struct MainTabView: View {
             ContentView()
                 .tabItem {
                     Image(systemName: "fork.knife")
+//                        .foregroundColor(Color("colorPrimary"))
                     Text("Home")
                 }
             
@@ -27,9 +28,36 @@ struct MainTabView: View {
             HistoryView(products: $dummyCart)
                 .tabItem {
                     Image(systemName: "list.bullet.clipboard")
+//                        .foregroundColor(Color("colorSecondary"))
                     Text("History")
                 }
         }
+        .tint(Color("colorPrimary"))
+    }
+}
+
+struct CustomTabBarItem: View {
+    let icon: String
+    let title: String
+    let isSelected: Bool
+    let color: Color
+    
+    var body: some View {
+        VStack{
+            Rectangle()
+                .fill(isSelected ? color : Color.clear)
+                .frame(height: 3)
+                .cornerRadius(16)
+            Spacer()
+            Image(systemName: icon)
+                .font(.system(size: 18))
+                .foregroundColor(isSelected ? color : .gray)
+            Text(title)
+                .font(.caption)
+                .foregroundColor(isSelected ? color: .gray)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
