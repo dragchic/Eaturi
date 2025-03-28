@@ -12,7 +12,6 @@ struct CategoryModel: Identifiable, Hashable {
     var image: String
     var localName: String
     
-    // More flexible category generation method
     static func generateCategories() -> [CategoryModel] {
         return [
             CategoryModel(name: "Chicken", image: "chicken_thights", localName: "Ayam"),

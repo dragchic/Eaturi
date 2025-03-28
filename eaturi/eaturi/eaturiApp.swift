@@ -13,7 +13,6 @@ struct eaturiApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView(cartItems: [:])
-                // Ensure container is created BEFORE main view
                 .modelContainer(
                     for: HistoryRecord.self,
                     isAutosaveEnabled: true

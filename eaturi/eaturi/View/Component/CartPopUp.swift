@@ -25,7 +25,6 @@ struct CartPopUp: View {
        )
    }
     
-    // Detailed list of cart items
     private var cartItemDetails: [(item: FoodModel, quantity: Int)] {
         cartItems.compactMap { key, value in
             if let foodItem = foodItems.first(where: { $0.id == key }) {
@@ -61,8 +60,8 @@ struct CartPopUp: View {
                         .font(.system(size: 16, weight: .medium))
                     Image(systemName: "chevron.right.circle.fill")
                         .resizable()
-                        .scaledToFit()             // Keep the aspect ratio
-                        .frame(width: 30, height: 30) // Adjust these values as needed for a larger image
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
                         .foregroundStyle(.white)
                 }
             }
@@ -77,8 +76,4 @@ struct CartPopUp: View {
             onTap()
         }
     }
-}
-
-#Preview {
-    MainTabView()
 }

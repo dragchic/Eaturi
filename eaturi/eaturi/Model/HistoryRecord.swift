@@ -5,7 +5,7 @@ import Foundation
 class HistoryRecord {
     @Attribute(.unique) var id: UUID
     var timestamp: Date
-    var cartData: Data  // Storage for dictionary
+    var cartData: Data
     var totalPrice: Int
     var totalCalories: Int
     var totalProtein: Int
@@ -13,7 +13,6 @@ class HistoryRecord {
     var totalFiber: Int
     var totalFat: Int
     
-    // Computed property for dictionary access
     var cart: [UUID: Int] {
         get {
             do {

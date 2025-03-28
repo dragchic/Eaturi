@@ -2,7 +2,7 @@ import SwiftUI
 
 struct HistoryCardView: View {
     let record: HistoryRecord
-    let onPickAgain: ([UUID: Int]) -> Void // Closure to trigger navigation and cart update
+    let onPickAgain: ([UUID: Int]) -> Void
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -43,7 +43,7 @@ struct HistoryCardView: View {
             HStack {
                 Spacer()
                 Button(action: {
-                    onPickAgain(record.cart) // Trigger the closure with the record's cart
+                    onPickAgain(record.cart)
                 }) {
                     Text("Pick Again")
                         .font(.headline)
@@ -72,7 +72,7 @@ struct ProductImageView: View {
     let productID: UUID
 
     var body: some View {
-        Image("otak_otak") // Replace with actual image fetching logic based on productID
+        Image("otak_otak")
             .resizable()
             .frame(width: 100, height: 100)
             .scaledToFill()

@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct MainTabView: View {
-    @Environment(\.modelContext) private var modelContext // ✅ Inject SwiftData context
+    @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 0
     @State var cartItems: [UUID: Int] = [:]
     @State var isCartVisible: Bool = false
@@ -72,5 +72,11 @@ struct CustomTabBarItem: View {
 }
 
 #Preview {
-    MainTabView()
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
 }

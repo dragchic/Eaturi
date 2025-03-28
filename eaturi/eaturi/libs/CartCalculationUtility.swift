@@ -8,7 +8,6 @@
 import Foundation
 
 enum CartCalculationUtility {
-    // Static methods mean you can call these without instantiating the type
     static func calculateTotalCalories(cartItems: [UUID: Int], foodItems: [FoodModel]) -> Int {
         cartItems.reduce(0) { total, entry in
             if let foodItem = foodItems.first(where: { $0.id == entry.key }) {
@@ -58,7 +57,6 @@ enum CartCalculationUtility {
         cartItems.values.reduce(0, +)
     }
     
-    // You can add more calculation methods as needed
     static func calculateTotalProtein(cartItems: [UUID: Int], foodItems: [FoodModel]) -> Int {
         cartItems.reduce(0) { total, entry in
             if let foodItem = foodItems.first(where: { $0.id == entry.key }) {

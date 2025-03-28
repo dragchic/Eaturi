@@ -11,10 +11,6 @@ struct CategoryView: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     
-//    var categories: [String] {
-//        Set(foodItems.flatMap { $0.categories }).sorted()
-//    }
-    
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -27,26 +23,20 @@ struct CategoryView: View {
     var filteredFoodItems: [FoodModel] {
         var items = foodItems
         
-        // Filter by search text
         if !searchText.isEmpty {
             items = items.filter { $0.name.lowercased().contains(searchText.lowercased()) }
         }
         
-        // Define nutritional filter keywords
         let nutritionalFilters = ["Low Carb", "Low Calorie", "High Protein", "Low Fat", "High Fiber"]
         
-        // Separate nutritional and category filters
         let selectedNutritionalFilters = selectedFilters.filter { nutritionalFilters.contains($0) }
         let availableCategories = Set(foodItems.flatMap { $0.categories })
         let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
         
-        // If the user has selected category filters but none match the available categories,
-        // return an empty array.
         if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty {
             return []
         }
         
-        // Apply nutritional filters if any
         if !selectedNutritionalFilters.isEmpty {
             items = items.filter { item in
                 var match = true
@@ -69,10 +59,8 @@ struct CategoryView: View {
             }
         }
         
-        // Apply category filters if any
         if !selectedCategoryFilters.isEmpty {
             items = items.filter { item in
-                // Keep item if at least one of its categories matches one of the selected categories
                 !Set(item.categories).intersection(selectedCategoryFilters).isEmpty
             }
         }
@@ -108,7 +96,6 @@ struct CategoryView: View {
                 }
                 .padding(.bottom, 12)
                 
-                // Category header using a simple VStack instead of GeometryReader
                 VStack {
                     Text("Categories")
                         .font(.title3)
@@ -125,7 +112,7 @@ struct CategoryView: View {
                                     .resizable()
                                     .frame(width: 52, height: 50)
                                     .cornerRadius(20)
-                                Text(category.localName)  // Use localName here
+                                Text(category.localName)
                                     .font(.footnote)
                                     .foregroundColor(.black)
                             }
@@ -151,7 +138,6 @@ struct CategoryView: View {
                 }
                 .frame(height: 90)
                 .padding(.bottom, 20)
-//                .cornerRadius(20)
                 .shadow(radius: 2)
             } else {
                 Text("Search Results")

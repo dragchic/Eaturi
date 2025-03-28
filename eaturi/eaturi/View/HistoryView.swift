@@ -37,7 +37,7 @@ struct HistoryView: View {
                                 HistoryCardView(record: record, onPickAgain: onPickAgain)
                                     .contextMenu {
                                         Button(role: .destructive) {
-                                            modelContext.delete(record) // Delete record
+                                            modelContext.delete(record)
                                         } label: {
                                             Label("Delete", systemImage: "trash")
                                         }
@@ -51,8 +51,4 @@ struct HistoryView: View {
             }
         }
     }
-}
-
-#Preview {
-    MainTabView()
 }

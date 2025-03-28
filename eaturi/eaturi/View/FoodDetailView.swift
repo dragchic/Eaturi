@@ -23,7 +23,6 @@ struct FoodDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Food Image
             HStack {
                 Spacer()
                 Image(item.image)
@@ -34,8 +33,6 @@ struct FoodDetailView: View {
                     .padding(.top, 20)
                 Spacer()
             }
-            
-            // Food Details
             
             Text(item.name)
                 .font(.title)
@@ -63,8 +60,6 @@ struct FoodDetailView: View {
                 }
             }
             .padding(.top, 8)
-            
-            // Quantity and Add to Cart Button
             HStack(spacing: 10) {
                 QuantityControl(
                     quantity: $quantity,
@@ -103,8 +98,6 @@ struct FoodDetailView: View {
             showDetailModal = false
         }
     }
-    
-    // Computed property to generate nutrition data dynamically
     private var nutritionData: [(label: String, value: Int, image: String)] {
         return [
             ("Kcal", item.calories, "calorie"),
@@ -115,8 +108,6 @@ struct FoodDetailView: View {
         ]
     }
 }
-
-// Extracted Nutrition Info View
 struct NutritionInfoView: View {
     var label: String
     var value: Int

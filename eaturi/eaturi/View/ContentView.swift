@@ -13,7 +13,6 @@ struct ContentView: View {
     @State private var isCartViewActive = false
     @State private var navigationPath = NavigationPath()
     @Binding var foodItems: [FoodModel]
-    // Expanded calculations for total nutritional values
     var totalCalories: Int {
         cartItems.reduce(0) { total, entry in
             let item = foodItems.first { $0.id == entry.key }
@@ -75,7 +74,7 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
                 
                 VStack {
-                    // Header with title and search bar
+                    
                     VStack(alignment: .leading) {
                         Text("Let's Start a")
                             .font(.largeTitle)
@@ -95,14 +94,12 @@ struct ContentView: View {
                                 .padding(.leading, 10)
                         }
                         
-                        // Search bar with filter button
                         SearchBar(searchText: $searchText,
                                 isFilterModalPresented: $isFilterModalPresented,
                                 selectedFilters: $selectedFilters)
                     }
                     .padding(.top, 20)
                     
-                    // Content ScrollView with CategoryView
                     ScrollViewReader { scrollProxy in
                         ScrollView {
                             CategoryView(searchText: $searchText,
@@ -118,7 +115,6 @@ struct ContentView: View {
                     }
                 }
                 
-                // Cart popup overlay at bottom
                 if isCartVisible && !cartItems.isEmpty {
                     CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
                         navigationPath.append("cart")
@@ -147,5 +143,11 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 }
 
 #Preview {
-    MainTabView()
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
 }

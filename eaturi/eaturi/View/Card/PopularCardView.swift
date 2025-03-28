@@ -32,7 +32,6 @@ struct PopularCardView: View {
                         Image("fire")
                             .resizable()
                             .frame(width: 15, height: 15)
-//                            .border(.red)
                         Text("\(item.calories) kcal")
                             .font(.caption)
                             .fontWeight(.medium)

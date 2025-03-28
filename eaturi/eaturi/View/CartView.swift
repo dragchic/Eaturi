@@ -7,18 +7,16 @@ struct CartView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    // Remove unnecessary @State for historyRecords unless needed for UI
     @State private var showingSaveAlert = false
     
-    // Keep calculated values for UI display
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
-
+    
     var totalPrice: Int {
         CartCalculationUtility.calculateTotalPrice(cartItems: cartItems, foodItems: foodItems)
     }
-
+    
     var body: some View {
         VStack {
             // Navigation Bar (unchanged)
@@ -29,24 +27,23 @@ struct CartView: View {
                         .foregroundColor(Color.colorPrimary)
                         .frame(width: 33, height: 33)
                 }
-
+                
                 HStack(spacing: 0) {
                     Text("My")
                         .font(.title)
                         .bold()
                         .foregroundColor(.blackGray)
-
+                    
                     Text("Lunch")
                         .font(.title)
                         .bold()
                         .foregroundColor(.colorPrimary)
                 }
-
+                
                 Spacer()
             }
             .padding()
-
-            // Cart Items List (unchanged)
+            
             ScrollView {
                 VStack(spacing: 16) {
                     if cartItems.isEmpty {
@@ -68,11 +65,9 @@ struct CartView: View {
                     }
                 }
             }
-
-            // Summary View (unchanged)
+            
             SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
-
-            // Save Button with confirmation
+            
             Button(action: { showingSaveAlert = true }) {
                 Text("Save to History")
                     .foregroundColor(.white)
@@ -83,16 +78,12 @@ struct CartView: View {
                     .padding()
             }
             .disabled(cartItems.isEmpty)
-            .alert("Confirm Save", isPresented: $showingSaveAlert) {
-                Button("Cancel", role: .cancel) {}
-                Button("Save", action: saveToHistory)
-            }
         }
         .background(Color(UIColor.systemGray6))
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
     }
-
+    
     private func updateQuantity(for id: UUID, quantity: Int) {
         if quantity > 0 {
             cartItems[id] = quantity
@@ -100,11 +91,10 @@ struct CartView: View {
             cartItems.removeValue(forKey: id)
         }
     }
-
+    
     private func saveToHistory() {
         print("⏳ Saving to history...")
         
-        // Prepare food data for calculations
         let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
             result[item.id] = (
                 item.price,
@@ -116,14 +106,12 @@ struct CartView: View {
             )
         }
         
-        // Use the HistoryManager to save
         HistoryManager.saveOrderHistory(
             cart: cartItems,
             modelContext: modelContext,
             foodData: foodData
         )
         
-        // Clear cart and dismiss
         cartItems.removeAll()
         dismiss()
         
@@ -134,7 +122,7 @@ struct CartView: View {
 struct CartItemView: View {
     var item: FoodModel
     @Binding var quantity: Int
-
+    
     var body: some View {
         HStack {
             Image(item.image)
@@ -161,7 +149,7 @@ struct CartItemView: View {
             }
             
             Spacer()
-
+            
             QuantityControl(
                 quantity: $quantity,
                 onIncrement: { quantity += 1 },
@@ -212,8 +200,4 @@ struct SummaryView: View {
         .shadow(radius: 5)
         .padding()
     }
-}
-
-#Preview {
-    MainTabView()
 }

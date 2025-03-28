@@ -7,7 +7,6 @@ class HistoryManager {
         modelContext: ModelContext,
         foodData: [UUID: (price: Int, calories: Int, protein: Int, carbs: Int, fiber: Int, fat: Int)]
     ) {
-        // Calculate totals
         var totals = (price: 0, calories: 0, protein: 0, carbs: 0, fiber: 0, fat: 0)
         
         for (itemID, quantity) in cart {
@@ -21,7 +20,6 @@ class HistoryManager {
             }
         }
         
-        // Create record with actual calculated values
         let newRecord = HistoryRecord(
             cart: cart,
             totalPrice: totals.price,
