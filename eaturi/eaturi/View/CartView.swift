@@ -7,8 +7,6 @@ struct CartView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    @State private var showingSaveAlert = false
-    
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
@@ -19,7 +17,6 @@ struct CartView: View {
     
     var body: some View {
         VStack {
-            // Navigation Bar (unchanged)
             HStack {
                 Button(action: { dismiss() }) {
                     Image(systemName: "chevron.backward.circle.fill")
@@ -68,7 +65,8 @@ struct CartView: View {
             
             SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
             
-            Button(action: { showingSaveAlert = true }) {
+            // Modified button to directly save without alert
+            Button(action: saveToHistory) {
                 Text("Save to History")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -199,5 +197,15 @@ struct SummaryView: View {
         .cornerRadius(20)
         .shadow(radius: 5)
         .padding()
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }
