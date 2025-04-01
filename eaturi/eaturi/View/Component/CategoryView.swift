@@ -23,7 +23,7 @@ struct CategoryView: View {
     
     // Use a separate task to update cache when dependencies change
     private func updateCaches() {
-        let popular = foodItems.filter { $0.isPopular }
+        _ = foodItems.filter { $0.isPopular }
         
         var items = foodItems
         
