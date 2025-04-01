@@ -68,6 +68,31 @@ struct CategoryView: View {
         return items
     }
     
+    // Group food items by category
+    func groupedFoodItems() -> [String: [FoodModel]] {
+        var grouped = [String: [FoodModel]]()
+        
+        for item in filteredFoodItems {
+            if let primaryCategory = item.categories.first {
+                if grouped[primaryCategory] == nil {
+                    grouped[primaryCategory] = []
+                }
+                grouped[primaryCategory]?.append(item)
+            }
+        }
+        
+        return grouped
+    }
+    
+    var sortedCategories: [String] {
+        let categories = groupedFoodItems().keys.sorted { cat1, cat2 in
+            let index1 = categoryModels.firstIndex { $0.localName == cat1 } ?? Int.max
+            let index2 = categoryModels.firstIndex { $0.localName == cat2 } ?? Int.max
+            return index1 < index2
+        }
+        return categories
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
             if searchText.isEmpty {
@@ -164,76 +189,93 @@ struct CategoryView: View {
                 .padding(.top, 50)
             } else {
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 17) {
-                        ForEach(filteredFoodItems) { item in
-                            VStack(alignment: .leading, spacing: 3) {
-                                ZStack(alignment: .bottomTrailing) {
-                                    Image(item.image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 160, height: 160)
-                                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        .onTapGesture {
-                                            selectedFoodItem = item
-                                            showDetailModal = true
-                                        }
+                    VStack(alignment: .leading, spacing: 20) {
+                        ForEach(sortedCategories, id: \.self) { category in
+                            if let items = groupedFoodItems()[category], !items.isEmpty {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text(category)
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .padding(.horizontal)
+                                        .padding(.top, 5)
                                     
-                                    if let quantity = cartItems[item.id] {
-                                        QuantityControl(
-                                            quantity: .constant(quantity),
-                                            onIncrement: {
-                                                cartItems[item.id] = quantity + 1
-                                            },
-                                            onDecrement: {
-                                                if quantity > 1 {
-                                                    cartItems[item.id] = quantity - 1
-                                                } else {
-                                                    cartItems.removeValue(forKey: item.id)
-                                                    if cartItems.isEmpty {
-                                                        isCartVisible = false
+                                    LazyVGrid(columns: columns, spacing: 17) {
+                                        ForEach(items) { item in
+                                            VStack(alignment: .leading, spacing: 3) {
+                                                ZStack(alignment: .bottomTrailing) {
+                                                    Image(item.image)
+                                                        .resizable()
+                                                        .scaledToFill()
+                                                        .frame(width: 160, height: 160)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                                        .onTapGesture {
+                                                            selectedFoodItem = item
+                                                            showDetailModal = true
+                                                        }
+                                                    
+                                                    if let quantity = cartItems[item.id] {
+                                                        QuantityControl(
+                                                            quantity: .constant(quantity),
+                                                            onIncrement: {
+                                                                cartItems[item.id] = quantity + 1
+                                                            },
+                                                            onDecrement: {
+                                                                if quantity > 1 {
+                                                                    cartItems[item.id] = quantity - 1
+                                                                } else {
+                                                                    cartItems.removeValue(forKey: item.id)
+                                                                    if cartItems.isEmpty {
+                                                                        isCartVisible = false
+                                                                    }
+                                                                }
+                                                            }
+                                                        )
+                                                        .padding(4)
+                                                    } else {
+                                                        Button(action: {
+                                                            cartItems[item.id] = 1
+                                                            isCartVisible = true
+                                                        }) {
+                                                            Image(systemName: "plus")
+                                                                .padding(10)
+                                                                .background(Color("colorPrimary"))
+                                                                .foregroundColor(.white)
+                                                                .clipShape(Circle())
+                                                                .padding(8)
+                                                        }
                                                     }
                                                 }
+                                                
+                                                Text(item.name)
+                                                    .font(.subheadline)
+                                                    .fontWeight(.medium)
+                                                    .lineLimit(1)
+                                                
+                                                Text("Rp\(item.price)")
+                                                    .font(.headline)
+                                                    .fontWeight(.bold)
+                                                
+                                                HStack{
+                                                    Image(systemName:"flame.fill")
+                                                        .foregroundStyle(.colorOren)
+                                                    Text("\(item.calories) kcal")
+                                                        .font(.caption)
+                                                        .fontWeight(.bold)
+                                                        .foregroundColor(.secondary)
+                                                }
                                             }
-                                        )
-                                        .padding(4)
-                                    } else {
-                                        Button(action: {
-                                            cartItems[item.id] = 1
-                                            isCartVisible = true
-                                        }) {
-                                            Image(systemName: "plus")
-                                                .padding(10)
-                                                .background(Color("colorPrimary"))
-                                                .foregroundColor(.white)
-                                                .clipShape(Circle())
-                                                .padding(8)
+                                            .frame(width: 164)
+                                            .cornerRadius(12)
                                         }
                                     }
+                                    .padding(.horizontal)
                                 }
                                 
-                                Text(item.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .lineLimit(1)
-                                
-                                Text("Rp\(item.price)")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                
-                                HStack{
-                                    Image(systemName:"flame.fill")
-                                        .foregroundStyle(.colorOren)
-                                    Text("\(item.calories) kcal")
-                                        .font(.caption)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.secondary)
-                                }
+                                Divider()
+                                    .padding(.horizontal)
                             }
-                            .frame(width: 164)
-                            .cornerRadius(12)
                         }
                     }
-                    .padding(.horizontal)
                 }
                 .sheet(item: $selectedFoodItem) { item in
                     FoodDetailView(
@@ -255,5 +297,15 @@ struct CategoryView: View {
                 }
             }
         }
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }
