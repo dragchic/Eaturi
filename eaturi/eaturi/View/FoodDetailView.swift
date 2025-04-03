@@ -23,15 +23,19 @@ struct FoodDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Spacer()
-                Image(item.image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 240)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
-                    .padding(.top, 20)
-                Spacer()
+            GeometryReader { geometry in
+                HStack {
+                    Spacer()
+                    Image(item.image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width * 0.9) // Set width to 80% of parent
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 240) // Adjust this if you want different height based on aspect ratio
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        .padding(.top, 20)
+                    Spacer()
+                }
             }
             
             Text(item.name)
@@ -98,6 +102,7 @@ struct FoodDetailView: View {
             showDetailModal = false
         }
     }
+    
     private var nutritionData: [(label: String, value: Int, image: String)] {
         return [
             ("Kcal", item.calories, "calorie"),
@@ -108,6 +113,8 @@ struct FoodDetailView: View {
         ]
     }
 }
+
+
 struct NutritionInfoView: View {
     var label: String
     var value: Int
