@@ -11,16 +11,20 @@ struct CategoryView: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     
+    // Store calculated values to avoid recomputing
+    @State private var cachedFilteredItems: [FoodModel] = []
+    @State private var cachedGroupedItems: [String: [FoodModel]] = [:]
+    @State private var cachedSortedCategories: [String] = []
+    
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-    var popularMenus: [FoodModel] {
-        foodItems.filter { $0.isPopular }
-    }
-    
-    var filteredFoodItems: [FoodModel] {
+    // Use a separate task to update cache when dependencies change
+    private func updateCaches() {
+        _ = foodItems.filter { $0.isPopular }
+        
         var items = foodItems
         
         if !searchText.isEmpty {
@@ -34,7 +38,10 @@ struct CategoryView: View {
         let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
         
         if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty {
-            return []
+            cachedFilteredItems = []
+            cachedGroupedItems = [:]
+            cachedSortedCategories = []
+            return
         }
         
         if !selectedNutritionalFilters.isEmpty {
@@ -65,7 +72,27 @@ struct CategoryView: View {
             }
         }
         
-        return items
+        cachedFilteredItems = items
+        
+        // Calculate grouped items
+        var grouped = [String: [FoodModel]]()
+        for item in cachedFilteredItems {
+            if let primaryCategory = item.categories.first {
+                if grouped[primaryCategory] == nil {
+                    grouped[primaryCategory] = []
+                }
+                grouped[primaryCategory]?.append(item)
+            }
+        }
+        cachedGroupedItems = grouped
+        
+        // Calculate sorted categories
+        let categories = grouped.keys.sorted { cat1, cat2 in
+            let index1 = categoryModels.firstIndex { $0.localName == cat1 } ?? Int.max
+            let index2 = categoryModels.firstIndex { $0.localName == cat2 } ?? Int.max
+            return index1 < index2
+        }
+        cachedSortedCategories = categories
     }
     
     var body: some View {
@@ -77,25 +104,15 @@ struct CategoryView: View {
                     .padding(.leading, 20)
                     .padding(.top, 10)
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: 15) {
-                        ForEach(popularMenus, id: \.id) { item in
-                            PopularCardView(item: .constant(item))
-                                .padding()
-                                .frame(width: 230, height: 90)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .onTapGesture {
-                                    selectedFoodItem = item
-                                    showDetailModal = true
-                                }
-                        }
-                    }
-                    .padding(.leading, 20)
-                    .frame(maxHeight: 120)
-                }
+                // Popular items section
+                PopularItemsSection(
+                    foodItems: foodItems.filter { $0.isPopular },
+                    selectedFoodItem: $selectedFoodItem,
+                    showDetailModal: $showDetailModal
+                )
                 .padding(.bottom, 12)
                 
+                // Categories section
                 VStack {
                     Text("Categories")
                         .font(.title3)
@@ -104,38 +121,10 @@ struct CategoryView: View {
                 }
                 .frame(height: 30)
                 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: 15) {
-                        ForEach(categoryModels) { category in
-                            VStack(spacing: 0) {
-                                Image(category.image)
-                                    .resizable()
-                                    .frame(width: 52, height: 50)
-                                    .cornerRadius(20)
-                                Text(category.localName)
-                                    .font(.footnote)
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 80, height: 75)
-                            .background(selectedFilters.contains(category.localName) ? Color("categorySelected").opacity(0.7) : Color.white)
-                            .cornerRadius(20)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedFilters.contains(category.localName) ? Color("Border") : Color.clear, lineWidth: 2)
-                            )
-                            .onTapGesture {
-                                withAnimation {
-                                    if let index = selectedFilters.firstIndex(of: category.localName) {
-                                        selectedFilters.remove(at: index)
-                                    } else {
-                                        selectedFilters.append(category.localName)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 30)
-                }
+                CategorySelectionView(
+                    categoryModels: categoryModels,
+                    selectedFilters: $selectedFilters
+                )
                 .frame(height: 90)
                 .padding(.bottom, 20)
                 .shadow(radius: 2)
@@ -147,94 +136,17 @@ struct CategoryView: View {
                     .padding(.top, 10)
             }
             
-            if !searchText.isEmpty && filteredFoodItems.isEmpty {
-                VStack(spacing: 20) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 50))
-                        .foregroundColor(.gray)
-                    Text("No menu items found for \"\(searchText)\"")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                    Text("Try a different search term or clear the search field")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 50)
+            if !searchText.isEmpty && cachedFilteredItems.isEmpty {
+                EmptySearchResultsView(searchText: searchText)
             } else {
-                ScrollView {
-                    LazyVGrid(columns: columns, spacing: 17) {
-                        ForEach(filteredFoodItems) { item in
-                            VStack(alignment: .leading, spacing: 3) {
-                                ZStack(alignment: .bottomTrailing) {
-                                    Image(item.image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 160, height: 160)
-                                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        .onTapGesture {
-                                            selectedFoodItem = item
-                                            showDetailModal = true
-                                        }
-                                    
-                                    if let quantity = cartItems[item.id] {
-                                        QuantityControl(
-                                            quantity: .constant(quantity),
-                                            onIncrement: {
-                                                cartItems[item.id] = quantity + 1
-                                            },
-                                            onDecrement: {
-                                                if quantity > 1 {
-                                                    cartItems[item.id] = quantity - 1
-                                                } else {
-                                                    cartItems.removeValue(forKey: item.id)
-                                                    if cartItems.isEmpty {
-                                                        isCartVisible = false
-                                                    }
-                                                }
-                                            }
-                                        )
-                                        .padding(4)
-                                    } else {
-                                        Button(action: {
-                                            cartItems[item.id] = 1
-                                            isCartVisible = true
-                                        }) {
-                                            Image(systemName: "plus")
-                                                .padding(10)
-                                                .background(Color("colorPrimary"))
-                                                .foregroundColor(.white)
-                                                .clipShape(Circle())
-                                                .padding(8)
-                                        }
-                                    }
-                                }
-                                
-                                Text(item.name)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                    .lineLimit(1)
-                                
-                                Text("Rp\(item.price)")
-                                    .font(.headline)
-                                    .fontWeight(.bold)
-                                
-                                HStack{
-                                    Image(systemName:"flame.fill")
-                                        .foregroundStyle(.colorOren)
-                                    Text("\(item.calories) kcal")
-                                        .font(.caption)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                            .frame(width: 164)
-                            .cornerRadius(12)
-                        }
-                    }
-                    .padding(.horizontal)
-                }
+                FoodItemsGrid(
+                    sortedCategories: cachedSortedCategories,
+                    groupedItems: cachedGroupedItems,
+                    selectedFoodItem: $selectedFoodItem,
+                    showDetailModal: $showDetailModal,
+                    cartItems: $cartItems,
+                    isCartVisible: $isCartVisible
+                )
                 .sheet(item: $selectedFoodItem) { item in
                     FoodDetailView(
                         item: item,
@@ -255,5 +167,248 @@ struct CategoryView: View {
                 }
             }
         }
+        .onAppear {
+            updateCaches()
+        }
+        .onChange(of: searchText) { _, _ in
+            updateCaches()
+        }
+        .onChange(of: selectedFilters) { _, _ in
+            updateCaches()
+        }
+        .onAppear {
+            updateCaches()
+        }
+        .task {
+            updateCaches()
+        }
+    }
+}
+
+// MARK: - Component Views
+
+// Extracted view for popular items section
+struct PopularItemsSection: View {
+    let foodItems: [FoodModel]
+    @Binding var selectedFoodItem: FoodModel?
+    @Binding var showDetailModal: Bool
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 15) {
+                ForEach(foodItems, id: \.id) { item in
+                    PopularCardView(item: .constant(item))
+                        .padding()
+                        .frame(width: 230, height: 90)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .onTapGesture {
+                            selectedFoodItem = item
+                            showDetailModal = true
+                        }
+                }
+            }
+            .padding(.leading, 20)
+            .frame(maxHeight: 120)
+        }
+    }
+}
+
+// Extracted view for category selection
+struct CategorySelectionView: View {
+    let categoryModels: [CategoryModel]
+    @Binding var selectedFilters: [String]
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 15) {
+                ForEach(categoryModels) { category in
+                    VStack(spacing: 0) {
+                        Image(category.image)
+                            .resizable()
+                            .frame(width: 52, height: 50)
+                            .cornerRadius(20)
+                        Text(category.localName)
+                            .font(.footnote)
+                            .foregroundColor(.black)
+                    }
+                    .frame(width: 80, height: 75)
+                    .background(selectedFilters.contains(category.localName) ? Color("categorySelected").opacity(0.7) : Color.white)
+                    .cornerRadius(20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(selectedFilters.contains(category.localName) ? Color("Border") : Color.clear, lineWidth: 2)
+                    )
+                    .onTapGesture {
+                        withAnimation {
+                            if let index = selectedFilters.firstIndex(of: category.localName) {
+                                selectedFilters.remove(at: index)
+                            } else {
+                                selectedFilters.append(category.localName)
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 30)
+        }
+    }
+}
+
+// Empty results view
+struct EmptySearchResultsView: View {
+    let searchText: String
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 50))
+                .foregroundColor(.gray)
+            Text("No menu items found for \"\(searchText)\"")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+            Text("Try a different search term or clear the search field")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 50)
+    }
+}
+
+// Grid of food items
+struct FoodItemsGrid: View {
+    let sortedCategories: [String]
+    let groupedItems: [String: [FoodModel]]
+    @Binding var selectedFoodItem: FoodModel?
+    @Binding var showDetailModal: Bool
+    @Binding var cartItems: [UUID: Int]
+    @Binding var isCartVisible: Bool
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                ForEach(sortedCategories, id: \.self) { category in
+                    if let items = groupedItems[category], !items.isEmpty {
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text(category)
+                                .font(.title3)
+                                .fontWeight(.bold)
+                                .padding(.horizontal)
+                                .padding(.top, 5)
+                            
+                            LazyVGrid(columns: columns, spacing: 17) {
+                                ForEach(items) { item in
+                                    FoodItemCell(
+                                        item: item,
+                                        selectedFoodItem: $selectedFoodItem,
+                                        showDetailModal: $showDetailModal,
+                                        cartItems: $cartItems,
+                                        isCartVisible: $isCartVisible
+                                    )
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        
+                        Divider()
+                            .padding(.horizontal)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Individual food item cell
+struct FoodItemCell: View {
+    let item: FoodModel
+    @Binding var selectedFoodItem: FoodModel?
+    @Binding var showDetailModal: Bool
+    @Binding var cartItems: [UUID: Int]
+    @Binding var isCartVisible: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            ZStack(alignment: .bottomTrailing) {
+                Image(item.image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 160, height: 160)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .onTapGesture {
+                        selectedFoodItem = item
+                        showDetailModal = true
+                    }
+                
+                if let quantity = cartItems[item.id] {
+                    QuantityControl(
+                        quantity: .constant(quantity),
+                        onIncrement: {
+                            cartItems[item.id] = quantity + 1
+                        },
+                        onDecrement: {
+                            if quantity > 1 {
+                                cartItems[item.id] = quantity - 1
+                            } else {
+                                cartItems.removeValue(forKey: item.id)
+                                if cartItems.isEmpty {
+                                    isCartVisible = false
+                                }
+                            }
+                        }
+                    )
+                    .padding(4)
+                } else {
+                    Button(action: {
+                        cartItems[item.id] = 1
+                        isCartVisible = true
+                    }) {
+                        Image(systemName: "plus")
+                            .padding(10)
+                            .background(Color("colorPrimary"))
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                            .padding(8)
+                    }
+                }
+            }
+            
+            Text(item.name)
+                .font(.subheadline)
+                .fontWeight(.medium)
+                .lineLimit(1)
+            
+            Text("Rp\(item.price)")
+                .font(.headline)
+                .fontWeight(.bold)
+            
+            HStack {
+                Image(systemName: "flame.fill")
+                    .foregroundStyle(.colorOren)
+                Text("\(item.calories) kcal")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .frame(width: 164)
+        .cornerRadius(12)
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }

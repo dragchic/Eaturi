@@ -39,7 +39,7 @@ struct FoodDetailView: View {
                 .fontWeight(.bold)
                 .foregroundStyle(.newblek)
             
-            Text(item.description)
+            Text(item.foodDescription)
                 .font(.body)
                 .foregroundStyle(.abu)
             
