@@ -11,7 +11,6 @@ struct CategoryView: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     
-    // Store calculated values to avoid recomputing
     @State private var cachedFilteredItems: [FoodModel] = []
     @State private var cachedGroupedItems: [String: [FoodModel]] = [:]
     @State private var cachedSortedCategories: [String] = []
@@ -21,7 +20,6 @@ struct CategoryView: View {
         GridItem(.flexible())
     ]
     
-    // Use a separate task to update cache when dependencies change
     private func updateCaches() {
         _ = foodItems.filter { $0.isPopular }
         
@@ -74,7 +72,6 @@ struct CategoryView: View {
         
         cachedFilteredItems = items
         
-        // Calculate grouped items
         var grouped = [String: [FoodModel]]()
         for item in cachedFilteredItems {
             if let primaryCategory = item.categories.first {
@@ -86,7 +83,6 @@ struct CategoryView: View {
         }
         cachedGroupedItems = grouped
         
-        // Calculate sorted categories
         let categories = grouped.keys.sorted { cat1, cat2 in
             let index1 = categoryModels.firstIndex { $0.localName == cat1 } ?? Int.max
             let index2 = categoryModels.firstIndex { $0.localName == cat2 } ?? Int.max
@@ -104,7 +100,6 @@ struct CategoryView: View {
                     .padding(.leading, 20)
                     .padding(.top, 10)
                 
-                // Popular items section
                 PopularItemsSection(
                     foodItems: foodItems.filter { $0.isPopular },
                     selectedFoodItem: $selectedFoodItem,
@@ -112,7 +107,6 @@ struct CategoryView: View {
                 )
                 .padding(.bottom, 12)
                 
-                // Categories section
                 VStack {
                     Text("Categories")
                         .font(.title3)
@@ -187,7 +181,6 @@ struct CategoryView: View {
 
 // MARK: - Component Views
 
-// Extracted view for popular items section
 struct PopularItemsSection: View {
     let foodItems: [FoodModel]
     @Binding var selectedFoodItem: FoodModel?
@@ -214,7 +207,6 @@ struct PopularItemsSection: View {
     }
 }
 
-// Extracted view for category selection
 struct CategorySelectionView: View {
     let categoryModels: [CategoryModel]
     @Binding var selectedFilters: [String]
@@ -255,7 +247,6 @@ struct CategorySelectionView: View {
     }
 }
 
-// Empty results view
 struct EmptySearchResultsView: View {
     let searchText: String
     
@@ -277,7 +268,6 @@ struct EmptySearchResultsView: View {
     }
 }
 
-// Grid of food items
 struct FoodItemsGrid: View {
     let sortedCategories: [String]
     let groupedItems: [String: [FoodModel]]
@@ -326,7 +316,6 @@ struct FoodItemsGrid: View {
     }
 }
 
-// Individual food item cell
 struct FoodItemCell: View {
     let item: FoodModel
     @Binding var selectedFoodItem: FoodModel?

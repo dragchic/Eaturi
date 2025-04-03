@@ -3,7 +3,7 @@ import SwiftUI
 struct CartPopUp: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var foodItems: [FoodModel]
-    var onTap: () -> Void   // Closure to trigger navigation
+    var onTap: () -> Void
 
     var totalQuantity : Int {
         CartCalculationUtility.calculateTotalQuantity(
