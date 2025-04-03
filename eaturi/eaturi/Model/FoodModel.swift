@@ -1,4 +1,3 @@
-// FoodModel.swift (Ensure it looks like this)
 import SwiftUI
 import SwiftData
 
@@ -41,7 +40,7 @@ func sampleFoodData() -> [FoodModel] {
     return [
         // MARK: - Ayam (6 items)
 
-        FoodModel( // No 'id: UUID()' needed anymore
+        FoodModel(
 
             name: "Ayam Teriyaki", image: "ayam_teriyaki",
 
@@ -55,7 +54,7 @@ func sampleFoodData() -> [FoodModel] {
 
         ),
 
-        FoodModel( // No 'id: UUID()' needed anymore
+        FoodModel(
 
             name: "Ayam Bistik", image: "ayam_bistik",
 
@@ -469,10 +468,7 @@ func sampleFoodData() -> [FoodModel] {
              foodDescription: "Tumis kacang panjang bawang putih"
 
          ),
-
-        // (... and so on for Gorengan, Nasi, Sambal, Lainnya, Minuman ...)
-
-
+        
         // MARK: - Gorengan
 
          FoodModel(
@@ -743,7 +739,7 @@ func sampleFoodData() -> [FoodModel] {
 
              price: 22000, calories: 300, protein: 28, carbs: 12, fiber: 2, fat: 15,
 
-             isPopular: false, categories: ["Ikan"], // Assuming fish bone soup?
+             isPopular: false, categories: ["Ikan"],
 
              availableDays: ["Selasa", "Kamis"],
 

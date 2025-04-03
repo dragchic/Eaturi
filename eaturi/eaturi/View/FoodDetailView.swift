@@ -29,9 +29,9 @@ struct FoodDetailView: View {
                     Image(item.image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: geometry.size.width * 0.9) // Set width to 80% of parent
+                        .frame(width: geometry.size.width * 0.95)
                         .aspectRatio(contentMode: .fill)
-                        .frame(height: 240) // Adjust this if you want different height based on aspect ratio
+                        .frame(height: 240)
                         .clipShape(RoundedRectangle(cornerRadius: 25))
                         .padding(.top, 20)
                     Spacer()

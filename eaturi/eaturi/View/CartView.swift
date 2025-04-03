@@ -65,7 +65,6 @@ struct CartView: View {
             
             SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
             
-            // Modified button to directly save without alert
             Button(action: saveToHistory) {
                 Text("Save to History")
                     .foregroundColor(.white)
