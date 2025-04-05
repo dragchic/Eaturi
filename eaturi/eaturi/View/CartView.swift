@@ -1,14 +1,32 @@
 import SwiftUI
 import SwiftData
+import HealthKit
 
 struct CartView: View {
     @Binding var cartItems: [UUID: Int]
     var foodItems: [FoodModel]
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
+    let healthManager = HealthManager()
     
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
+    }
+    
+    var totalProtein: Int {
+        CartCalculationUtility.calculateTotalProtein(cartItems: cartItems, foodItems: foodItems)
+    }
+    
+    var totalFat: Int {
+        CartCalculationUtility.calculateTotalFat(cartItems: cartItems, foodItems: foodItems)
+    }
+    
+    var totalFiber: Int {
+        CartCalculationUtility.calculateTotalFiber(cartItems: cartItems, foodItems: foodItems)
+    }
+    
+    var totalCarbs: Int {
+        CartCalculationUtility.calculateTotalCarbs(cartItems: cartItems, foodItems: foodItems)
     }
     
     var totalPrice: Int {
@@ -109,10 +127,16 @@ struct CartView: View {
             foodData: foodData
         )
         
+        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
+        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal) // Optional, kalau mau simpan price juga
+        healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
+        healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
+        healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
+        
         cartItems.removeAll()
         dismiss()
         
-        print("✅ Save completed")
+        print("Save completed")
     }
 }
 

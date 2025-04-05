@@ -1,9 +1,15 @@
 import SwiftUI
 import SwiftData
+import HealthKit
 
 @main
 struct eaturiApp: App {
     let sharedModelContainer: ModelContainer = createContainer()
+    let healthManager = HealthManager()
+    
+    init() {
+        healthManager.requestAuthorization()
+    }
 
     var body: some Scene {
         WindowGroup {

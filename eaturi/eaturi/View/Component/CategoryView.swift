@@ -380,7 +380,7 @@ struct FoodItemCell: View {
             
             HStack {
                 Image(systemName: "flame.fill")
-                    .foregroundStyle(.colorOren)
+                    .foregroundStyle(Color.colororen)
                 Text("\(item.calories) kcal")
                     .font(.caption)
                     .fontWeight(.bold)
