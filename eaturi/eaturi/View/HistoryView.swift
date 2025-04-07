@@ -19,7 +19,7 @@ struct HistoryView: View {
                     gradient: Gradient(stops: [
                         .init(color: Color("colorSecondary"), location: 0.0),
                         .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
-                        .init(color: .white, location: 0.6)
+                        .init(color: Color("abubg"), location: 0.6)
                     ]),
                     startPoint: .topTrailing,
                     endPoint: .bottom

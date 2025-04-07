@@ -85,17 +85,29 @@ struct ContentCardView: View {
                 .fontWeight(.medium)
                 .lineLimit(1)
             
-            Text("Rp\(item.price)")
-                .font(.headline)
-                .fontWeight(.bold)
-            
             Text("Calories: \(item.calories)")
                 .font(.caption)
-                .fontWeight(.bold)
+                .fontWeight(.semibold)
                 .foregroundColor(.red)
+            
+            Text("Rp\(item.price)")
+                .font(.headline)
+                .fontWeight(.medium)
+                .foregroundColor(Color("colorPrimary"))
+    
         }
         .frame(width: 164)
         .background(Color.white)
         .cornerRadius(12)
+    }
+}
+
+#Preview("Main Tab View") {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Failed to create preview: \(error.localizedDescription)")
     }
 }

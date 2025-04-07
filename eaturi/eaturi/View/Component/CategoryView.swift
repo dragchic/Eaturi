@@ -121,7 +121,6 @@ struct CategoryView: View {
                 )
                 .frame(height: 90)
                 .padding(.bottom, 20)
-                .shadow(radius: 2)
             } else {
                 Text("Search Results")
                     .font(.title2)
@@ -325,7 +324,7 @@ struct FoodItemCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            ZStack(alignment: .bottomTrailing) {
+            ZStack {
                 Image(item.image)
                     .resizable()
                     .scaledToFill()
@@ -336,58 +335,116 @@ struct FoodItemCell: View {
                         showDetailModal = true
                     }
                 
-                if let quantity = cartItems[item.id] {
-                    QuantityControl(
-                        quantity: .constant(quantity),
-                        onIncrement: {
-                            cartItems[item.id] = quantity + 1
-                        },
-                        onDecrement: {
-                            if quantity > 1 {
-                                cartItems[item.id] = quantity - 1
-                            } else {
-                                cartItems.removeValue(forKey: item.id)
-                                if cartItems.isEmpty {
-                                    isCartVisible = false
+                VStack {
+                    HStack {
+                        HStack(spacing: 4) {
+                            Image("fire")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                            Text("\(item.calories) kcal")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(5)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        Spacer()
+                    }.padding(10)
+                    
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        
+                        if let quantity = cartItems[item.id] {
+                            QuantityControl(
+                                quantity: .constant(quantity),
+                                onIncrement: {
+                                    cartItems[item.id] = quantity + 1
+                                },
+                                onDecrement: {
+                                    if quantity > 1 {
+                                        cartItems[item.id] = quantity - 1
+                                    } else {
+                                        cartItems.removeValue(forKey: item.id)
+                                        if cartItems.isEmpty {
+                                            isCartVisible = false
+                                        }
+                                    }
                                 }
+                            )
+                            .padding(4)
+                        } else {
+                            Button(action: {
+                                cartItems[item.id] = 1
+                                isCartVisible = true
+                            }) {
+                                Image(systemName: "plus")
+                                    .padding(10)
+                                    .background(Color("colorPrimary"))
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                                    .padding(8)
                             }
                         }
-                    )
-                    .padding(4)
-                } else {
-                    Button(action: {
-                        cartItems[item.id] = 1
-                        isCartVisible = true
-                    }) {
-                        Image(systemName: "plus")
-                            .padding(10)
-                            .background(Color("colorPrimary"))
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
-                            .padding(8)
                     }
                 }
             }
             
-            Text(item.name)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .lineLimit(1)
-            
-            Text("Rp\(item.price)")
-                .font(.headline)
-                .fontWeight(.bold)
-            
-            HStack {
-                Image(systemName: "flame.fill")
-                    .foregroundStyle(Color.colorOren)
-                Text("\(item.calories) kcal")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(item.name)
+                    .font(.system(size: 20))
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                    .foregroundColor(.newblek)
+                
+                HStack(spacing: 12) {
+                    HStack(spacing: 4) {
+                        Image("fat")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                        Text("\(item.fat)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 4) {
+                        Image("protein")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                        Text("\(item.protein)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 4) {
+                        Image("carbs")
+                            .resizable()
+                            .frame(width: 12, height: 12)
+                        Text("\(item.carbs)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding(.bottom, 10)
+                
+                
+                Text("Rp\(item.price)")
+                    .font(.system(size: 14))
+                    .fontWeight(.semibold)
+                    .foregroundColor(.ijotulisan)
             }
+            .padding(.horizontal, 12)
+            .padding(.top, 10)
+            .padding(.bottom, 15)
         }
         .frame(width: 164)
+        .background(Color.white)
         .cornerRadius(12)
     }
 }
