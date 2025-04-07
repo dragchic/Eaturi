@@ -1,7 +1,3 @@
-//
-//  HistoryView.swift
-//  KasturiFoodTracker
-//
 import SwiftUI
 import SwiftData
 
@@ -11,9 +7,8 @@ struct HistoryView: View {
     private var historyRecords: [HistoryRecord]
     
     var onPickAgain: ([UUID: Int]) -> Void
-
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
