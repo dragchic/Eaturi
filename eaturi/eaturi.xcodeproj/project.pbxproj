@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		4EBF5B152D8BC6D200994724 /* eaturi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = eaturi.app; path = "/Users/grachiauliari/Documents/Eaturi/eaturi/build/Debug-iphoneos/eaturi.app"; sourceTree = "<absolute>"; };
+		4EC1B3322DA35801007138A7 /* eaturi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eaturi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				4EBF5B172D8BC6D200994724 /* eaturi */,
+				4EC1B3322DA35801007138A7 /* eaturi.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,7 +59,7 @@
 			packageProductDependencies = (
 			);
 			productName = eaturi;
-			productReference = 4EBF5B152D8BC6D200994724 /* eaturi.app */;
+			productReference = 4EC1B3322DA35801007138A7 /* eaturi.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -244,7 +245,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"eaturi/Preview Content\"";
-				DEVELOPMENT_TEAM = C78LH9D7KD;
+				DEVELOPMENT_TEAM = ZCVUABJF6A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";
@@ -276,7 +277,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"eaturi/Preview Content\"";
-				DEVELOPMENT_TEAM = C78LH9D7KD;
+				DEVELOPMENT_TEAM = ZCVUABJF6A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";

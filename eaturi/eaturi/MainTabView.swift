@@ -76,3 +76,13 @@ struct CustomTabBarItem: View {
         .frame(maxWidth: .infinity)
     }
 }
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
+}
