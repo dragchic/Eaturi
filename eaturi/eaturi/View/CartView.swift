@@ -34,69 +34,81 @@ struct CartView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.backward.circle.fill")
-                        .resizable()
-                        .foregroundColor(Color.colorPrimary)
-                        .frame(width: 33, height: 33)
-                }
-                
-                HStack(spacing: 0) {
-                    Text("My")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.blackGray)
-                    
-                    Text("Lunch")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(.colorPrimary)
-                }
-                
-                Spacer()
-            }
-            .padding()
+        ZStack {
+            // ✅ Ganti background menjadi gradient seperti permintaan
+            LinearGradient(
+                gradient: Gradient(stops: [
+                    .init(color: Color("colorSecondary"), location: 0.0),
+                    .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
+                    .init(color: Color("abubg"), location: 0.6)
+                ]),
+                startPoint: .topTrailing,
+                endPoint: .bottom
+            )
+            .edgesIgnoringSafeArea(.all)
             
-            ScrollView {
-                VStack(spacing: 16) {
-                    if cartItems.isEmpty {
-                        Text("Your cart is empty")
-                            .foregroundColor(.gray)
-                            .padding()
-                    } else {
-                        ForEach(cartItems.compactMap { key, value -> (FoodModel, Binding<Int>)? in
-                            if let item = foodItems.first(where: { $0.id == key }) {
-                                return (item, Binding(
-                                    get: { cartItems[key] ?? 0 },
-                                    set: { newValue in updateQuantity(for: key, quantity: newValue) }
-                                ))
+            VStack {
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.backward.circle.fill")
+                            .resizable()
+                            .foregroundColor(Color.colorPrimary)
+                            .frame(width: 33, height: 33)
+                    }
+                    
+                    HStack(spacing: 0) {
+                        Text("My")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.blackGray)
+                        
+                        Text("Lunch")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.colorPrimary)
+                    }
+                    
+                    Spacer()
+                }
+                .padding()
+                
+                ScrollView {
+                    VStack(spacing: 16) {
+                        if cartItems.isEmpty {
+                            Text("Your cart is empty")
+                                .foregroundColor(.gray)
+                                .padding()
+                        } else {
+                            ForEach(cartItems.compactMap { key, value -> (FoodModel, Binding<Int>)? in
+                                if let item = foodItems.first(where: { $0.id == key }) {
+                                    return (item, Binding(
+                                        get: { cartItems[key] ?? 0 },
+                                        set: { newValue in updateQuantity(for: key, quantity: newValue) }
+                                    ))
+                                }
+                                return nil
+                            }, id: \.0.id) { item, quantity in
+                                CartItemView(item: item, quantity: quantity)
                             }
-                            return nil
-                        }, id: \.0.id) { item, quantity in
-                            CartItemView(item: item, quantity: quantity)
                         }
                     }
                 }
+                
+                SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
+                
+                Button(action: saveToHistory) {
+                    Text("Save to History")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
+                        .cornerRadius(25)
+                        .padding()
+                }
+                .disabled(cartItems.isEmpty)
             }
-            
-            SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
-            
-            Button(action: saveToHistory) {
-                Text("Save to History")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
-                    .cornerRadius(25)
-                    .padding()
-            }
-            .disabled(cartItems.isEmpty)
+            .navigationBarHidden(true)
         }
-        .background(Color(UIColor.systemGray6))
-        .edgesIgnoringSafeArea(.bottom)
-        .navigationBarHidden(true)
     }
     
     private func updateQuantity(for id: UUID, quantity: Int) {
@@ -128,7 +140,7 @@ struct CartView: View {
         )
         
         healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
-        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal) // Optional, kalau mau simpan price juga
+        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
         healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
         healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
         healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
@@ -139,6 +151,7 @@ struct CartView: View {
         print("Save completed")
     }
 }
+
 
 struct CartItemView: View {
     var item: FoodModel

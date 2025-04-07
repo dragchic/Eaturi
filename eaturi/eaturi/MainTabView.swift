@@ -34,7 +34,7 @@ struct MainTabView: View {
                  Button {
                      selectedTab = 0
                  } label: {
-                     CustomTabBarItem(icon: "house.fill", title: "Home", isSelected: selectedTab == 0, color: Color("colorPrimary"))
+                     CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
                  }
                  Button {
                      selectedTab = 1
