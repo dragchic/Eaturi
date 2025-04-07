@@ -18,6 +18,7 @@ struct PopularCardView: View {
                     .frame(width: 70, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .clipped()
+                    .padding(10)
    
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)

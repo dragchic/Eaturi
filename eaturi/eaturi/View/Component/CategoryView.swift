@@ -106,6 +106,7 @@ struct CategoryView: View {
                     showDetailModal: $showDetailModal
                 )
                 .padding(.bottom, 12)
+                .padding(.horizontal, 20)
                 
                 VStack {
                     Text("Categories")
@@ -179,30 +180,60 @@ struct CategoryView: View {
 }
 
 // MARK: - Component Views
-
 struct PopularItemsSection: View {
     let foodItems: [FoodModel]
     @Binding var selectedFoodItem: FoodModel?
     @Binding var showDetailModal: Bool
     
+    // Auto-scrolling properties
+    @State private var timerScrollIndex: Int = 0
+    private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+    
+    // Layout constants
+    private let cardWidth: CGFloat = 230
+    private let cardHeight: CGFloat = 90
+    private let cardSpacing: CGFloat = 15
+    
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 15) {
-                ForEach(foodItems, id: \.id) { item in
-                    PopularCardView(item: .constant(item))
-                        .padding()
-                        .frame(width: 230, height: 90)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            selectedFoodItem = item
-                            showDetailModal = true
+        VStack(alignment: .leading) {
+            ScrollViewReader { scrollProxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        // This spacer creates the left padding for scrolling
+                        LazyHStack(spacing: cardSpacing) {
+                            ForEach(Array(foodItems.enumerated()), id: \.offset) { index, item in
+                                PopularCardView(item: .constant(item))
+                                    .frame(width: cardWidth, height: cardHeight)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
+                                    .onTapGesture {
+                                        selectedFoodItem = item
+                                        showDetailModal = true
+                                    }
+                                    .id(index)
+                            }
                         }
+                    }
+                }
+                .onReceive(timer) { _ in
+                    if foodItems.count > 1 {
+                        // Scroll to leftPadding first to ensure consistent left padding
+                        scrollProxy.scrollTo("leftPadding", anchor: .leading)
+                        
+                        // Then scroll to the desired item with a slight delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                timerScrollIndex = (timerScrollIndex + 1) % foodItems.count
+                                // Use the horizontalPadding value as the anchor offset
+                                scrollProxy.scrollTo(timerScrollIndex, anchor: .leading)
+                            }
+                        }
+                    }
                 }
             }
-            .padding(.leading, 20)
-            .frame(maxHeight: 120)
         }
+        .padding(.top, 5)
     }
 }
 
