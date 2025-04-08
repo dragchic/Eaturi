@@ -129,7 +129,16 @@ struct CategoryView: View {
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .padding(.top, 6)
+                    .padding(.bottom, 1)
+                
+                if !searchText.isEmpty {
+                                Text("\"\(searchText)\" search showing \(cachedFilteredItems.count) result\(cachedFilteredItems.count == 1 ? "" : "s")")
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 20)
+                                    .padding(.bottom, 10)
+                            }
             }
             
             if !searchText.isEmpty && cachedFilteredItems.isEmpty {
