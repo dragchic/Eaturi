@@ -126,9 +126,7 @@ struct ContentView: View {
                     .padding(.leading, 10)
             }
             
-            SearchBar(searchText: $searchText,
-                     selectedFilters: $selectedFilters)
-                      selectedFilters: $selectedFilters)
+            SearchBar(searchText: $searchText, isFilterModalPresented: $isFilterModalPresented, selectedFilters: $selectedFilters)
         }
         //                    .padding(.top, 20)
         .safeAreaInset(edge: .top) {

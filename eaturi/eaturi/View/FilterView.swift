@@ -76,12 +76,12 @@ struct FilterView: View {
                     onSelectFilter(activeFilters)
                 }) {
                     Text("Apply Filter")
+                        .font(.headline)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 20)
+                        .background(Color("colorPrimary"))
                         .foregroundColor(.white)
-                        .fontWeight(.semibold)
-                        .padding()
-                        .frame(width: 130, height: 40)
-                        .background(.colorPrimary)
-                        .cornerRadius(10)
+                        .cornerRadius(25)
                 }
             }
         }

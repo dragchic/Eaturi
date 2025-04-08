@@ -80,6 +80,18 @@ struct CartPopUp: View {
         .onTapGesture {
             onTap()
         }
+        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 2, y: 2)
     }
 }
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
+}
+
 

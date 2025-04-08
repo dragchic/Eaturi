@@ -18,13 +18,14 @@ struct PopularCardView: View {
                     .frame(width: 70, height: 70)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .clipped()
-                    .padding(10)
+                    .padding(.leading, 10)
    
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
                         .font(.title3)
                         .fontWeight(.medium)
                         .lineLimit(1)
+                        .padding(.top, 5)
                     HStack(spacing: 4) {
                         Image(systemName:"flame.fill")
                             .foregroundColor(.orange)
@@ -33,14 +34,54 @@ struct PopularCardView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
                     }
-                    Text("Rp\(item.price)")
-                        .font(.system(size: 14))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.colorPrimary)
+                
+                    HStack(spacing: 5) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "circle.hexagongrid.fill")
+                                .font(.system(size: 11))
+                                .foregroundColor(.yellow)
+                            Text("\(item.fat)g")
+                                .font(.system(size: 11))
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack(spacing: 3) {
+                            Image(systemName: "bolt.fill")
+                                .font(.system(size: 11))
+                                .foregroundColor(.red)
+                            Text("\(item.protein)g")
+                                .font(.system(size: 11))
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack(spacing: 3) {
+                            Image(systemName:"chart.pie.fill")
+                                .font(.system(size: 11))
+                                .foregroundColor(.blue)
+                            Text("\(item.carbs)g")
+                                .font(.system(size: 11))
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.top, 5)
+                    .padding(.bottom, 10)
                 }
                 .padding(.leading, 12)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }

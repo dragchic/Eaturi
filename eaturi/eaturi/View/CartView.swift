@@ -215,53 +215,53 @@ struct CartItemView: View {
             
             VStack(alignment: .leading) {
                 Text(item.name)
-                    .font(.headline)
-                    .fontWeight(.regular)
+                    .font(.system(size: 20))
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                    .foregroundColor(.newblek)
                 
-                HStack (spacing: 2) {
-                    Image(systemName: "flame.fill")
+                HStack(spacing: 4) {
+                    Image(systemName:"flame.fill")
                         .foregroundColor(.orange)
                     Text("\(item.calories) kcal")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
+                        .font(.system(size: 15))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
                 }
                 .padding(.leading, 3)
                 
-                HStack(spacing: 12) {
-                    HStack(spacing: 4) {
-                        Image("fat")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                HStack(spacing: 10) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "circle.hexagongrid.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
                         Text("\(item.fat)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
-                    HStack(spacing: 4) {
-                        Image("protein")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                    HStack(spacing: 3) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
                         Text("\(item.protein)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
-                    HStack(spacing: 4) {
-                        Image("carbs")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                    HStack(spacing: 3) {
+                        Image(systemName:"chart.pie.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.blue)
                         Text("\(item.carbs)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                 }
-
-//                Text("Rp. \(item.price)")
-//                    .font(.subheadline)
-//                    .foregroundColor(.black)
+                .padding(.top, 3)
             }
             
             Spacer()
