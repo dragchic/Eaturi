@@ -14,6 +14,7 @@ struct SearchBar: View {
                 TextField("Search", text: $searchText)
                     .textFieldStyle(PlainTextFieldStyle())
                     .foregroundColor(.gray)
+                    .accentColor(Color("colorPrimary"))
                 
                 
                 if !searchText.isEmpty {
