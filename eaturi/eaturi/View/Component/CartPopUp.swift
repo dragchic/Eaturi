@@ -44,7 +44,7 @@ struct CartPopUp: View {
                     
                     Text("Rp\(totalPrice)")
                         .foregroundColor(.white)
-                        .font(.system(size: 14, weight: .medium))
+                        .font(.system(size: 15, weight: .medium))
                 }
                 
                 Spacer()
@@ -55,9 +55,9 @@ struct CartPopUp: View {
                             .foregroundColor(.orange)
                         
                         Text("\(totalCalories) kcal")
-                            .font(.system(size: 16))
+                            .font(.system(size: 15))
                             .fontWeight(.semibold)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.colorPrimary)
                     }
                     .padding(8)
                     .background(Color.white)
@@ -68,6 +68,7 @@ struct CartPopUp: View {
                         .scaledToFit()
                         .frame(width: 32, height: 32)
                         .foregroundStyle(.white)
+                        .foregroundColor(.colorPrimary)
                 }
             }
             .padding(.leading,20)
@@ -80,7 +81,7 @@ struct CartPopUp: View {
         .onTapGesture {
             onTap()
         }
-        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 2, y: 2)
+        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: -1)
     }
 }
 

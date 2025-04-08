@@ -48,7 +48,7 @@ struct MainTabView: View {
                 }
                 .frame(height: 90)
                 .background(Color.white)
-                .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: -2)
+                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: -1)
             }
             .ignoresSafeArea(.all)
             .preferredColorScheme(.light)

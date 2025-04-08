@@ -380,14 +380,14 @@ struct FoodItemCell: View {
                         HStack(spacing: 4) {
                             Image(systemName: "flame.fill")
                                 .foregroundColor(.orange)
-                            Text("\(item.calories) kcal")
-                                .font(.system(size: 14))
+                            Text("\(item.calories) kcal ")
+                                .font(.system(size: 15))
                                 .fontWeight(.semibold)
                                 .foregroundColor(.secondary)
                         }
-                        .padding(5)
+                        .padding(6)
                         .background(Color.white)
-                        .cornerRadius(8)
+                        .cornerRadius(25)
                         Spacer()
                     }
                     .padding(10)
@@ -443,6 +443,7 @@ struct FoodItemCell: View {
                                     .foregroundColor(.white)
                                     .clipShape(Circle())
                                     .padding(8)
+                                    .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 2)
                             }
                             .zIndex(1)
                         }
@@ -496,7 +497,7 @@ struct FoodItemCell: View {
                 .padding(.bottom, 10)
                 
                 Text("Rp\(item.price)")
-                    .font(.system(size: 14))
+                    .font(.system(size: 15))
                     .fontWeight(.medium)
                     .foregroundColor(.colorPrimary)
             }

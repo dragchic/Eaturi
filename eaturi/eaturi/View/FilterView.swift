@@ -37,9 +37,12 @@ struct FilterView: View {
                         Text(filter)
                             .padding()
                             .frame(height: 50)
-                            .background(activeFilters.contains(filter) ? .colorPrimary : Color.gray.opacity(0.1))
-                            .foregroundColor(activeFilters.contains(filter) ? .white : .black)
+                            .background(activeFilters.contains(filter) ? Color("colorTertiary") : Color.gray.opacity(0.1))
+                            .foregroundColor(activeFilters.contains(filter) ? Color("newblek") : .newblek)
                             .cornerRadius(30)
+                            .overlay(
+                                     RoundedRectangle(cornerRadius: 30)
+                                        .stroke(activeFilters.contains(filter) ? Color("colorPrimary") : Color.clear, lineWidth: 2))
                     }
                 }
             }
@@ -52,9 +55,12 @@ struct FilterView: View {
                         Text(filter)
                             .padding()
                             .frame(height: 50)
-                            .background(activeFilters.contains(filter) ? .colorPrimary : Color.gray.opacity(0.1))
-                            .foregroundColor(activeFilters.contains(filter) ? .white : .black)
+                            .background(activeFilters.contains(filter) ? Color("colorTertiary") : Color.gray.opacity(0.1))
+                            .foregroundColor(activeFilters.contains(filter) ? Color("newblek") : .newblek)
                             .cornerRadius(30)
+                            .overlay(
+                                     RoundedRectangle(cornerRadius: 30)
+                                        .stroke(activeFilters.contains(filter) ? Color("colorPrimary") : Color.clear, lineWidth: 2))
                     }
                 }
             }
@@ -79,6 +85,7 @@ struct FilterView: View {
                         .font(.headline)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 20)
+                        .frame(height: 50)
                         .background(Color("colorPrimary"))
                         .foregroundColor(.white)
                         .cornerRadius(25)
@@ -100,3 +107,14 @@ struct FilterView: View {
         }
     }
 }
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
+}
+

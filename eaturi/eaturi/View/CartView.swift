@@ -119,11 +119,14 @@ struct CartView: View {
                     
                     Button(action: saveToHistory) {
                         Text("Save to History")
+                            .font(.system(size: 20))
                             .foregroundColor(.white)
+                            .frame(height: 40)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
-                            .cornerRadius(25)
+
+                            .cornerRadius(100)
                             .padding()
                     }
                     .disabled(cartItems.isEmpty)
@@ -139,7 +142,7 @@ struct CartView: View {
     private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
         VStack {
             Image(systemName: icon)
-                .font(.system(size: 14))
+                .font(.system(size: 15))
                 .foregroundStyle(color)
             Text(value)
                 .font(.subheadline)
