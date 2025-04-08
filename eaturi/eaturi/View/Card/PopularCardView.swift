@@ -22,15 +22,16 @@ struct PopularCardView: View {
    
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
-                        .font(.title3)
+                        .font(.system(size: 15))
                         .fontWeight(.medium)
                         .lineLimit(1)
                         .padding(.top, 5)
                     HStack(spacing: 4) {
                         Image(systemName:"flame.fill")
+                            .font(.system(size: 12))
                             .foregroundColor(.orange)
                         Text("\(item.calories) kcal")
-                            .font(.system(size: 15))
+                            .font(.system(size: 12))
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
                     }

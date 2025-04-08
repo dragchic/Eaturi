@@ -120,6 +120,7 @@ struct CartView: View {
                     Button(action: saveToHistory) {
                         Text("Save to History")
                             .font(.system(size: 20))
+                            .fontWeight(.medium)
                             .foregroundColor(.white)
                             .frame(height: 40)
                             .frame(maxWidth: .infinity)
