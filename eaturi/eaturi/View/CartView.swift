@@ -9,6 +9,8 @@ struct CartView: View {
     @Environment(\.modelContext) var modelContext
     let healthManager = HealthManager()
     
+    @Binding var selectedTab: Int
+    
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
@@ -166,36 +168,39 @@ struct CartView: View {
     }
     
     private func saveToHistory() {
-        print("Saving to history...")
-        
-        let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
-            result[item.id] = (
-                item.price,
-                item.calories,
-                item.protein,
-                item.carbs,
-                item.fiber,
-                item.fat
+            print("Saving to history...")
+            
+            let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
+                result[item.id] = (
+                    item.price,
+                    item.calories,
+                    item.protein,
+                    item.carbs,
+                    item.fiber,
+                    item.fat
+                )
+            }
+            
+            HistoryManager.saveOrderHistory(
+                cart: cartItems,
+                modelContext: modelContext,
+                foodData: foodData
             )
+            
+            healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
+            healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
+            healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
+            healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
+            healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
+            
+            cartItems.removeAll()
+            
+            // Switch to History tab (index 1) before dismissing
+            selectedTab = 1
+            dismiss()
+            
+            print("Save completed")
         }
-        
-        HistoryManager.saveOrderHistory(
-            cart: cartItems,
-            modelContext: modelContext,
-            foodData: foodData
-        )
-        
-        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
-        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
-        healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
-        healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
-        healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
-        
-        cartItems.removeAll()
-        dismiss()
-        
-        print("Save completed")
-    }
 }
 
 

@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var showDetailModal = false
     @State private var navigationPath = NavigationPath()
     @Binding var foodItems: [FoodModel]
+    @Binding var selectedTab: Int
     
     // MARK: - Computed Properties
     
@@ -48,48 +49,48 @@ struct ContentView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            ZStack {
-                backgroundGradient
-                
-                VStack {
-                    headerSection
+            NavigationStack(path: $navigationPath) {
+                ZStack {
+                    backgroundGradient
                     
-                    ScrollViewReader { scrollProxy in
-                        ScrollView {
-                            CategoryView(searchText: $searchText,
-                                        isCategoryReached: $isCategoryReached,
-                                        categoryModels: $categoryModels,
-                                        foodItems: $foodItems,
-                                        selectedFilters: $selectedFilters,
-                                        selectedFoodItem: $selectedFoodItem,
-                                        showDetailModal: $showDetailModal,
-                                        cartItems: $cartItems,
-                                        isCartVisible: $isCartVisible)
+                    VStack {
+                        headerSection
+                        
+                        ScrollViewReader { scrollProxy in
+                            ScrollView {
+                                CategoryView(searchText: $searchText,
+                                           isCategoryReached: $isCategoryReached,
+                                           categoryModels: $categoryModels,
+                                           foodItems: $foodItems,
+                                           selectedFilters: $selectedFilters,
+                                           selectedFoodItem: $selectedFoodItem,
+                                           showDetailModal: $showDetailModal,
+                                           cartItems: $cartItems,
+                                           isCartVisible: $isCartVisible)
+                            }
                         }
                     }
-                }
-                
-                // Cart popup
-                if isCartVisible && !cartItems.isEmpty {
-                    CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
-                        navigationPath.append("cart")
+                    
+                    // Cart popup
+                    if isCartVisible && !cartItems.isEmpty {
+                        CartPopUp(cartItems: $cartItems, foodItems: $foodItems) {
+                            navigationPath.append("cart")
+                        }
+                        .padding(.top, 10)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
                     }
-                    .padding(.top, 10)
-                    .frame(maxHeight: .infinity, alignment: .bottom)
                 }
-            }
-            .navigationDestination(for: String.self) { destination in
-                if destination == "cart" {
-                    CartView(
-                        cartItems: $cartItems,
-                        foodItems: foodItems
-                    )
-//                    .toolbar(.hidden, for: .tabBar)
+                .navigationDestination(for: String.self) { destination in
+                    if destination == "cart" {
+                        CartView(
+                            cartItems: $cartItems,
+                            foodItems: foodItems,
+                            selectedTab: $selectedTab  // Pass the binding here
+                        )
+                    }
                 }
             }
         }
-    }
     
     // MARK: - Subviews
     

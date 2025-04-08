@@ -43,11 +43,11 @@ struct CategoryView: View {
         }
         
         if !selectedNutritionalFilters.isEmpty {
-        
+            
             items = items.filter { item in
                 var match = true
                 if selectedNutritionalFilters.contains("Low Carb") && !(item.carbs < 20) {
-//                    print(item.name)
+                    //                    print(item.name)
                     match = false
                 }
                 if selectedNutritionalFilters.contains("Low Calorie") && !(item.calories < 250) {
@@ -133,12 +133,12 @@ struct CategoryView: View {
                     .padding(.bottom, 1)
                 
                 if !searchText.isEmpty {
-                                Text("\"\(searchText)\" search showing \(cachedFilteredItems.count) result\(cachedFilteredItems.count == 1 ? "" : "s")")
-                                    .font(.system(size: 15))
-                                    .foregroundColor(.gray)
-                                    .padding(.horizontal, 20)
-                                    .padding(.bottom, 10)
-                            }
+                    Text("\"\(searchText)\" search showing \(cachedFilteredItems.count) result\(cachedFilteredItems.count == 1 ? "" : "s")")
+                        .font(.system(size: 15))
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 10)
+                }
             }
             
             if cachedFilteredItems.isEmpty {
@@ -373,17 +373,13 @@ struct FoodItemCell: View {
                     .scaledToFill()
                     .frame(width: 160, height: 160)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .onTapGesture {
-                        selectedFoodItem = item
-                        showDetailModal = true
-                    }
+                    // Move onTapGesture to a specific tappable area if needed
                 
                 VStack {
                     HStack {
                         HStack(spacing: 4) {
-                            Image(systemName:"flame.fill")
+                            Image(systemName: "flame.fill")
                                 .foregroundColor(.orange)
-
                             Text("\(item.calories) kcal")
                                 .font(.system(size: 14))
                                 .fontWeight(.semibold)
@@ -393,23 +389,35 @@ struct FoodItemCell: View {
                         .background(Color.white)
                         .cornerRadius(8)
                         Spacer()
-                    }.padding(10)
-                    
+                    }
+                    .padding(10)
                     
                     Spacer()
                     
                     HStack {
                         Spacer()
                         
-                        if let quantity = cartItems[item.id] {
+                        if cartItems[item.id] != nil {
                             QuantityControl(
-                                quantity: .constant(quantity),
+                                quantity: Binding(
+                                    get: { cartItems[item.id] ?? 0 },
+                                    set: { newValue in
+                                        if newValue > 0 {
+                                            cartItems[item.id] = newValue
+                                        } else {
+                                            cartItems.removeValue(forKey: item.id)
+                                            if cartItems.isEmpty {
+                                                isCartVisible = false
+                                            }
+                                        }
+                                    }
+                                ),
                                 onIncrement: {
-                                    cartItems[item.id] = quantity + 1
+                                    cartItems[item.id] = (cartItems[item.id] ?? 0) + 1
                                 },
                                 onDecrement: {
-                                    if quantity > 1 {
-                                        cartItems[item.id] = quantity - 1
+                                    if let qty = cartItems[item.id], qty > 1 {
+                                        cartItems[item.id] = qty - 1
                                     } else {
                                         cartItems.removeValue(forKey: item.id)
                                         if cartItems.isEmpty {
@@ -417,9 +425,13 @@ struct FoodItemCell: View {
                                         }
                                     }
                                 },
+                                buttonSize: 24,
+                                iconSize: 10,
+                                fontSize: 16,
                                 textSpacing: 0
                             )
                             .padding(4)
+                            .zIndex(1)
                         } else {
                             Button(action: {
                                 cartItems[item.id] = 1
@@ -432,9 +444,15 @@ struct FoodItemCell: View {
                                     .clipShape(Circle())
                                     .padding(8)
                             }
+                            .zIndex(1)
                         }
                     }
                 }
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                selectedFoodItem = item
+                showDetailModal = true
             }
             
             VStack(alignment: .leading, spacing: 6) {
@@ -466,7 +484,7 @@ struct FoodItemCell: View {
                     }
                     
                     HStack(spacing: 3) {
-                        Image(systemName:"chart.pie.fill")
+                        Image(systemName: "chart.pie.fill")
                             .font(.system(size: 12))
                             .foregroundColor(.blue)
                         Text("\(item.carbs)g")
@@ -476,7 +494,6 @@ struct FoodItemCell: View {
                     }
                 }
                 .padding(.bottom, 10)
-                
                 
                 Text("Rp\(item.price)")
                     .font(.system(size: 14))
