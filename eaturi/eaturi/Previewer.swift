@@ -1,55 +1,50 @@
 import SwiftUI
 import SwiftData
 
-@MainActor
 struct Previewer {
     let container: ModelContainer
 
+    @MainActor
     init() throws {
+        let schema = Schema([FoodModel.self, HistoryRecord.self])
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        container = try ModelContainer(
-            for: HistoryRecord.self, FoodModel.self,
-            configurations: config
-        )
+        container = try ModelContainer(for: schema, configurations: config)
 
-        let sampleRecord = HistoryRecord(
-            cart: [UUID(): 2],
-            totalPrice: 25000, totalCalories: 350, totalProtein: 30,
-            totalCarbs: 25, totalFiber: 2, totalFat: 15
-        )
-        container.mainContext.insert(sampleRecord)
-
-         var foodFetchDescriptor = FetchDescriptor<FoodModel>()
-         foodFetchDescriptor.fetchLimit = 1
-         let existingFoodItems = try container.mainContext.fetch(foodFetchDescriptor)
-         if existingFoodItems.isEmpty {
-             print("Preview FoodModel container empty, seeding...")
-             let sampleFoods = sampleFoodData()
-             for food in sampleFoods {
-                 container.mainContext.insert(food)
-             }
-             print("Preview FoodModel seeded.")
-         }
-    }
-}
-
-#Preview("Main Tab View") {
-    do {
-        let previewer = try Previewer()
-        return MainTabView(cartItems: [:])
-            .modelContainer(previewer.container)
-    } catch {
-        return Text("Failed to create preview: \(error.localizedDescription)")
-    }
-}
-
-#Preview("Main Tab View") {
-    do {
-        let previewer = try Previewer()
-        
-        return MainTabView(cartItems: [:])
-            .modelContainer(previewer.container)
-    } catch {
-        return Text("Failed to create preview: \(error.localizedDescription)")
+        // Seed sample data for previews
+        let context = container.mainContext
+        let previewData = [
+            FoodModel(
+                name: "Ayam Teriyaki",
+                image: "ayam_teriyaki",
+                price: 25000,
+                calories: 350,
+                protein: 30,
+                carbs: 25,
+                fiber: 2,
+                fat: 15,
+                isPopular: true,
+                categories: ["Ayam"],
+                availableDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
+                foodDescription: "Lorem ipsum dolor sit amet..."
+            ),
+            FoodModel(
+                name: "Ayam Bistik",
+                image: "ayam_bistik",
+                price: 27000,
+                calories: 380,
+                protein: 32,
+                carbs: 20,
+                fiber: 3,
+                fat: 18,
+                isPopular: true,
+                categories: ["Ayam"],
+                availableDays: ["Senin", "Rabu", "Jumat"],
+                foodDescription: "Ayam bistik saus jamur"
+            )
+        ]
+        for item in previewData {
+            context.insert(item)
+        }
+        try context.save()
     }
 }
