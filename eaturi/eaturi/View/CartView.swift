@@ -268,8 +268,17 @@ struct CartItemView: View {
             
             QuantityControl(
                 quantity: $quantity,
-                onIncrement: { quantity += 1 },
-                onDecrement: { if quantity > 0 { quantity -= 1 } }
+                onIncrement: {
+                    quantity += 1
+                },
+                onDecrement: {
+                    if quantity > 0 {
+                        quantity -= 1
+                    }
+                },
+                buttonSize: 25,
+                iconSize: 10,
+                fontSize: 20
             )
         }
         .frame(width: 340, height: 90)

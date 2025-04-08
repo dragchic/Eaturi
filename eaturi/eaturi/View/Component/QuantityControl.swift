@@ -9,7 +9,7 @@ struct QuantityControl: View {
     var fontSize: CGFloat = 16  // Added parameter for font size
     
     var body: some View {
-        HStack(spacing: 12) {
+        HStack{
             // Minus button
             Button(action: onDecrement) {
                 ZStack {

@@ -144,7 +144,7 @@ struct FoodDetailView: View {
     // Computed property to determine button text
     private var buttonText: String {
         print("initialQuantity: \(initialQuantity), quantity: \(quantity)")
-        if initialQuantity > 0 && quantity != initialQuantity {
+        if initialQuantity >= 0 && quantity != initialQuantity {
             return "Update MyLunch"
         } else {
             return "Add to MyLunch"
