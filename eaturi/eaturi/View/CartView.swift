@@ -276,9 +276,10 @@ struct CartItemView: View {
                         quantity -= 1
                     }
                 },
-                buttonSize: 25,
+                buttonSize: 24,
                 iconSize: 10,
-                fontSize: 20
+                fontSize: 16,
+                textSpacing: 0
             )
         }
         .frame(width: 340, height: 90)

@@ -3,6 +3,7 @@ import SwiftData
 
 struct HistoryDetailView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) var dismiss // Add this to support dismissal
     @Query private var foodItems: [FoodModel]
     
     var record: HistoryRecord
@@ -20,41 +21,69 @@ struct HistoryDetailView: View {
             )
             .ignoresSafeArea(edges: .top)
             
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Header section
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(dateFormatter.string(from: record.timestamp))
-                            .font(.title)
-                            .fontWeight(.bold)
-                        
-                        Text("\(record.cart.count) items · Rp \(record.totalPrice)")
-                            .font(.title3)
-                            .foregroundColor(.secondary)
+            VStack {
+                // Custom header with back button
+                HStack {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.backward.circle.fill")
+                            .resizable()
+                            .foregroundColor(Color.colorPrimary)
+                            .frame(width: 33, height: 33)
                     }
-                    .padding(.bottom, 10)
                     
-                    // Nutrition summary
-                    NutritionSummaryView(record: record)
+                    HStack(spacing: 8) {
+                        Text("History")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.blackGray)
+                        
+                        Text("Detail")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.colorPrimary)
+                    }
                     
-                    // Food items list
-                    Text("Items")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .padding(.top, 10)
-                    
-                    ForEach(Array(record.cart.keys), id: \.self) { foodId in
-                        if let quantity = record.cart[foodId],
-                           let food = findFood(byId: foodId) {
-                            FoodItemView(food: food, quantity: quantity)
+                    Spacer()
+                }
+                .padding(.horizontal)
+                .padding(.top)
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // Header section
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(dateFormatter.string(from: record.timestamp))
+                                .font(.title)
+                                .fontWeight(.bold)
+                            
+                            Text("\(record.cart.count) items · Rp \(record.totalPrice)")
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.bottom, 10)
+                        
+                        // Nutrition summary
+                        NutritionSummaryView(record: record)
+                        
+                        // Food items list
+                        Text("Items")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(.top, 10)
+                        
+                        ForEach(Array(record.cart.keys), id: \.self) { foodId in
+                            if let quantity = record.cart[foodId],
+                               let food = findFood(byId: foodId) {
+                                FoodItemView(food: food, quantity: quantity)
+                            }
                         }
                     }
+                    .padding()
                 }
-                .padding()
             }
         }
-        .navigationTitle("Order Details")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true) // Hide the default back button
     }
     
     private func findFood(byId id: UUID) -> FoodModel? {
