@@ -1,42 +1,53 @@
 import SwiftUI
-
 struct QuantityControl: View {
     @Binding var quantity: Int
     var onIncrement: () -> Void
     var onDecrement: () -> Void
-
+    var buttonSize: CGFloat = 32
+    var iconSize: CGFloat = 12
+    var textWidth: CGFloat = 30
+    var fontSize: CGFloat = 16  // Added parameter for font size
+    
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
+            // Minus button
             Button(action: onDecrement) {
-                Image(systemName: "minus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 9, height: 9)
-                    .foregroundColor(.white)
-                    .padding(12)
-                    .background(Color("colorPrimary"))
-                    .clipShape(Circle())
+                ZStack {
+                    Circle()
+                        .fill(Color("colorPrimary"))
+                        .frame(width: buttonSize, height: buttonSize)
+                    
+                    Image(systemName: "minus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: iconSize, height: iconSize)
+                        .foregroundColor(.white)
+                }
             }
-            .frame(width: 20, height: 20)
-
+            
+            // Quantity text
             Text("\(quantity)")
-                .font(.headline)
-                .frame(width: 30, alignment: .center)
-
+                .font(.system(size: fontSize))  // Use the dynamic fontSize parameter
+                .fontWeight(.semibold)  // Added to match headline style
+                .frame(width: textWidth, alignment: .center)
+            
+            // Plus button
             Button(action: onIncrement) {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 9, height: 9)
-                    .foregroundColor(.white)
-                    .padding(12)
-                    .background(Color("colorPrimary"))
-                    .clipShape(Circle())
+                ZStack {
+                    Circle()
+                        .fill(Color("colorPrimary"))
+                        .frame(width: buttonSize, height: buttonSize)
+                    
+                    Image(systemName: "plus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: iconSize, height: iconSize)
+                        .foregroundColor(.white)
+                }
             }
-            .frame(width: 21, height: 21)
         }
         .padding(6)
         .background(Color.white)
-        .cornerRadius(30)
+        .cornerRadius(buttonSize / 2 + 6)
     }
 }

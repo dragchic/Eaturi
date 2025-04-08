@@ -43,6 +43,7 @@ struct CategoryView: View {
         }
         
         if !selectedNutritionalFilters.isEmpty {
+        
             items = items.filter { item in
                 var match = true
                 if selectedNutritionalFilters.contains("Low Carb") && !(item.carbs < 20) {
@@ -122,7 +123,7 @@ struct CategoryView: View {
                     selectedFilters: $selectedFilters
                 )
                 .frame(height: 90)
-                .padding(.bottom, 20)
+                .padding(.bottom, 10)
             } else {
                 Text("Search Results")
                     .font(.title2)
@@ -150,7 +151,7 @@ struct CategoryView: View {
                         isCartVisible: $isCartVisible,
                         showDetailModal: $showDetailModal
                     )
-                    .presentationDetents([.fraction(0.9)])
+                    .presentationDetents([.fraction(0.8)])
                     .presentationCornerRadius(40)
                     .presentationDragIndicator(.visible)
                     .interactiveDismissDisabled(false)
@@ -314,7 +315,7 @@ struct FoodItemsGrid: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 10) {
                 ForEach(sortedCategories, id: \.self) { category in
                     if let items = groupedItems[category], !items.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
