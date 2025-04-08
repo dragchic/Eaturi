@@ -21,11 +21,11 @@ struct HistoryView: View {
                 )
                 .ignoresSafeArea(edges: .top)
                 VStack {
-                    HStack{
+                    HStack(spacing: 8) {
                         Text("History")
                             .font(.title)
-                            .fontWeight(.bold)
-                        Spacer()
+                            .bold()
+                            .foregroundColor(.blackGray)
                     }
                     
             
