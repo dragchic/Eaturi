@@ -8,7 +8,7 @@ struct HistoryView: View {
     
     var onPickAgain: ([UUID: Int]) -> Void
     var body: some View {
-        NavigationStack {
+       
             ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
@@ -21,6 +21,14 @@ struct HistoryView: View {
                 )
                 .ignoresSafeArea(edges: .top)
                 VStack {
+                    HStack{
+                        Text("History")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        Spacer()
+                    }
+                    
+            
                     if historyRecords.isEmpty {
                         Text("No history records found")
                             .foregroundColor(.gray)
@@ -41,11 +49,21 @@ struct HistoryView: View {
                     }
                 }
                 .padding()
-                .navigationTitle("History")
+                
                 .safeAreaInset(edge: .top) {
-                    Color.clear.frame(height: 60) // buat spasi aman untuk notch
+                    Color.clear.frame(height: 60)
                 }
             }
-        }
+        
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }
