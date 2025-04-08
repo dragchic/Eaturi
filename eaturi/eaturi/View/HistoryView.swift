@@ -1,7 +1,3 @@
-//
-//  HistoryView.swift
-//  KasturiFoodTracker
-//
 import SwiftUI
 import SwiftData
 
@@ -11,21 +7,28 @@ struct HistoryView: View {
     private var historyRecords: [HistoryRecord]
     
     var onPickAgain: ([UUID: Int]) -> Void
-
     var body: some View {
-        NavigationView {
+       
             ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
                         .init(color: Color("colorSecondary"), location: 0.0),
                         .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
-                        .init(color: .white, location: 0.6)
+                        .init(color: Color("abubg"), location: 0.6)
                     ]),
                     startPoint: .topTrailing,
                     endPoint: .bottom
                 )
                 .ignoresSafeArea(edges: .top)
                 VStack {
+                    HStack(spacing: 8) {
+                        Text("History")
+                            .font(.title)
+                            .bold()
+                            .foregroundColor(.blackGray)
+                    }
+                    
+            
                     if historyRecords.isEmpty {
                         Text("No history records found")
                             .foregroundColor(.gray)
@@ -46,8 +49,21 @@ struct HistoryView: View {
                     }
                 }
                 .padding()
-                .navigationTitle("History")
+                
+                .safeAreaInset(edge: .top) {
+                    Color.clear.frame(height: 60)
+                }
             }
-        }
+        
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }

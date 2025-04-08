@@ -35,7 +35,7 @@ struct CategoryView: View {
         let availableCategories = Set(foodItems.flatMap { $0.categories })
         let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
         
-        if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty {
+        if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty && selectedNutritionalFilters.isEmpty {
             cachedFilteredItems = []
             cachedGroupedItems = [:]
             cachedSortedCategories = []
@@ -43,9 +43,11 @@ struct CategoryView: View {
         }
         
         if !selectedNutritionalFilters.isEmpty {
+        
             items = items.filter { item in
                 var match = true
                 if selectedNutritionalFilters.contains("Low Carb") && !(item.carbs < 20) {
+//                    print(item.name)
                     match = false
                 }
                 if selectedNutritionalFilters.contains("Low Calorie") && !(item.calories < 250) {
@@ -106,6 +108,7 @@ struct CategoryView: View {
                     showDetailModal: $showDetailModal
                 )
                 .padding(.bottom, 12)
+                .padding(.horizontal, 20)
                 
                 VStack {
                     Text("Categories")
@@ -120,14 +123,22 @@ struct CategoryView: View {
                     selectedFilters: $selectedFilters
                 )
                 .frame(height: 90)
-                .padding(.bottom, 20)
-                .shadow(radius: 2)
+                .padding(.bottom, 10)
             } else {
                 Text("Search Results")
                     .font(.title2)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 20)
-                    .padding(.top, 10)
+                    .padding(.top, 6)
+                    .padding(.bottom, 1)
+                
+                if !searchText.isEmpty {
+                                Text("\"\(searchText)\" search showing \(cachedFilteredItems.count) result\(cachedFilteredItems.count == 1 ? "" : "s")")
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.gray)
+                                    .padding(.horizontal, 20)
+                                    .padding(.bottom, 10)
+                            }
             }
             
             if !searchText.isEmpty && cachedFilteredItems.isEmpty {
@@ -149,7 +160,7 @@ struct CategoryView: View {
                         isCartVisible: $isCartVisible,
                         showDetailModal: $showDetailModal
                     )
-                    .presentationDetents([.fraction(0.9)])
+                    .presentationDetents([.fraction(0.8)])
                     .presentationCornerRadius(40)
                     .presentationDragIndicator(.visible)
                     .interactiveDismissDisabled(false)
@@ -180,30 +191,60 @@ struct CategoryView: View {
 }
 
 // MARK: - Component Views
-
 struct PopularItemsSection: View {
     let foodItems: [FoodModel]
     @Binding var selectedFoodItem: FoodModel?
     @Binding var showDetailModal: Bool
     
+    // Auto-scrolling properties
+    @State private var timerScrollIndex: Int = 0
+    private let timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+    
+    // Layout constants
+    private let cardWidth: CGFloat = 230
+    private let cardHeight: CGFloat = 90
+    private let cardSpacing: CGFloat = 15
+    
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 15) {
-                ForEach(foodItems, id: \.id) { item in
-                    PopularCardView(item: .constant(item))
-                        .padding()
-                        .frame(width: 230, height: 90)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .onTapGesture {
-                            selectedFoodItem = item
-                            showDetailModal = true
+        VStack(alignment: .leading) {
+            ScrollViewReader { scrollProxy in
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        // This spacer creates the left padding for scrolling
+                        LazyHStack(spacing: cardSpacing) {
+                            ForEach(Array(foodItems.enumerated()), id: \.offset) { index, item in
+                                PopularCardView(item: .constant(item))
+                                    .frame(width: cardWidth, height: cardHeight)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
+                                    .onTapGesture {
+                                        selectedFoodItem = item
+                                        showDetailModal = true
+                                    }
+                                    .id(index)
+                            }
                         }
+                    }
+                }
+                .onReceive(timer) { _ in
+                    if foodItems.count > 1 {
+                        // Scroll to leftPadding first to ensure consistent left padding
+                        scrollProxy.scrollTo("leftPadding", anchor: .leading)
+                        
+                        // Then scroll to the desired item with a slight delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                timerScrollIndex = (timerScrollIndex + 1) % foodItems.count
+                                // Use the horizontalPadding value as the anchor offset
+                                scrollProxy.scrollTo(timerScrollIndex, anchor: .leading)
+                            }
+                        }
+                    }
                 }
             }
-            .padding(.leading, 20)
-            .frame(maxHeight: 120)
         }
+        .padding(.top, 5)
     }
 }
 
@@ -283,7 +324,7 @@ struct FoodItemsGrid: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 10) {
                 ForEach(sortedCategories, id: \.self) { category in
                     if let items = groupedItems[category], !items.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
@@ -306,9 +347,7 @@ struct FoodItemsGrid: View {
                             }
                             .padding(.horizontal)
                         }
-                        
-                        Divider()
-                            .padding(.horizontal)
+                        Spacer()
                     }
                 }
             }
@@ -325,7 +364,7 @@ struct FoodItemCell: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            ZStack(alignment: .bottomTrailing) {
+            ZStack {
                 Image(item.image)
                     .resizable()
                     .scaledToFill()
@@ -336,58 +375,116 @@ struct FoodItemCell: View {
                         showDetailModal = true
                     }
                 
-                if let quantity = cartItems[item.id] {
-                    QuantityControl(
-                        quantity: .constant(quantity),
-                        onIncrement: {
-                            cartItems[item.id] = quantity + 1
-                        },
-                        onDecrement: {
-                            if quantity > 1 {
-                                cartItems[item.id] = quantity - 1
-                            } else {
-                                cartItems.removeValue(forKey: item.id)
-                                if cartItems.isEmpty {
-                                    isCartVisible = false
+                VStack {
+                    HStack {
+                        HStack(spacing: 4) {
+                            Image(systemName:"flame.fill")
+                                .foregroundColor(.orange)
+
+                            Text("\(item.calories) kcal")
+                                .font(.system(size: 14))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(5)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        Spacer()
+                    }.padding(10)
+                    
+                    
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        
+                        if let quantity = cartItems[item.id] {
+                            QuantityControl(
+                                quantity: .constant(quantity),
+                                onIncrement: {
+                                    cartItems[item.id] = quantity + 1
+                                },
+                                onDecrement: {
+                                    if quantity > 1 {
+                                        cartItems[item.id] = quantity - 1
+                                    } else {
+                                        cartItems.removeValue(forKey: item.id)
+                                        if cartItems.isEmpty {
+                                            isCartVisible = false
+                                        }
+                                    }
                                 }
+                            )
+                            .padding(4)
+                        } else {
+                            Button(action: {
+                                cartItems[item.id] = 1
+                                isCartVisible = true
+                            }) {
+                                Image(systemName: "plus")
+                                    .padding(10)
+                                    .background(Color("colorPrimary"))
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                                    .padding(8)
                             }
                         }
-                    )
-                    .padding(4)
-                } else {
-                    Button(action: {
-                        cartItems[item.id] = 1
-                        isCartVisible = true
-                    }) {
-                        Image(systemName: "plus")
-                            .padding(10)
-                            .background(Color("colorPrimary"))
-                            .foregroundColor(.white)
-                            .clipShape(Circle())
-                            .padding(8)
                     }
                 }
             }
             
-            Text(item.name)
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .lineLimit(1)
-            
-            Text("Rp\(item.price)")
-                .font(.headline)
-                .fontWeight(.bold)
-            
-            HStack {
-                Image(systemName: "flame.fill")
-                    .foregroundStyle(.colorOren)
-                Text("\(item.calories) kcal")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(item.name)
+                    .font(.system(size: 20))
+                    .fontWeight(.medium)
+                    .lineLimit(1)
+                    .foregroundColor(.newblek)
+                
+                HStack(spacing: 10) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "circle.hexagongrid.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
+                        Text("\(item.fat)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
+                        Text("\(item.protein)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName:"chart.pie.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.blue)
+                        Text("\(item.carbs)g")
+                            .font(.system(size: 12))
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding(.bottom, 10)
+                
+                
+                Text("Rp\(item.price)")
+                    .font(.system(size: 14))
+                    .fontWeight(.medium)
+                    .foregroundColor(.colorPrimary)
             }
+            .padding(.horizontal, 12)
+            .padding(.top, 10)
+            .padding(.bottom, 15)
         }
         .frame(width: 164)
+        .background(Color.white)
         .cornerRadius(12)
     }
 }

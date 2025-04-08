@@ -14,15 +14,15 @@ struct CategoryModel: Identifiable, Hashable {
     
     static func generateCategories() -> [CategoryModel] {
         return [
-            CategoryModel(name: "Chicken", image: "chicken_thights", localName: "Ayam"),
-            CategoryModel(name: "Rice", image: "Rice Bowl", localName: "Nasi"),
-            CategoryModel(name: "Fish", image: "fish", localName: "Ikan"),
-            CategoryModel(name: "Beef", image: "meat", localName: "Daging"),
-            CategoryModel(name: "Egg", image: "egg", localName: "Telur"),
-            CategoryModel(name: "Fried", image: "fried", localName: "Gorengan"),
-            CategoryModel(name: "Veggies", image: "veggies", localName: "Sayuran"),
-            CategoryModel(name: "Sambal", image: "sambal", localName: "Sambal"),
-            CategoryModel(name: "Others", image: "others", localName: "Lainnya")
+            CategoryModel(name: "Chicken", image: "ayam", localName: "Ayam"),
+            CategoryModel(name: "Rice", image: "nasi", localName: "Nasi"),
+            CategoryModel(name: "Fish", image: "ikan", localName: "Ikan"),
+            CategoryModel(name: "Beef", image: "sapi", localName: "Daging"),
+            CategoryModel(name: "Egg", image: "telur", localName: "Telur"),
+            CategoryModel(name: "Fried", image: "gorengan", localName: "Gorengan"),
+            CategoryModel(name: "Veggies", image: "sayur", localName: "Sayuran"),
+            CategoryModel(name: "Sambal", image: "cabe", localName: "Sambal"),
+            CategoryModel(name: "Others", image: "lainnya", localName: "Lainnya")
         ]
     }
 }

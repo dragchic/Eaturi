@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct FoodDetailView: View {
+    // MARK: - Properties
     let item: FoodModel
     @Binding var isPresented: Bool
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
     @Binding var showDetailModal: Bool
-    @State private var quantity: Int
+    @State private var quantity: Int = 0
+    @State private var initialQuantity: Int = 0
     
+    // MARK: - Initialization
     init(item: FoodModel,
          isPresented: Binding<Bool>,
          cartItems: Binding<[UUID: Int]>,
@@ -18,26 +21,50 @@ struct FoodDetailView: View {
         _cartItems = cartItems
         _isCartVisible = isCartVisible
         _showDetailModal = showDetailModal
-        _quantity = State(initialValue: cartItems.wrappedValue[item.id] ?? 0)
+        let initialValue = cartItems.wrappedValue[item.id] ?? 0
+        _quantity = State(initialValue: initialValue)
+        _initialQuantity = State(initialValue: initialValue)
     }
     
+    // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            GeometryReader { geometry in
-                HStack {
-                    Spacer()
-                    Image(item.image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width * 0.95)
-                        .aspectRatio(contentMode: .fill)
-                        .frame(height: 240)
-                        .clipShape(RoundedRectangle(cornerRadius: 25))
-                        .padding(.top, 20)
-                    Spacer()
-                }
-            }
-            
+            foodImageView
+            detailsSection
+            nutritionSection
+            actionButtons
+        }
+        .padding(.horizontal, 20)
+        .background(Color.white)
+        .cornerRadius(20)
+        .presentationDetents([.medium])
+        .onTapGesture {
+            isPresented = false
+            showDetailModal = false
+        }
+        .onAppear {
+            let initialValue = cartItems[item.id] ?? 0
+            quantity = initialValue
+            initialQuantity = initialValue
+        }
+    }
+    
+    // MARK: - Subviews
+    private var foodImageView: some View {
+        GeometryReader { geometry in
+            Image(item.image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: geometry.size.width * 0.98, height: 240)
+                .clipShape(RoundedRectangle(cornerRadius: 25))
+                .padding(.top, 20)
+                .position(x: geometry.size.width / 2, y: 240 / 2 + 20)
+        }
+        .frame(height: 260)
+    }
+    
+    private var detailsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
             Text(item.name)
                 .font(.title)
                 .fontWeight(.bold)
@@ -50,104 +77,123 @@ struct FoodDetailView: View {
             Text("Rp\(item.price)")
                 .font(.title2)
                 .fontWeight(.semibold)
-                .foregroundColor(.ijotulisan)
-            
+                .foregroundColor(.colorPrimary)
+        }
+    }
+    
+    private var nutritionSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
             Text("Nutrition")
                 .font(.body)
                 .fontWeight(.semibold)
                 .foregroundStyle(.newblek)
             
-            // Nutritional Information
-            HStack(spacing: 15) {
-                ForEach(nutritionData, id: \.label) { data in
-                    NutritionInfoView(label: data.label, value: data.value, imageName: data.image)
-                }
+            HStack {
+                nutritionItem(icon: "flame.fill", value: "\(item.calories)", label: "Calories", color: .orange)
+                separator()
+                nutritionItem(icon: "circle.hexagongrid.fill", value: "\(item.fat) g", label: "Fat", color: .yellow)
+                separator()
+                nutritionItem(icon: "bolt.fill", value: "\(item.protein) g", label: "Protein", color: .red)
+                separator()
+                nutritionItem(icon: "chart.pie.fill", value: "\(item.carbs) g", label: "Carbs", color: .blue)
+                separator()
+                nutritionItem(icon: "leaf.fill", value: "\(item.fiber) g", label: "Fiber", color: .green)
             }
-            .padding(.top, 8)
-            HStack(spacing: 10) {
-                QuantityControl(
-                    quantity: $quantity,
-                    onIncrement: { quantity += 1 },
-                    onDecrement: { if quantity > 0 { quantity -= 1 } }
-                )
-                .padding(.vertical, 10)
-                .foregroundStyle(Color("newblek"))
-                
-                Button {
-                    if quantity > 0 {
-                        cartItems[item.id] = quantity
-                        isCartVisible = true
-                        isPresented = false
-                        showDetailModal = false
-                    }
-                } label: {
-                    Text("Add to MyLunch")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(width: 220, height: 60)
-                        .background(Color.colorPrimary)
-                        .cornerRadius(100)
-                }
-                .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
-            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 10)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         }
-        .padding(.horizontal, 20)
+    }
+    
+    private var actionButtons: some View {
+        HStack(spacing: 10) {
+            QuantityControl(
+                quantity: $quantity,
+                onIncrement: {
+                    quantity += 1
+                },
+                onDecrement: {
+                    if quantity > 0 {
+                        quantity -= 1
+                    }
+                },
+                buttonSize: 40,
+                iconSize: 15,
+                fontSize: 25
+            )
+            .padding(.vertical, 10)
+            .foregroundStyle(Color("newblek"))
+            
+            Button(action: addToCart) {
+                Text(buttonText)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(width: 220, height: 60)
+                    .background(Color.colorPrimary)
+                    .cornerRadius(100)
+            }
+            .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
+            .disabled(quantity <= 0)
+        }
         .padding(.bottom, 20)
-        .background(Color.white)
-        .cornerRadius(20)
-        .presentationDetents([.height(500)])
-        .onTapGesture {
+    }
+    
+    // Computed property to determine button text
+    private var buttonText: String {
+        print("initialQuantity: \(initialQuantity), quantity: \(quantity)")
+        if initialQuantity >= 0 && quantity != initialQuantity {
+            return "Update MyLunch"
+        } else {
+            return "Add to MyLunch"
+        }
+    }
+    
+    // MARK: - Helper Methods
+    private func addToCart() {
+        if quantity > 0 {
+            cartItems[item.id] = quantity
+            isCartVisible = true
+            isPresented = false
+            showDetailModal = false
+        } else {
+            cartItems.removeValue(forKey: item.id)
             isPresented = false
             showDetailModal = false
         }
     }
     
-    private var nutritionData: [(label: String, value: Int, image: String)] {
-        return [
-            ("Kcal", item.calories, "calorie"),
-            ("Fat", item.fat, "fat"),
-            ("Protein", item.protein, "protein"),
-            ("Carbs", item.carbs, "carbs"),
-            ("Fiber", item.fiber, "fiber")
-        ]
+    private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
+        VStack {
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundStyle(color)
+            Text(value)
+                .font(.subheadline)
+                .foregroundColor(.black)
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func separator() -> some View {
+        Rectangle()
+            .fill(Color("colorPrimary"))
+            .frame(width: 1, height: 40)
+            .padding(.horizontal, 4)
     }
 }
 
-
-struct NutritionInfoView: View {
-    var label: String
-    var value: Int
-    var imageName: String
-    
-    var body: some View {
-        VStack(spacing: 15) {
-            VStack(spacing: 10){
-                Image(imageName)
-                    .foregroundColor(.colorOren)
-                    .frame(width:40, height: 40)
-                    .background(Color(.white))
-                    .cornerRadius(100)
-                
-                VStack {
-                    Text("\(value) g")
-                        .foregroundStyle(.newblek)
-                        .font(.system(size: 16))
-                    
-                    Text(label)
-                        .foregroundStyle(.newblek)
-                        .font(.system(size: 12))
-                }
-            }
-            .padding(10)
-            .frame(width: 62.5, height: 100)
-            .frame(alignment: .center)
-            .background(Color("colorTertiary"))
-            .cornerRadius(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 15)
-                    .stroke(Color("colorPrimary"), lineWidth: 2)
-            )
-        }
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }
