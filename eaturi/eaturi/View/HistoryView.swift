@@ -42,6 +42,9 @@ struct HistoryView: View {
                 }
                 .padding()
                 .navigationTitle("History")
+                .safeAreaInset(edge: .top) {
+                    Color.clear.frame(height: 60) // buat spasi aman untuk notch
+                }
             }
         }
     }

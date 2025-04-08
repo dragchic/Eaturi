@@ -85,6 +85,7 @@ struct ContentView: View {
                         cartItems: $cartItems,
                         foodItems: foodItems
                     )
+//                    .toolbar(.hidden, for: .tabBar)
                 }
             }
         }
@@ -112,14 +113,12 @@ struct ContentView: View {
                 .foregroundColor(Color("BlackGray"))
                 .fontWeight(.bold)
                 .padding(.leading, 30)
-            
-            HStack(spacing: 0) {
+            HStack (spacing:0){
                 Text("Healthy")
                     .font(.largeTitle)
                     .foregroundColor(Color("colorPrimary"))
                     .fontWeight(.bold)
                     .padding(.leading, 30)
-                
                 Text("Lifestyle")
                     .font(.largeTitle)
                     .foregroundColor(Color("BlackGray"))
@@ -128,10 +127,13 @@ struct ContentView: View {
             }
             
             SearchBar(searchText: $searchText,
-                     isFilterModalPresented: $isFilterModalPresented,
                      selectedFilters: $selectedFilters)
+                      selectedFilters: $selectedFilters)
         }
-        .padding(.top, 20)
+        //                    .padding(.top, 20)
+        .safeAreaInset(edge: .top) {
+            Color.clear.frame(height: 60) // buat spasi aman untuk notch
+        }
     }
 }
 

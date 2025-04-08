@@ -35,97 +35,102 @@ struct CartView: View {
     
     var body: some View {
         ZStack {
-            LinearGradient(
-                gradient: Gradient(stops: [
-                    .init(color: Color("colorSecondary"), location: 0.0),
-                    .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
-                    .init(color: Color("abubg"), location: 0.6)
-                ]),
-                startPoint: .topTrailing,
-                endPoint: .bottom
-            )
-            .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                HStack {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.backward.circle.fill")
-                            .resizable()
-                            .foregroundColor(Color.colorPrimary)
-                            .frame(width: 33, height: 33)
-                    }
-                    
-                    HStack(spacing: 0) {
-                        Text("My")
-                            .font(.title)
-                            .bold()
-                            .foregroundColor(.blackGray)
+            ZStack {
+                LinearGradient(
+                    gradient: Gradient(stops: [
+                        .init(color: Color("colorSecondary"), location: 0.0),
+                        .init(color: Color("colorSecondary").opacity(0.3), location: 0.3),
+                        .init(color: Color("abubg"), location: 0.6)
+                    ]),
+                    startPoint: .topTrailing,
+                    endPoint: .bottom
+                )
+                .edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    HStack {
+                        Button(action: { dismiss() }) {
+                            Image(systemName: "chevron.backward.circle.fill")
+                                .resizable()
+                                .foregroundColor(Color.colorPrimary)
+                                .frame(width: 33, height: 33)
+                        }
                         
-                        Text("Lunch")
-                            .font(.title)
-                            .bold()
-                            .foregroundColor(.colorPrimary)
+                        HStack(spacing: 0) {
+                            Text("My")
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(.blackGray)
+                            
+                            Text("Lunch")
+                                .font(.title)
+                                .bold()
+                                .foregroundColor(.colorPrimary)
+                        }
+                        
+                        Spacer()
                     }
+                    .padding()
                     
-                    Spacer()
-                }
-                .padding()
-                
-                HStack{
-                    nutritionItem(icon: "flame.fill", value: "\(totalCalories)", label: "Calories", color: .orange)
+                    HStack{
+                        nutritionItem(icon: "flame.fill", value: "\(totalCalories)", label: "Calories", color: .orange)
                         separator()
-                    nutritionItem(icon: "circle.hexagongrid.fill", value: "\(totalFat) g", label: "Fat", color: .yellow)
+                        nutritionItem(icon: "circle.hexagongrid.fill", value: "\(totalFat) g", label: "Fat", color: .yellow)
                         separator()
-                    nutritionItem(icon: "bolt.fill", value: "\(totalProtein) g", label: "Protein", color: .red)
+                        nutritionItem(icon: "bolt.fill", value: "\(totalProtein) g", label: "Protein", color: .red)
                         separator()
-                    nutritionItem(icon: "chart.pie.fill", value: "\(totalCarbs) g", label: "Carbs", color: .blue)
+                        nutritionItem(icon: "chart.pie.fill", value: "\(totalCarbs) g", label: "Carbs", color: .blue)
                         separator()
-                    nutritionItem(icon: "leaf.fill", value: "\(totalFiber) g", label: "Fiber", color: .green)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .frame(width: 340)
-                .padding(.vertical, 16)
-                .padding(.horizontal, 10)
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
-                
-                ScrollView {
-                    VStack(spacing: 16) {
-                        if cartItems.isEmpty {
-                            Text("Your cart is empty")
-                                .foregroundColor(.gray)
-                                .padding()
-                        } else {
-                            ForEach(cartItems.compactMap { key, value -> (FoodModel, Binding<Int>)? in
-                                if let item = foodItems.first(where: { $0.id == key }) {
-                                    return (item, Binding(
-                                        get: { cartItems[key] ?? 0 },
-                                        set: { newValue in updateQuantity(for: key, quantity: newValue) }
-                                    ))
+                        nutritionItem(icon: "leaf.fill", value: "\(totalFiber) g", label: "Fiber", color: .green)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(width: 340)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 10)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+                    
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            if cartItems.isEmpty {
+                                Text("Your cart is empty")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            } else {
+                                ForEach(cartItems.compactMap { key, value -> (FoodModel, Binding<Int>)? in
+                                    if let item = foodItems.first(where: { $0.id == key }) {
+                                        return (item, Binding(
+                                            get: { cartItems[key] ?? 0 },
+                                            set: { newValue in updateQuantity(for: key, quantity: newValue) }
+                                        ))
+                                    }
+                                    return nil
+                                }, id: \.0.id) { item, quantity in
+                                    CartItemView(item: item, quantity: quantity)
                                 }
-                                return nil
-                            }, id: \.0.id) { item, quantity in
-                                CartItemView(item: item, quantity: quantity)
                             }
                         }
                     }
+                    
+                    //                SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
+                    
+                    Button(action: saveToHistory) {
+                        Text("Save to History")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
+                            .cornerRadius(25)
+                            .padding()
+                    }
+                    .disabled(cartItems.isEmpty)
                 }
+                //            .navigationBarHidden(true)
+                .navigationBarHidden(true)
+                .toolbar(.hidden, for: .tabBar)
                 
-//                SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
-                
-                Button(action: saveToHistory) {
-                    Text("Save to History")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
-                        .cornerRadius(25)
-                        .padding()
-                }
-                .disabled(cartItems.isEmpty)
             }
-            .navigationBarHidden(true)
         }
     }
     
@@ -192,6 +197,8 @@ struct CartView: View {
         print("Save completed")
     }
 }
+
+
 
 
 struct CartItemView: View {
