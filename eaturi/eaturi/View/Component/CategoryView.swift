@@ -35,7 +35,7 @@ struct CategoryView: View {
         let availableCategories = Set(foodItems.flatMap { $0.categories })
         let selectedCategoryFilters = selectedFilters.filter { availableCategories.contains($0) }
         
-        if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty {
+        if !selectedFilters.isEmpty && selectedCategoryFilters.isEmpty && selectedNutritionalFilters.isEmpty {
             cachedFilteredItems = []
             cachedGroupedItems = [:]
             cachedSortedCategories = []
@@ -46,6 +46,7 @@ struct CategoryView: View {
             items = items.filter { item in
                 var match = true
                 if selectedNutritionalFilters.contains("Low Carb") && !(item.carbs < 20) {
+//                    print(item.name)
                     match = false
                 }
                 if selectedNutritionalFilters.contains("Low Calorie") && !(item.calories < 250) {
