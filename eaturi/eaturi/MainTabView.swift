@@ -6,11 +6,8 @@ struct MainTabView: View {
     @Query(sort: \FoodModel.name) private var foodItems: [FoodModel]
 
     @State private var selectedTab = 0
-
     @State var cartItems: [UUID: Int]
     @State var isCartVisible: Bool = false
-    @State private var isCartPageActive: Bool = false
-
 
     var body: some View {
         NavigationStack {
@@ -18,8 +15,12 @@ struct MainTabView: View {
                 ZStack {
                     switch selectedTab {
                     case 0:
-                        ContentView(cartItems: $cartItems, isCartVisible: $isCartVisible, foodItems: .constant(foodItems))
-                            .environment(\.modelContext, modelContext)
+                        ContentView(
+                            cartItems: $cartItems,
+                            isCartVisible: $isCartVisible,
+                            foodItems: .constant(foodItems), selectedTab: $selectedTab
+                        )
+                        .environment(\.modelContext, modelContext)
                         
                     case 1:
                         HistoryView(onPickAgain: { selectedCart in
@@ -47,9 +48,8 @@ struct MainTabView: View {
                 }
                 .frame(height: 90)
                 .background(Color.white)
-                .shadow(color: .black.opacity(0.2), radius: 3, x: 0, y: -2)
+                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: -1)
             }
-//            .edgesIgnoringSafeArea(.top)
             .ignoresSafeArea(.all)
             .preferredColorScheme(.light)
         }

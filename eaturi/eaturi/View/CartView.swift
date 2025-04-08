@@ -9,6 +9,8 @@ struct CartView: View {
     @Environment(\.modelContext) var modelContext
     let healthManager = HealthManager()
     
+    @Binding var selectedTab: Int
+    
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
@@ -117,11 +119,14 @@ struct CartView: View {
                     
                     Button(action: saveToHistory) {
                         Text("Save to History")
+                            .font(.system(size: 20))
                             .foregroundColor(.white)
+                            .frame(height: 40)
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
-                            .cornerRadius(25)
+
+                            .cornerRadius(100)
                             .padding()
                     }
                     .disabled(cartItems.isEmpty)
@@ -137,7 +142,7 @@ struct CartView: View {
     private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
         VStack {
             Image(systemName: icon)
-                .font(.system(size: 14))
+                .font(.system(size: 15))
                 .foregroundStyle(color)
             Text(value)
                 .font(.subheadline)
@@ -166,36 +171,39 @@ struct CartView: View {
     }
     
     private func saveToHistory() {
-        print("Saving to history...")
-        
-        let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
-            result[item.id] = (
-                item.price,
-                item.calories,
-                item.protein,
-                item.carbs,
-                item.fiber,
-                item.fat
+            print("Saving to history...")
+            
+            let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
+                result[item.id] = (
+                    item.price,
+                    item.calories,
+                    item.protein,
+                    item.carbs,
+                    item.fiber,
+                    item.fat
+                )
+            }
+            
+            HistoryManager.saveOrderHistory(
+                cart: cartItems,
+                modelContext: modelContext,
+                foodData: foodData
             )
+            
+            healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
+            healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
+            healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
+            healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
+            healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
+            
+            cartItems.removeAll()
+            
+            // Switch to History tab (index 1) before dismissing
+            selectedTab = 1
+            dismiss()
+            
+            print("Save completed")
         }
-        
-        HistoryManager.saveOrderHistory(
-            cart: cartItems,
-            modelContext: modelContext,
-            foodData: foodData
-        )
-        
-        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
-        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
-        healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
-        healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
-        healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
-        
-        cartItems.removeAll()
-        dismiss()
-        
-        print("Save completed")
-    }
 }
 
 

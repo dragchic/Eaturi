@@ -131,7 +131,7 @@ struct FoodDetailView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
-                    .frame(width: 220, height: 60)
+                    .frame(width: 220, height: 50)
                     .background(Color.colorPrimary)
                     .cornerRadius(100)
             }
