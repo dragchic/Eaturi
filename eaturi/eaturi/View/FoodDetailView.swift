@@ -23,20 +23,17 @@ struct FoodDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            GeometryReader { geometry in
-                HStack {
-                    Spacer()
+            
                     Image(item.image)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: geometry.size.width * 0.95)
+                        .frame(maxWidth: .infinity)
                         .aspectRatio(contentMode: .fill)
                         .frame(height: 240)
                         .clipShape(RoundedRectangle(cornerRadius: 25))
                         .padding(.top, 20)
-                    Spacer()
-                }
-            }
+                   
+            
             
             Text(item.name)
                 .font(.title)
@@ -58,12 +55,23 @@ struct FoodDetailView: View {
                 .foregroundStyle(.newblek)
             
             // Nutritional Information
-            HStack(spacing: 15) {
-                ForEach(nutritionData, id: \.label) { data in
-                    NutritionInfoView(label: data.label, value: data.value, imageName: data.image)
-                }
+            HStack {
+                nutritionItem(icon: "flame.fill", value: "\(item.calories)", label: "Calories", color: .orange)
+                    separator()
+                    nutritionItem(icon: "circle.hexagongrid.fill", value: "\(item.fat) g", label: "Fat", color: .yellow)
+                    separator()
+                    nutritionItem(icon: "bolt.fill", value: "\(item.protein) g", label: "Protein", color: .red)
+                    separator()
+                    nutritionItem(icon: "chart.pie.fill", value: "\(item.carbs) g", label: "Carbs", color: .blue)
+                    separator()
+                    nutritionItem(icon: "leaf.fill", value: "\(item.fiber) g", label: "Fiber", color: .green)
             }
-            .padding(.top, 8)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 10)
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+            
             HStack(spacing: 10) {
                 QuantityControl(
                     quantity: $quantity,
@@ -102,6 +110,29 @@ struct FoodDetailView: View {
             showDetailModal = false
         }
     }
+    
+    private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
+        VStack {
+            Image(systemName: icon)
+                .font(.system(size: 16))
+                .foregroundStyle(color)
+            Text(value)
+                .font(.subheadline)
+                .foregroundColor(.black)
+            Text(label)
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func separator() -> some View {
+        Rectangle()
+            .fill(Color("colorPrimary"))
+            .frame(width: 1, height: 40)
+            .padding(.horizontal, 4)
+    }
+
     
     private var nutritionData: [(label: String, value: Int, image: String)] {
         return [
@@ -151,3 +182,14 @@ struct NutritionInfoView: View {
         }
     }
 }
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
+    }
+}
+

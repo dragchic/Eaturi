@@ -5,11 +5,12 @@ struct HistoryCardView: View {
     let record: HistoryRecord
     let onPickAgain: ([UUID: Int]) -> Void
     
+    
     var body: some View {
         NavigationLink(destination: HistoryDetailView(record: record)) {
             VStack(alignment: .leading, spacing: 16) {
                 Text(dateFormatter.string(from: record.timestamp) + ", \(record.cart.count) items")
-                    .font(.title2)
+                    .font(.subheadline)
                     .foregroundColor(.secondary)
                 HStack(spacing: 12) {
                     let productIDs = Array(record.cart.keys)
@@ -98,5 +99,15 @@ struct AdditionalProductsView: View {
             .frame(width: 100, height: 100)
             .background(Color.gray.opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+#Preview {
+    do {
+        let previewer = try Previewer()
+        return MainTabView(cartItems: [:])
+            .modelContainer(previewer.container)
+    } catch {
+        return Text("Preview Error: \(error.localizedDescription)")
     }
 }
