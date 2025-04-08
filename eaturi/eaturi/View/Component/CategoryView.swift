@@ -59,7 +59,7 @@ struct CategoryView: View {
                 if selectedNutritionalFilters.contains("Low Fat") && !(item.fat < 10) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("High Fiber") && !(item.fiber > 5) {
+                if selectedNutritionalFilters.contains("High Fiber") && !(item.fiber >= 3) {
                     match = false
                 }
                 return match
@@ -141,7 +141,7 @@ struct CategoryView: View {
                             }
             }
             
-            if !searchText.isEmpty && cachedFilteredItems.isEmpty {
+            if cachedFilteredItems.isEmpty {
                 EmptySearchResultsView(searchText: searchText)
             } else {
                 FoodItemsGrid(
@@ -296,9 +296,11 @@ struct EmptySearchResultsView: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 50))
                 .foregroundColor(.gray)
-            Text("No menu items found for \"\(searchText)\"")
+            
+            Text(searchText.isEmpty ? "No menu items found" : "No menu items found for \"\(searchText)\"")
                 .font(.headline)
                 .multilineTextAlignment(.center)
+            
             Text("Try a different search term or clear the search field")
                 .font(.subheadline)
                 .foregroundColor(.gray)
@@ -308,6 +310,7 @@ struct EmptySearchResultsView: View {
         .padding(.top, 50)
     }
 }
+
 
 struct FoodItemsGrid: View {
     let sortedCategories: [String]
