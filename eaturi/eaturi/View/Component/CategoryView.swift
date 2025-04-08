@@ -413,7 +413,8 @@ struct FoodItemCell: View {
                                             isCartVisible = false
                                         }
                                     }
-                                }
+                                },
+                                textSpacing: 0
                             )
                             .padding(4)
                         } else {
