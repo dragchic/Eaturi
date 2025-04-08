@@ -28,7 +28,7 @@ struct HistoryCardView: View {
                     HStack(spacing: 8) {
                         Image(systemName: "flame.fill")
                             .foregroundColor(.orange)
-                        Text("\(record.totalCalories) Kcalories")
+                        Text("\(record.totalCalories) kcal")
                             .font(.body)
                             .foregroundColor(.black)
                     }

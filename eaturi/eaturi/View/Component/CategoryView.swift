@@ -336,9 +336,7 @@ struct FoodItemsGrid: View {
                             }
                             .padding(.horizontal)
                         }
-                        
-                        Divider()
-                            .padding(.horizontal)
+                        Spacer()
                     }
                 }
             }
@@ -369,9 +367,9 @@ struct FoodItemCell: View {
                 VStack {
                     HStack {
                         HStack(spacing: 4) {
-                            Image("fire")
-                                .resizable()
-                                .frame(width: 15, height: 15)
+                            Image(systemName:"flame.fill")
+                                .foregroundColor(.orange)
+
                             Text("\(item.calories) kcal")
                                 .font(.system(size: 14))
                                 .fontWeight(.semibold)
@@ -379,7 +377,7 @@ struct FoodItemCell: View {
                         }
                         .padding(5)
                         .background(Color.white)
-                        .cornerRadius(10)
+                        .cornerRadius(8)
                         Spacer()
                     }.padding(10)
                     
@@ -431,31 +429,31 @@ struct FoodItemCell: View {
                     .lineLimit(1)
                     .foregroundColor(.newblek)
                 
-                HStack(spacing: 12) {
-                    HStack(spacing: 4) {
-                        Image("fat")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                HStack(spacing: 10) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "circle.hexagongrid.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.yellow)
                         Text("\(item.fat)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
-                    HStack(spacing: 4) {
-                        Image("protein")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                    HStack(spacing: 3) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.red)
                         Text("\(item.protein)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
-                    HStack(spacing: 4) {
-                        Image("carbs")
-                            .resizable()
-                            .frame(width: 12, height: 12)
+                    HStack(spacing: 3) {
+                        Image(systemName:"chart.pie.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(.blue)
                         Text("\(item.carbs)g")
                             .font(.system(size: 12))
                             .fontWeight(.medium)
@@ -467,8 +465,8 @@ struct FoodItemCell: View {
                 
                 Text("Rp\(item.price)")
                     .font(.system(size: 14))
-                    .fontWeight(.semibold)
-                    .foregroundColor(.ijotulisan)
+                    .fontWeight(.medium)
+                    .foregroundColor(.colorPrimary)
             }
             .padding(.horizontal, 12)
             .padding(.top, 10)

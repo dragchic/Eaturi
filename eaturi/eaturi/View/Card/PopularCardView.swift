@@ -25,19 +25,18 @@ struct PopularCardView: View {
                         .font(.title3)
                         .fontWeight(.medium)
                         .lineLimit(1)
-                    Text("Rp\(item.price)")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .foregroundColor(Color("colorPrimary"))
-                    HStack (spacing: 2){
-                        Image("fire")
-                            .resizable()
-                            .frame(width: 15, height: 15)
+                    HStack(spacing: 4) {
+                        Image(systemName:"flame.fill")
+                            .foregroundColor(.orange)
                         Text("\(item.calories) kcal")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
+                            .font(.system(size: 15))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
                     }
+                    Text("Rp\(item.price)")
+                        .font(.system(size: 14))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.colorPrimary)
                 }
                 .padding(.leading, 12)
             }

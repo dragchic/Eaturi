@@ -4,7 +4,7 @@ struct CartPopUp: View {
     @Binding var cartItems: [UUID: Int]
     @Binding var foodItems: [FoodModel]
     var onTap: () -> Void
-
+    
     var totalQuantity : Int {
         CartCalculationUtility.calculateTotalQuantity(
             cartItems: cartItems
@@ -12,18 +12,18 @@ struct CartPopUp: View {
     }
     
     var totalCalories: Int {
-           CartCalculationUtility.calculateTotalCalories(
-               cartItems: cartItems,
-               foodItems: foodItems
-           )
-       }
-       
-   var totalPrice: Int {
-       CartCalculationUtility.calculateTotalPrice(
-           cartItems: cartItems,
-           foodItems: foodItems
-       )
-   }
+        CartCalculationUtility.calculateTotalCalories(
+            cartItems: cartItems,
+            foodItems: foodItems
+        )
+    }
+    
+    var totalPrice: Int {
+        CartCalculationUtility.calculateTotalPrice(
+            cartItems: cartItems,
+            foodItems: foodItems
+        )
+    }
     
     private var cartItemDetails: [(item: FoodModel, quantity: Int)] {
         cartItems.compactMap { key, value in
@@ -37,31 +37,36 @@ struct CartPopUp: View {
     var body: some View {
         HStack(spacing: 3) {
             HStack{
-                VStack(alignment: .leading){
+                VStack(alignment: .leading, spacing: 3){
                     Text("\(totalQuantity) items")
                         .foregroundColor(.white)
                         .font(.caption)
                     
-                    
-                    HStack(spacing: 8) {
-                        Image(systemName: "flame.fill")
-                            .foregroundColor(Color.colorOren)
-                        Text("\(totalCalories)")
-                            .font(.body)
-                            .foregroundColor(.white)
-                    }
+                    Text("Rp\(totalPrice)")
+                        .foregroundColor(.white)
+                        .font(.system(size: 14, weight: .medium))
                 }
                 
                 Spacer()
                 
-                HStack(spacing: 20){
-                    Text("Rp\(totalPrice)")
-                        .foregroundColor(.white)
-                        .font(.system(size: 16, weight: .medium))
+                HStack(spacing: 10){
+                    HStack{
+                        Image(systemName:"flame.fill")
+                            .foregroundColor(.orange)
+                        
+                        Text("\(totalCalories) kcal")
+                            .font(.system(size: 16))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                    }
+                    .padding(8)
+                    .background(Color.white)
+                    .cornerRadius(30)
+                    
                     Image(systemName: "chevron.right.circle.fill")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 32, height: 32)
                         .foregroundStyle(.white)
                 }
             }
@@ -77,3 +82,4 @@ struct CartPopUp: View {
         }
     }
 }
+

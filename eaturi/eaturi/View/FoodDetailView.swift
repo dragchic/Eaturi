@@ -50,7 +50,7 @@ struct FoodDetailView: View {
             Text("Rp\(item.price)")
                 .font(.title2)
                 .fontWeight(.semibold)
-                .foregroundColor(.ijotulisan)
+                .foregroundColor(.colorPrimary)
             
             Text("Nutrition")
                 .font(.body)
