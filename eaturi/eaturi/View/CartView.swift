@@ -11,6 +11,10 @@ struct CartView: View {
     
     @Binding var selectedTab: Int
     
+    // Add these state variables for the popup animation
+    @State private var showSaveConfirmation = false
+    @State private var isAnimating = false
+    
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
@@ -37,6 +41,7 @@ struct CartView: View {
     
     var body: some View {
         ZStack {
+            // Background and main content
             ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
@@ -56,18 +61,21 @@ struct CartView: View {
                                 .resizable()
                                 .foregroundColor(Color.colorPrimary)
                                 .frame(width: 33, height: 33)
+                                .dynamicTypeSize(.xSmall...(.accessibility5))
                         }
                         
                         HStack(spacing: 0) {
                             Text("My")
-                                .font(.title)
+                                .font(.system(.title, design: .default))
                                 .bold()
                                 .foregroundColor(.blackGray)
+                                .dynamicTypeSize(.xSmall...(.accessibility5))
                             
                             Text("Lunch")
-                                .font(.title)
+                                .font(.system(.title, design: .default))
                                 .bold()
                                 .foregroundColor(.colorPrimary)
+                                .dynamicTypeSize(.xSmall...(.accessibility5))
                         }
                         
                         Spacer()
@@ -86,19 +94,21 @@ struct CartView: View {
                         nutritionItem(icon: "leaf.fill", value: "\(totalFiber) g", label: "Fiber", color: .green)
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(width: 340)
-                    .padding(.vertical, 16)
-                    .padding(.horizontal, 10)
+                    .frame(width: UIFontMetrics.default.scaledValue(for: 340))
+                    .padding(.vertical, UIFontMetrics.default.scaledValue(for: 16))
+                    .padding(.horizontal, UIFontMetrics.default.scaledValue(for: 10))
                     .background(Color.white)
                     .cornerRadius(20)
                     .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
                     
                     ScrollView {
-                        VStack(spacing: 16) {
+                        VStack(spacing: UIFontMetrics.default.scaledValue(for: 16)) {
                             if cartItems.isEmpty {
                                 Text("Your cart is empty")
+                                    .font(.system(.body, design: .default))
                                     .foregroundColor(.gray)
                                     .padding()
+                                    .dynamicTypeSize(.xSmall...(.accessibility5))
                             } else {
                                 ForEach(cartItems.compactMap { key, value -> (FoodModel, Binding<Int>)? in
                                     if let item = foodItems.first(where: { $0.id == key }) {
@@ -115,27 +125,68 @@ struct CartView: View {
                         }
                     }
                     
-                    //                SummaryView(totalCalories: totalCalories, totalPrice: totalPrice)
-                    
-                    Button(action: saveToHistory) {
+                    Button(action: {
+                        // Show the confirmation animation before saving
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showSaveConfirmation = true
+                            isAnimating = true
+                        }
+                        
+                        // After a delay, save the data and dismiss
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            saveToHistory()
+                        }
+                    }) {
                         Text("Save to History")
-                            .font(.system(size: 20))
+                            .font(.system(size: UIFontMetrics.default.scaledValue(for: 20)))
                             .fontWeight(.medium)
                             .foregroundColor(.white)
-                            .frame(height: 40)
+                            .frame(height: UIFontMetrics.default.scaledValue(for: 40))
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(cartItems.isEmpty ? Color.gray : Color.colorPrimary)
-
                             .cornerRadius(100)
                             .padding()
                     }
                     .disabled(cartItems.isEmpty)
                 }
-                //            .navigationBarHidden(true)
                 .navigationBarHidden(true)
                 .toolbar(.hidden, for: .tabBar)
+            }
+            
+            // Popup confirmation overlay
+            if showSaveConfirmation {
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                    .transition(.opacity)
+                    .zIndex(1)
                 
+                VStack {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: UIFontMetrics.default.scaledValue(for: 70)))
+                        .foregroundColor(.green)
+                        .scaleEffect(isAnimating ? 1.0 : 0.5)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0), value: isAnimating)
+                    
+                    Text("Saved Successfully!")
+                        .font(.system(.title2, design: .default))
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.top, 16)
+                        .opacity(isAnimating ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.3), value: isAnimating)
+                        .dynamicTypeSize(.xSmall...(.accessibility5))
+                }
+                .frame(width: UIFontMetrics.default.scaledValue(for: 250), height: UIFontMetrics.default.scaledValue(for: 250))
+                .background(Color.colorPrimary.opacity(0.9))
+                .cornerRadius(20)
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5) // Added shadow for depth
+                .offset(y: isAnimating ? 0 : 300) // Start from below (near button)
+                .scaleEffect(isAnimating ? 1.0 : 0.8)
+                .opacity(isAnimating ? 1.0 : 0.0)
+                .transition(.move(edge: .bottom).combined(with: .scale).combined(with: .opacity))
+                .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0), value: isAnimating)
+                .zIndex(2)
             }
         }
     }
@@ -143,14 +194,16 @@ struct CartView: View {
     private func nutritionItem(icon: String, value: String, label: String, color: Color) -> some View {
         VStack {
             Image(systemName: icon)
-                .font(.system(size: 15))
+                .font(.system(size: UIFontMetrics.default.scaledValue(for: 15)))
                 .foregroundStyle(color)
             Text(value)
-                .font(.subheadline)
+                .font(.system(.subheadline, design: .default))
                 .foregroundColor(.black)
+                .dynamicTypeSize(.xSmall...(.accessibility5))
             Text(label)
-                .font(.caption)
+                .font(.system(.caption, design: .default))
                 .foregroundColor(.gray)
+                .dynamicTypeSize(.xSmall...(.accessibility5))
         }
         .frame(maxWidth: .infinity)
     }
@@ -158,10 +211,9 @@ struct CartView: View {
     private func separator() -> some View {
         Rectangle()
             .fill(Color("colorPrimary"))
-            .frame(width: 1, height: 40)
+            .frame(width: 1, height: UIFontMetrics.default.scaledValue(for: 40))
             .padding(.horizontal, 4)
     }
-
     
     private func updateQuantity(for id: UUID, quantity: Int) {
         if quantity > 0 {
@@ -172,39 +224,39 @@ struct CartView: View {
     }
     
     private func saveToHistory() {
-            print("Saving to history...")
-            
-            let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
-                result[item.id] = (
-                    item.price,
-                    item.calories,
-                    item.protein,
-                    item.carbs,
-                    item.fiber,
-                    item.fat
-                )
-            }
-            
-            HistoryManager.saveOrderHistory(
-                cart: cartItems,
-                modelContext: modelContext,
-                foodData: foodData
+        print("Saving to history...")
+        
+        let foodData = foodItems.reduce(into: [UUID: (Int, Int, Int, Int, Int, Int)]()) { result, item in
+            result[item.id] = (
+                item.price,
+                item.calories,
+                item.protein,
+                item.carbs,
+                item.fiber,
+                item.fat
             )
-            
-            healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
-            healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
-            healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
-            healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
-            healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
-            
-            cartItems.removeAll()
-            
-            // Switch to History tab (index 1) before dismissing
-            selectedTab = 1
-            dismiss()
-            
-            print("Save completed")
         }
+        
+        HistoryManager.saveOrderHistory(
+            cart: cartItems,
+            modelContext: modelContext,
+            foodData: foodData
+        )
+        
+        healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
+        healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)
+        healthManager.saveNutrition(value: Double(totalCarbs), unit: .gram(), typeIdentifier: .dietaryCarbohydrates)
+        healthManager.saveNutrition(value: Double(totalFiber), unit: .gram(), typeIdentifier: .dietaryFiber)
+        healthManager.saveNutrition(value: Double(totalProtein), unit: .gram(), typeIdentifier: .dietaryProtein)
+        
+        cartItems.removeAll()
+        
+        // Switch to History tab (index 1) before dismissing
+        selectedTab = 1
+        dismiss()
+        
+        print("Save completed")
+    }
 }
 
 
@@ -292,52 +344,13 @@ struct CartItemView: View {
             )
         }
         .frame(width: 340, height: 90)
-//        .padding(.top, 8)
+        //        .padding(.top, 8)
         .padding()
         .background(Color.white)
         .cornerRadius(20)
-//        .shadow(radius: 5)
+        //        .shadow(radius: 5)
     }
 }
-
-//struct SummaryView: View {
-//    var totalCalories: Int
-//    var totalPrice: Int
-//    
-//    var body: some View {
-//        VStack(spacing: 16) {
-//            HStack {
-//                Text("Summary")
-//                    .font(.system(size: 20, weight: .medium))
-//                    .foregroundColor(.secondary)
-//                Spacer()
-//            }
-//            HStack {
-//                Text("Calories")
-//                    .foregroundColor(.black)
-//                Spacer()
-//                HStack(spacing: 8) {
-//                    Image(systemName: "flame.fill")
-//                        .foregroundColor(.orange)
-//                    Text("\(totalCalories) kcal")
-//                        .foregroundColor(.secondary)
-//                }
-//            }
-//            HStack {
-//                Text("Price")
-//                    .foregroundColor(.black)
-//                Spacer()
-//                Text("Rp \(totalPrice)")
-//                    .foregroundColor(.blue)
-//            }
-//        }
-//        .padding()
-//        .background(Color.white)
-//        .cornerRadius(20)
-//        .shadow(radius: 5)
-//        .padding()
-//    }
-//}
 
 #Preview {
     do {

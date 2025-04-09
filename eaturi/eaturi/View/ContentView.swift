@@ -110,7 +110,8 @@ struct ContentView: View {
     private var headerSection: some View {
         VStack(alignment: .leading) {
             Text("Let's Start a")
-                .font(.largeTitle)
+                .font(.system(.largeTitle, design: .default))
+                .dynamicTypeSize(.xSmall...(.accessibility5))
                 .foregroundColor(Color("BlackGray"))
                 .fontWeight(.bold)
                 .padding(.leading, 30)
