@@ -24,20 +24,37 @@ struct SplashScreenView: View {
             )
             .edgesIgnoringSafeArea(.all)
             
-            VStack{
-                VStack{
-                    Image(systemName: "flame.fill")
-                        .font(.title)
-                        .foregroundColor(.colorOren)
-                    Text("Eaturi")
-                }
-                .scaleEffect(size)
-                .opacity(opacity)
-                .onAppear{
-                    withAnimation(.easeIn(duration: 1.2)){
-                        self.size = 0.9
-                        self.opacity = 1.0
+            VStack {
+                    Spacer()
+
+                    VStack {
+                        Image("logomark")
+                            .resizable()
+                            .frame(width: 200, height: 145)
+                        Image("logotype")
+                            .resizable()
+                            .frame(width: 105, height: 65)
                     }
+
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Text("No more guessing calories — ")
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundColor(.white)
+                        Text("Eaturi got you!")
+                            .font(.body)
+                            .fontWeight(.medium)
+                            .foregroundColor(.white)
+                    }
+                    .padding(.bottom, 40)
+                }
+            .scaleEffect(size)
+            .opacity(opacity)
+            .onAppear{
+                withAnimation(.easeIn(duration: 1.2)){
+                    self.size = 0.9
+                    self.opacity = 1.0
                 }
             }
             .onAppear {
