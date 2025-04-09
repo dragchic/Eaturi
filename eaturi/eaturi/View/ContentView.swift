@@ -115,6 +115,7 @@ struct ContentView: View {
                 .foregroundColor(Color("BlackGray"))
                 .fontWeight(.bold)
                 .padding(.leading, 30)
+                .padding(.top, 10)
             HStack (spacing:0){
                 Text("Healthy")
                     .font(.largeTitle)

@@ -134,7 +134,7 @@ struct CategoryView: View {
                 
                 if !searchText.isEmpty {
                     Text("\"\(searchText)\" search showing \(cachedFilteredItems.count) result\(cachedFilteredItems.count == 1 ? "" : "s")")
-                        .font(.system(size: 15))
+                        .font(.body)
                         .foregroundColor(.gray)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
@@ -397,8 +397,7 @@ struct FoodItemCell: View {
                             Image(systemName: "flame.fill")
                                 .foregroundColor(.orange)
                             Text("\(item.calories) kcal ")
-                                .font(.system(size: 15))
-                                .fontWeight(.semibold)
+                                .font(.headline)
                                 .foregroundColor(.secondary)
                         }
                         .padding(6)
@@ -444,7 +443,7 @@ struct FoodItemCell: View {
                                     },
                                     buttonSize: 24,
                                     iconSize: 10,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     textSpacing: 0
                                 )
                                 .padding(4)
@@ -486,30 +485,30 @@ struct FoodItemCell: View {
                 HStack(spacing: 10) {
                     HStack(spacing: 3) {
                         Image(systemName: "circle.hexagongrid.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.yellow)
                         Text("\(item.fat)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
                     HStack(spacing: 3) {
                         Image(systemName: "bolt.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.red)
                         Text("\(item.protein)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
                     HStack(spacing: 3) {
                         Image(systemName: "chart.pie.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.blue)
                         Text("\(item.carbs)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
@@ -517,7 +516,7 @@ struct FoodItemCell: View {
                 .padding(.bottom, 10)
                 
                 Text("Rp\(item.price)")
-                    .font(.system(size: 15))
+                    .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(.colorPrimary)
             }

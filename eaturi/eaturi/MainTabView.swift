@@ -8,54 +8,69 @@ struct MainTabView: View {
     @State private var selectedTab = 0
     @State var cartItems: [UUID: Int]
     @State var isCartVisible: Bool = false
-
+    @State private var showSplash = true
+    
     var body: some View {
-        NavigationStack {
-            VStack {
-                ZStack {
-                    switch selectedTab {
-                    case 0:
-                        ContentView(
-                            cartItems: $cartItems,
-                            isCartVisible: $isCartVisible,
-                            foodItems: .constant(foodItems),
-                            selectedTab: $selectedTab
-                        )
-                        .environment(\.modelContext, modelContext)
-                        
-                    case 1:
-                        HistoryView(onPickAgain: { selectedCart in
-                            cartItems = selectedCart
-                            isCartVisible = true
-                            selectedTab = 0
-                        })
-                        .environment(\.modelContext, modelContext)
-                        
-                    default:
-                        EmptyView()
+        Group {
+            if showSplash {
+                SplashScreenView()
+                    .transition(.opacity)
+            } else {
+                NavigationStack {
+                    VStack {
+                        ZStack {
+                            switch selectedTab {
+                            case 0:
+                                ContentView(
+                                    cartItems: $cartItems,
+                                    isCartVisible: $isCartVisible,
+                                    foodItems: .constant(foodItems),
+                                    selectedTab: $selectedTab
+                                )
+                                .environment(\.modelContext, modelContext)
+                                
+                            case 1:
+                                HistoryView(onPickAgain: { selectedCart in
+                                    cartItems = selectedCart
+                                    isCartVisible = true
+                                    selectedTab = 0
+                                })
+                                .environment(\.modelContext, modelContext)
+                                
+                            default:
+                                EmptyView()
+                            }
+                        }
+                        HStack {
+                            Button {
+                                selectedTab = 0
+                            } label: {
+                                CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
+                            }
+                            Button {
+                                selectedTab = 1
+                            } label: {
+                                CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
+                            }
+                        }
+                        .frame(height: 90)
+                        .background(Color.white)
+                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: -1)
                     }
+                    .ignoresSafeArea(.all)
+                    .preferredColorScheme(.light)
                 }
-                HStack {
-                    Button {
-                        selectedTab = 0
-                    } label: {
-                        CustomTabBarItem(icon: "fork.knife", title: "Menu", isSelected: selectedTab == 0, color: Color("colorPrimary"))
-                    }
-                    Button {
-                        selectedTab = 1
-                    } label: {
-                        CustomTabBarItem(icon: "list.bullet.clipboard", title: "History", isSelected: selectedTab == 1, color: Color("colorPrimary"))
-                    }
-                }
-                .frame(height: 90)
-                .background(Color.white)
-                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: -1)
+                .ignoresSafeArea(.keyboard)
+                .ignoresSafeArea(.container, edges: .top)
             }
-            .ignoresSafeArea(.all)
-            .preferredColorScheme(.light)
         }
-        .ignoresSafeArea(.keyboard)
-        .ignoresSafeArea(.container, edges: .top)
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4){
+                withAnimation(.easeOut(duration: 0.2)){
+                    showSplash = false
+                }
+            }
+        }
     }
 }
 

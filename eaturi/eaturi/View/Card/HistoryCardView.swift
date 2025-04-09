@@ -26,13 +26,49 @@ struct HistoryCardView: View {
                     }
                 }
                 HStack {
-                    HStack(spacing: 8) {
-                        Image(systemName: "flame.fill")
-                            .foregroundColor(.orange)
-                        Text("\(record.totalCalories) kcal")
-                            .font(.body)
-                            .foregroundColor(.black)
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "flame.fill")
+                                .foregroundColor(.orange)
+                            Text("\(record.totalCalories) kcal")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                        }
+                        HStack(spacing: 10) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "circle.hexagongrid.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.yellow)
+                                Text("\(record.totalFat)g")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            HStack(spacing: 1) {
+                                Image(systemName: "bolt.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.red)
+                                Text("\(record.totalProtein)g")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            HStack(spacing: 3) {
+                                Image(systemName:"chart.pie.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.blue)
+                                Text("\(record.totalCarbs)g")
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        
                     }
+            
                     Spacer()
                     Text("Rp \(record.totalPrice)")
                         .font(.body)

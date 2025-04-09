@@ -36,7 +36,7 @@ struct CartPopUp: View {
 
                 Text("Rp\(totalPrice)")
                     .foregroundColor(.white)
-                    .font(.system(size: 15, weight: .medium))
+                    .font(.system(.subheadline, weight: .medium))
             }.padding(.leading, 10)
 
             Spacer()
@@ -48,7 +48,7 @@ struct CartPopUp: View {
                         .foregroundColor(.orange)
 
                     Text("\(totalCalories) kcal")
-                        .font(.system(size: 15))
+                        .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.colorPrimary)
                         .lineLimit(1) // ✅ Prevent line wrap

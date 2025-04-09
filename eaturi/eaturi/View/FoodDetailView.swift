@@ -97,7 +97,7 @@ struct FoodDetailView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.newblek)
             
-            HStack {
+            HStack{
                 nutritionItem(icon: "flame.fill", value: "\(item.calories)", label: "Calories", color: .orange)
                 separator()
                 nutritionItem(icon: "circle.hexagongrid.fill", value: "\(item.fat) g", label: "Fat", color: .yellow)

@@ -246,30 +246,30 @@ struct CartItemView: View {
                 HStack(spacing: 10) {
                     HStack(spacing: 3) {
                         Image(systemName: "circle.hexagongrid.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.yellow)
                         Text("\(item.fat)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
                     HStack(spacing: 3) {
                         Image(systemName: "bolt.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.red)
                         Text("\(item.protein)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
                     
                     HStack(spacing: 3) {
                         Image(systemName:"chart.pie.fill")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundColor(.blue)
                         Text("\(item.carbs)g")
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
                     }
