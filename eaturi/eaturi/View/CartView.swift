@@ -11,10 +11,6 @@ struct CartView: View {
     
     @Binding var selectedTab: Int
     
-    // Add these state variables for the popup animation
-    @State private var showSaveConfirmation = false
-    @State private var isAnimating = false
-    
     var totalCalories: Int {
         CartCalculationUtility.calculateTotalCalories(cartItems: cartItems, foodItems: foodItems)
     }
@@ -126,16 +122,7 @@ struct CartView: View {
                     }
                     
                     Button(action: {
-                        // Show the confirmation animation before saving
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            showSaveConfirmation = true
-                            isAnimating = true
-                        }
-                        
-                        // After a delay, save the data and dismiss
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             saveToHistory()
-                        }
                     }) {
                         Text("Save to History")
                             .font(.system(size: UIFontMetrics.default.scaledValue(for: 20)))
@@ -152,41 +139,6 @@ struct CartView: View {
                 }
                 .navigationBarHidden(true)
                 .toolbar(.hidden, for: .tabBar)
-            }
-            
-            // Popup confirmation overlay
-            if showSaveConfirmation {
-                Color.black.opacity(0.5)
-                    .edgesIgnoringSafeArea(.all)
-                    .transition(.opacity)
-                    .zIndex(1)
-                
-                VStack {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: UIFontMetrics.default.scaledValue(for: 70)))
-                        .foregroundColor(.green)
-                        .scaleEffect(isAnimating ? 1.0 : 0.5)
-                        .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0), value: isAnimating)
-                    
-                    Text("Saved Successfully!")
-                        .font(.system(.title2, design: .default))
-                        .bold()
-                        .foregroundColor(.white)
-                        .padding(.top, 16)
-                        .opacity(isAnimating ? 1.0 : 0.0)
-                        .animation(.easeInOut(duration: 0.3), value: isAnimating)
-                        .dynamicTypeSize(.xSmall...(.accessibility5))
-                }
-                .frame(width: UIFontMetrics.default.scaledValue(for: 250), height: UIFontMetrics.default.scaledValue(for: 250))
-                .background(Color.colorPrimary.opacity(0.9))
-                .cornerRadius(20)
-                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5) // Added shadow for depth
-                .offset(y: isAnimating ? 0 : 300) // Start from below (near button)
-                .scaleEffect(isAnimating ? 1.0 : 0.8)
-                .opacity(isAnimating ? 1.0 : 0.0)
-                .transition(.move(edge: .bottom).combined(with: .scale).combined(with: .opacity))
-                .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0), value: isAnimating)
-                .zIndex(2)
             }
         }
     }
