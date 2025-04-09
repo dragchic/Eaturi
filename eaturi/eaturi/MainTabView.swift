@@ -18,7 +18,8 @@ struct MainTabView: View {
                         ContentView(
                             cartItems: $cartItems,
                             isCartVisible: $isCartVisible,
-                            foodItems: .constant(foodItems), selectedTab: $selectedTab
+                            foodItems: .constant(foodItems),
+                            selectedTab: $selectedTab
                         )
                         .environment(\.modelContext, modelContext)
                         

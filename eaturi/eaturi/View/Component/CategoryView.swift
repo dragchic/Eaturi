@@ -59,7 +59,7 @@ struct CategoryView: View {
                 if selectedNutritionalFilters.contains("Low Fat") && !(item.fat < 10) {
                     match = false
                 }
-                if selectedNutritionalFilters.contains("High Fiber") && !(item.fiber >= 3) {
+                if selectedNutritionalFilters.contains("High Fiber") && !(item.fiber >= 4) {
                     match = false
                 }
                 return match
@@ -158,7 +158,8 @@ struct CategoryView: View {
                         isPresented: $showDetailModal,
                         cartItems: $cartItems,
                         isCartVisible: $isCartVisible,
-                        showDetailModal: $showDetailModal
+                        showDetailModal: $showDetailModal,
+                        isAvailableToday: item.availableDays.contains(getTodayString())
                     )
                     .presentationDetents([.fraction(0.8)])
                     .presentationCornerRadius(40)
@@ -358,8 +359,21 @@ struct FoodItemsGrid: View {
     }
 }
 
+func getTodayString() -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "id_ID") // Indonesia
+    formatter.dateFormat = "EEEE"
+    return formatter.string(from: Date()).capitalized // Capitalize biar jadi 'Senin', 'Selasa', dll
+}
+
+
 struct FoodItemCell: View {
     let item: FoodModel
+    var isAvailableToday: Bool {
+        let today = getTodayString()
+        return item.availableDays.contains(today)
+    }
+    
     @Binding var selectedFoodItem: FoodModel?
     @Binding var showDetailModal: Bool
     @Binding var cartItems: [UUID: Int]
@@ -373,7 +387,9 @@ struct FoodItemCell: View {
                     .scaledToFill()
                     .frame(width: 160, height: 160)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
-                    // Move onTapGesture to a specific tappable area if needed
+                    .saturation(isAvailableToday ? 1 : 0)
+                    .opacity(isAvailableToday ? 1 : 0.6)
+                // Move onTapGesture to a specific tappable area if needed
                 
                 VStack {
                     HStack {
@@ -397,63 +413,67 @@ struct FoodItemCell: View {
                     HStack {
                         Spacer()
                         
-                        if cartItems[item.id] != nil {
-                            QuantityControl(
-                                quantity: Binding(
-                                    get: { cartItems[item.id] ?? 0 },
-                                    set: { newValue in
-                                        if newValue > 0 {
-                                            cartItems[item.id] = newValue
+                        if isAvailableToday {
+                            if cartItems[item.id] != nil {
+                                QuantityControl(
+                                    quantity: Binding(
+                                        get: { cartItems[item.id] ?? 0 },
+                                        set: { newValue in
+                                            if newValue > 0 {
+                                                cartItems[item.id] = newValue
+                                            } else {
+                                                cartItems.removeValue(forKey: item.id)
+                                                if cartItems.isEmpty {
+                                                    isCartVisible = false
+                                                }
+                                            }
+                                        }
+                                    ),
+                                    onIncrement: {
+                                        cartItems[item.id] = (cartItems[item.id] ?? 0) + 1
+                                    },
+                                    onDecrement: {
+                                        if let qty = cartItems[item.id], qty > 1 {
+                                            cartItems[item.id] = qty - 1
                                         } else {
                                             cartItems.removeValue(forKey: item.id)
                                             if cartItems.isEmpty {
                                                 isCartVisible = false
                                             }
                                         }
-                                    }
-                                ),
-                                onIncrement: {
-                                    cartItems[item.id] = (cartItems[item.id] ?? 0) + 1
-                                },
-                                onDecrement: {
-                                    if let qty = cartItems[item.id], qty > 1 {
-                                        cartItems[item.id] = qty - 1
-                                    } else {
-                                        cartItems.removeValue(forKey: item.id)
-                                        if cartItems.isEmpty {
-                                            isCartVisible = false
-                                        }
-                                    }
-                                },
-                                buttonSize: 24,
-                                iconSize: 10,
-                                fontSize: 16,
-                                textSpacing: 0
-                            )
-                            .padding(4)
-                            .zIndex(1)
-                        } else {
-                            Button(action: {
-                                cartItems[item.id] = 1
-                                isCartVisible = true
-                            }) {
-                                Image(systemName: "plus")
-                                    .padding(10)
-                                    .background(Color("colorPrimary"))
-                                    .foregroundColor(.white)
-                                    .clipShape(Circle())
-                                    .padding(8)
-                                    .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 2)
+                                    },
+                                    buttonSize: 24,
+                                    iconSize: 10,
+                                    fontSize: 16,
+                                    textSpacing: 0
+                                )
+                                .padding(4)
+                                .zIndex(1)
+                            } else {
+                                Button(action: {
+                                    cartItems[item.id] = 1
+                                    isCartVisible = true
+                                }) {
+                                    Image(systemName: "plus")
+                                        .padding(10)
+                                        .background(Color("colorPrimary"))
+                                        .foregroundColor(.white)
+                                        .clipShape(Circle())
+                                        .padding(8)
+                                        .shadow(color: Color.black.opacity(0.4), radius: 4, x: 0, y: 2)
+                                }
+                                .zIndex(1)
                             }
-                            .zIndex(1)
+                            
                         }
                     }
                 }
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                selectedFoodItem = item
-                showDetailModal = true
+                    selectedFoodItem = item
+                    showDetailModal = true
+                
             }
             
             VStack(alignment: .leading, spacing: 6) {
@@ -508,7 +528,10 @@ struct FoodItemCell: View {
         .frame(width: 164)
         .background(Color.white)
         .cornerRadius(12)
+        .grayscale(isAvailableToday ? 0 : 1)
+        .opacity(isAvailableToday ? 1 : 0.7)
     }
+        
 }
 
 #Preview {
