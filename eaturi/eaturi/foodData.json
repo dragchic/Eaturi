@@ -484,7 +484,7 @@
             "carbs": 15,
             "fiber": 0,
             "fat": 5,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Gorengan"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Kerupuk udang renyah"
@@ -498,7 +498,7 @@
             "carbs": 45,
             "fiber": 1,
             "fat": 1,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Nasi"],
             "availableDays": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Nasi putih pulen"
@@ -512,7 +512,7 @@
             "carbs": 22,
             "fiber": 0,
             "fat": 0,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Nasi"],
             "availableDays": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Nasi putih 1/2 porsi"
@@ -526,7 +526,7 @@
             "carbs": 40,
             "fiber": 3,
             "fat": 1,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Nasi"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Nasi merah organik"
@@ -540,7 +540,7 @@
             "carbs": 20,
             "fiber": 1,
             "fat": 0,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Nasi"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Nasi merah 1/2 porsi"
@@ -568,7 +568,7 @@
             "carbs": 4,
             "fiber": 1,
             "fat": 2,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Sambal"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Sambal khas Manado"
@@ -624,7 +624,7 @@
             "carbs": 25,
             "fiber": 2,
             "fat": 25,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Daging"],
             "availableDays": ["Selasa", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Daging sapi lada hitam"
@@ -723,7 +723,7 @@
             "fiber": 2,
             "fat": 0,
             "isPopular": false,
-            "categories": ["Minuman"],
+            "categories": ["Lainnya"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Jus jambu merah segar"
         },
@@ -737,7 +737,7 @@
             "fiber": 0,
             "fat": 0,
             "isPopular": true,
-            "categories": ["Minuman"],
+            "categories": ["Lainnya"],
             "availableDays": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Es teh manis segar"
         },
@@ -751,7 +751,7 @@
             "fiber": 0,
             "fat": 3,
             "isPopular": false,
-            "categories": ["Minuman"],
+            "categories": ["Lainnya"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Kopi susu gula aren"
         }
