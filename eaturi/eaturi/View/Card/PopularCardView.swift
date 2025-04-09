@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct PopularCardView: View {
+    let isAvailable: Bool
     @Binding var item: FoodModel
 
     var body: some View {
@@ -74,6 +75,8 @@ struct PopularCardView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .grayscale(isAvailable ? 0 : 1)
+        .opacity(isAvailable ? 1 : 0.7)
     }
 }
 

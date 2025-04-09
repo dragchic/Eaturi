@@ -50,7 +50,7 @@
             "carbs": 15,
             "fiber": 2,
             "fat": 14,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Ayam"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Ayam fillet lada hitam"
@@ -64,7 +64,7 @@
             "carbs": 18,
             "fiber": 3,
             "fat": 20,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Ayam"],
             "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Ayam bakar bumbu kecap"
@@ -134,7 +134,7 @@
             "carbs": 12,
             "fiber": 2,
             "fat": 12,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Ikan"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Ikan tongkol sambal balado"
@@ -190,7 +190,7 @@
             "carbs": 15,
             "fiber": 1,
             "fat": 15,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Lainnya"],
             "availableDays": ["Selasa", "Kamis"],
             "foodDescription": "Sosis tumis bawang cabe rawit"
@@ -260,7 +260,7 @@
             "carbs": 5,
             "fiber": 1,
             "fat": 8,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Telur"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Telur puyuh sambal balado"
@@ -456,7 +456,7 @@
             "carbs": 18,
             "fiber": 2,
             "fat": 7,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Gorengan"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Bakwan campur sayuran"
@@ -582,7 +582,7 @@
             "carbs": 6,
             "fiber": 1,
             "fat": 3,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Sambal"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Sambal hijau khas Padang"
@@ -596,7 +596,7 @@
             "carbs": 45,
             "fiber": 2,
             "fat": 15,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Mie"],
             "availableDays": ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Mie goreng dengan telur"
@@ -610,7 +610,7 @@
             "carbs": 15,
             "fiber": 3,
             "fat": 8,
-            "isPopular": false,
+            "isPopular": true,
             "categories": ["Lainnya"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Tempe orek sambal balado"
@@ -638,7 +638,7 @@
             "carbs": 50,
             "fiber": 3,
             "fat": 18,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Mie"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Mie goreng dengan tambahan seafood"
@@ -666,7 +666,7 @@
             "carbs": 20,
             "fiber": 2,
             "fat": 28,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Daging"],
             "availableDays": ["Rabu", "Jumat"],
             "foodDescription": "Daging kambing bumbu krengsengan"
@@ -722,7 +722,7 @@
             "carbs": 28,
             "fiber": 2,
             "fat": 0,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Minuman"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Jus jambu merah segar"
@@ -750,7 +750,7 @@
             "carbs": 10,
             "fiber": 0,
             "fat": 3,
-            "isPopular": true,
+            "isPopular": false,
             "categories": ["Minuman"],
             "availableDays": ["Senin", "Rabu", "Jumat"],
             "foodDescription": "Kopi susu gula aren"

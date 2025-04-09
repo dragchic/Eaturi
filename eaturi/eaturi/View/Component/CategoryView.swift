@@ -213,18 +213,22 @@ struct PopularItemsSection: View {
                     HStack(spacing: 0) {
                         // This spacer creates the left padding for scrolling
                         LazyHStack(spacing: cardSpacing) {
-                            ForEach(Array(foodItems.enumerated()), id: \.offset) { index, item in
-                                PopularCardView(item: .constant(item))
-                                    .frame(width: cardWidth, height: cardHeight)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
-                                    .onTapGesture {
-                                        selectedFoodItem = item
-                                        showDetailModal = true
-                                    }
-                                    .id(index)
+                            ForEach(Array(foodItems.enumerated()).filter { $0.element.availableDays.contains(getTodayString()) }, id: \.offset) { index, item in
+                                PopularCardView(
+                                    isAvailable: true,
+                                    item: .constant(item)
+                                )
+                                .frame(width: cardWidth, height: cardHeight)
+                                .background(Color.white)
+                                .cornerRadius(10)
+                                .shadow(color: Color.black.opacity(0.05), radius: 3, x: 0, y: 1)
+                                .onTapGesture {
+                                    selectedFoodItem = item
+                                    showDetailModal = true
+                                }
+                                .id(index)
                             }
+
                         }
                     }
                 }
