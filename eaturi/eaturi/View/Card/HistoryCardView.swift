@@ -9,7 +9,7 @@ struct HistoryCardView: View {
     var body: some View {
         NavigationLink(destination: HistoryDetailView(record: record)) {
             VStack(alignment: .leading, spacing: 16) {
-                Text(dateFormatter.string(from: record.timestamp) + ", \(record.cart.count) items")
+                Text(dateFormatter.string(from: record.timestamp) + ", \(record.totalQuantity) items")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 HStack(spacing: 12) {

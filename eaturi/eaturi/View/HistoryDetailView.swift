@@ -56,7 +56,7 @@ struct HistoryDetailView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                             
-                            Text("\(record.cart.count) items · Rp \(record.totalPrice)")
+                            Text("\(record.totalQuantity) items · Rp \(record.totalPrice)")
                                 .font(.title3)
                                 .foregroundColor(.secondary)
                         }
