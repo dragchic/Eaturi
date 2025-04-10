@@ -4,12 +4,12 @@ import SwiftData
 struct MainTabView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \FoodModel.name) private var foodItems: [FoodModel]
-
+    
     @State private var selectedTab = 0
     @State var cartItems: [UUID: Int]
     @State var isCartVisible: Bool = false
     @State private var showSplash = true
-    
+    @State private var shouldNavigateToCart = false  // Add this state variable
     var body: some View {
         Group {
             if showSplash {
@@ -25,7 +25,8 @@ struct MainTabView: View {
                                     cartItems: $cartItems,
                                     isCartVisible: $isCartVisible,
                                     foodItems: .constant(foodItems),
-                                    selectedTab: $selectedTab
+                                    selectedTab: $selectedTab,
+                                    shouldNavigateToCart: $shouldNavigateToCart  // Pass this binding
                                 )
                                 .environment(\.modelContext, modelContext)
                                 
@@ -34,6 +35,7 @@ struct MainTabView: View {
                                     cartItems = selectedCart
                                     isCartVisible = true
                                     selectedTab = 0
+                                    shouldNavigateToCart = true  // Set this to true
                                 })
                                 .environment(\.modelContext, modelContext)
                                 
@@ -59,6 +61,13 @@ struct MainTabView: View {
                     }
                     .ignoresSafeArea(.all)
                     .preferredColorScheme(.light)
+                    .navigationDestination(isPresented: $shouldNavigateToCart) {
+                        CartView(
+                            cartItems: $cartItems,
+                            foodItems: foodItems,
+                            selectedTab: $selectedTab
+                        )
+                    }
                 }
                 .ignoresSafeArea(.keyboard)
                 .ignoresSafeArea(.container, edges: .top)
