@@ -61,7 +61,8 @@ struct ContentView: View {
                                 CategoryView(searchText: $searchText,
                                            isCategoryReached: $isCategoryReached,
                                            categoryModels: $categoryModels,
-                                           foodItems: $foodItems,
+                                           foodItems: .constant(sortedFoodItems),
+//                                           foodItems: $foodItems,
                                            selectedFilters: $selectedFilters,
                                            selectedFoodItem: $selectedFoodItem,
                                            showDetailModal: $showDetailModal,
@@ -136,6 +137,23 @@ struct ContentView: View {
             Color.clear.frame(height: 60) // buat spasi aman untuk notch
         }
     }
+    
+    private var sortedFoodItems: [FoodModel] {
+        let today = getTodayString()
+        return foodItems.sorted { first, second in
+            let firstAvailable = first.availableDays.contains(today)
+            let secondAvailable = second.availableDays.contains(today)
+            
+            if firstAvailable && !secondAvailable {
+                return true
+            } else if !firstAvailable && secondAvailable {
+                return false
+            } else {
+                return first.name < second.name
+            }
+        }
+    }
+
 }
 
 // MARK: - Preference Key

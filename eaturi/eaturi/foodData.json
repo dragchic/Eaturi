@@ -24,7 +24,7 @@
             "fat": 18,
             "isPopular": true,
             "categories": ["Ayam"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Ayam bistik saus jamur"
         },
         {
@@ -52,7 +52,7 @@
             "fat": 14,
             "isPopular": false,
             "categories": ["Ayam"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Ayam fillet lada hitam"
         },
         {
@@ -164,7 +164,7 @@
             "fat": 8,
             "isPopular": false,
             "categories": ["Lainnya"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Kentang goreng sambal balado"
         },
         {
@@ -234,7 +234,7 @@
             "fat": 14,
             "isPopular": true,
             "categories": ["Telur"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Telur ceplok sambal ponti"
         },
         {
@@ -276,7 +276,7 @@
             "fat": 12,
             "isPopular": false,
             "categories": ["Telur"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Telur rebus kuah semur"
         },
         {
@@ -528,7 +528,7 @@
             "fat": 1,
             "isPopular": false,
             "categories": ["Nasi"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Nasi merah organik"
         },
         {
@@ -542,7 +542,7 @@
             "fat": 0,
             "isPopular": false,
             "categories": ["Nasi"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Nasi merah 1/2 porsi"
         },
         {
@@ -570,7 +570,7 @@
             "fat": 2,
             "isPopular": false,
             "categories": ["Sambal"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Sambal khas Manado"
         },
         {
@@ -584,7 +584,7 @@
             "fat": 3,
             "isPopular": false,
             "categories": ["Sambal"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Sambal hijau khas Padang"
         },
         {
@@ -612,7 +612,7 @@
             "fat": 8,
             "isPopular": true,
             "categories": ["Lainnya"],
-            "availableDays": ["Senin", "Rabu", "Jumat"],
+            "availableDays": ["Senin", "Rabu", "Kamis", "Jumat"],
             "foodDescription": "Tempe orek sambal balado"
         },
         {
