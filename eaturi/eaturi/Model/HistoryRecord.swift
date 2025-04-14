@@ -12,6 +12,7 @@ class HistoryRecord {
     var totalCarbs: Int
     var totalFiber: Int
     var totalFat: Int
+    var totalQuantity: Int
     
     var cart: [UUID: Int] {
         get {
@@ -39,7 +40,8 @@ class HistoryRecord {
         totalProtein: Int,
         totalCarbs: Int,
         totalFiber: Int,
-        totalFat: Int
+        totalFat: Int,
+        totalQuantity: Int
     ) {
         self.id = UUID()
         self.timestamp = Date()
@@ -50,5 +52,6 @@ class HistoryRecord {
         self.totalCarbs = totalCarbs
         self.totalFiber = totalFiber
         self.totalFat = totalFat
+        self.totalQuantity = totalQuantity
     }
 }

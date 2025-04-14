@@ -3,6 +3,8 @@ import SwiftUI
 struct FoodDetailView: View {
     // MARK: - Properties
     let item: FoodModel
+    let isAvailableToday: Bool
+
     @Binding var isPresented: Bool
     @Binding var cartItems: [UUID: Int]
     @Binding var isCartVisible: Bool
@@ -15,16 +17,19 @@ struct FoodDetailView: View {
          isPresented: Binding<Bool>,
          cartItems: Binding<[UUID: Int]>,
          isCartVisible: Binding<Bool>,
-         showDetailModal: Binding<Bool>) {
+         showDetailModal: Binding<Bool>,
+         isAvailableToday: Bool) {
         self.item = item
         _isPresented = isPresented
         _cartItems = cartItems
         _isCartVisible = isCartVisible
         _showDetailModal = showDetailModal
+        self.isAvailableToday = isAvailableToday
         let initialValue = cartItems.wrappedValue[item.id] ?? 0
         _quantity = State(initialValue: initialValue)
         _initialQuantity = State(initialValue: initialValue)
     }
+
     
     // MARK: - Body
     var body: some View {
@@ -47,6 +52,8 @@ struct FoodDetailView: View {
             quantity = initialValue
             initialQuantity = initialValue
         }
+        .grayscale(isAvailableToday ? 0 : 1)
+        .opacity(isAvailableToday ? 1 : 0.7)
     }
     
     // MARK: - Subviews
@@ -59,6 +66,8 @@ struct FoodDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 25))
                 .padding(.top, 20)
                 .position(x: geometry.size.width / 2, y: 240 / 2 + 20)
+//                .saturation(isAvailableToday ? 1 : 0)
+//                .opacity(isAvailableToday ? 1 : 0.5)
         }
         .frame(height: 260)
     }
@@ -88,7 +97,7 @@ struct FoodDetailView: View {
                 .fontWeight(.semibold)
                 .foregroundStyle(.newblek)
             
-            HStack {
+            HStack{
                 nutritionItem(icon: "flame.fill", value: "\(item.calories)", label: "Calories", color: .orange)
                 separator()
                 nutritionItem(icon: "circle.hexagongrid.fill", value: "\(item.fat) g", label: "Fat", color: .yellow)
@@ -109,38 +118,52 @@ struct FoodDetailView: View {
     
     private var actionButtons: some View {
         HStack(spacing: 10) {
-            QuantityControl(
-                quantity: $quantity,
-                onIncrement: {
-                    quantity += 1
-                },
-                onDecrement: {
-                    if quantity > 0 {
-                        quantity -= 1
-                    }
-                },
-                buttonSize: 40,
-                iconSize: 15,
-                fontSize: 25
-            )
-            .padding(.vertical, 10)
-            .foregroundStyle(Color("newblek"))
-            
-            Button(action: addToCart) {
-                Text(buttonText)
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 220, height: 50)
-                    .background(Color.colorPrimary)
-                    .cornerRadius(100)
+            if isAvailableToday {
+                QuantityControl(
+                    quantity: $quantity,
+                    onIncrement: {
+                        quantity += 1
+                    },
+                    onDecrement: {
+                        if quantity > 0 {
+                            quantity -= 1
+                        }
+                    },
+                    buttonSize: 40,
+                    iconSize: 15,
+                    fontSize: 25
+                )
+                .padding(.vertical, 10)
+                .foregroundStyle(Color("newblek"))
+
+                Button(action: addToCart) {
+                    Text(buttonText)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(width: 220, height: 50)
+                        .background(Color.colorPrimary)
+                        .cornerRadius(100)
+                }
+                .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
+                .disabled(quantity <= 0)
+            } else {
+                Button(action: {}) {
+                    Text("Not Available Today")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 50)
+                        .background(Color.gray)
+                        .cornerRadius(100)
+                }
+                .disabled(true)
             }
-            .frame(maxWidth: UIScreen.main.bounds.width * 0.7)
-            .disabled(quantity <= 0)
         }
         .padding(.bottom, 20)
     }
-    
+
     // Computed property to determine button text
     private var buttonText: String {
         print("initialQuantity: \(initialQuantity), quantity: \(quantity)")

@@ -7,7 +7,7 @@ class HistoryManager {
         modelContext: ModelContext,
         foodData: [UUID: (price: Int, calories: Int, protein: Int, carbs: Int, fiber: Int, fat: Int)]
     ) {
-        var totals = (price: 0, calories: 0, protein: 0, carbs: 0, fiber: 0, fat: 0)
+        var totals = (price: 0, calories: 0, protein: 0, carbs: 0, fiber: 0, fat: 0, totalQuantity: 0)
         
         for (itemID, quantity) in cart {
             if let data = foodData[itemID] {
@@ -17,6 +17,7 @@ class HistoryManager {
                 totals.carbs += data.carbs * quantity
                 totals.fiber += data.fiber * quantity
                 totals.fat += data.fat * quantity
+                totals.totalQuantity += quantity
             }
         }
         
@@ -27,7 +28,8 @@ class HistoryManager {
             totalProtein: totals.protein,
             totalCarbs: totals.carbs,
             totalFiber: totals.fiber,
-            totalFat: totals.fat
+            totalFat: totals.fat,
+            totalQuantity: totals.totalQuantity
         )
         
         modelContext.insert(newRecord)

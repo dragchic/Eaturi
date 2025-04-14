@@ -56,7 +56,7 @@ struct HistoryDetailView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                             
-                            Text("\(record.cart.count) items · Rp \(record.totalPrice)")
+                            Text("\(record.totalQuantity) items · Rp \(record.totalPrice)")
                                 .font(.title3)
                                 .foregroundColor(.secondary)
                         }
@@ -206,17 +206,54 @@ struct FoodItemView: View {
                 Text("\(quantity) × Rp \(food.price)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                
-                Text("\(food.calories * quantity) kcal")
-                    .font(.caption)
-                    .foregroundColor(.orange)
+
+                HStack(spacing: 10) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "circle.hexagongrid.fill")
+                            .font(.caption)
+                            .foregroundColor(.yellow)
+                        Text("\(food.fat * quantity)g")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 1) {
+                        Image(systemName: "bolt.fill")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                        Text("\(food.protein * quantity)g")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                    
+                    HStack(spacing: 3) {
+                        Image(systemName:"chart.pie.fill")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                        Text("\(food.carbs * quantity)g")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding(.top, 3)
             }
             
             Spacer()
             
-            Text("Rp \(food.price * quantity)")
-                .font(.headline)
-                .foregroundColor(Color("colorPrimary"))
+            HStack(spacing: 4) {
+                Image(systemName:"flame.fill")
+                    .foregroundColor(.orange)
+                    .font(.footnote)
+                Text("\(food.calories * quantity) kcal")
+                    .font(.footnote)
+                    .fontWeight(.medium)
+                    .foregroundColor(.secondary)
+            }
+            .padding(.leading, 3)
+            
         }
         .padding()
         .background(Color.white)

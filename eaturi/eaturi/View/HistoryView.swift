@@ -9,7 +9,7 @@ struct HistoryView: View {
     var onPickAgain: ([UUID: Int]) -> Void
     var body: some View {
        
-            ZStack {
+        ZStack {
                 LinearGradient(
                     gradient: Gradient(stops: [
                         .init(color: Color("colorSecondary"), location: 0.0),
@@ -20,44 +20,51 @@ struct HistoryView: View {
                     endPoint: .bottom
                 )
                 .ignoresSafeArea(edges: .top)
-                VStack {
-                    HStack{
+                
+                VStack(spacing: 0) {
+                    // Top header
+                    HStack {
                         Text("History")
                             .font(.title)
                             .bold()
                             .foregroundColor(.blackGray)
                             .padding(.leading, 16)
-                    
                         Spacer()
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 20)
                     
-            
                     if historyRecords.isEmpty {
+                        // Centered message when empty
+                        Spacer()
                         Text("No history records found")
                             .foregroundColor(.gray)
                             .padding()
+                        Spacer()
                     } else {
+                        // ScrollView of history
                         ScrollView {
-                            ForEach(historyRecords) { record in
-                                HistoryCardView(record: record, onPickAgain: onPickAgain)
-                                    .contextMenu {
-                                        Button(role: .destructive) {
-                                            modelContext.delete(record)
-                                        } label: {
-                                            Label("Delete", systemImage: "trash")
+                            VStack(spacing: 16) {
+                                ForEach(historyRecords) { record in
+                                    HistoryCardView(record: record, onPickAgain: onPickAgain)
+                                        .contextMenu {
+                                            Button(role: .destructive) {
+                                                modelContext.delete(record)
+                                            } label: {
+                                                Label("Delete", systemImage: "trash")
+                                            }
                                         }
-                                    }
+                                }
                             }
+                            .padding(.top)
                         }
                     }
                 }
-                .padding()
-                
+                .padding(.horizontal)
                 .safeAreaInset(edge: .top) {
                     Color.clear.frame(height: 60)
                 }
             }
-        
     }
 }
 

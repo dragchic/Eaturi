@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct PopularCardView: View {
+    let isAvailable: Bool
     @Binding var item: FoodModel
 
     var body: some View {
@@ -22,15 +23,16 @@ struct PopularCardView: View {
    
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
-                        .font(.title3)
+                        .font(.body)
                         .fontWeight(.medium)
                         .lineLimit(1)
                         .padding(.top, 5)
                     HStack(spacing: 4) {
                         Image(systemName:"flame.fill")
+                            .font(.subheadline)
                             .foregroundColor(.orange)
                         Text("\(item.calories) kcal")
-                            .font(.system(size: 15))
+                            .font(.subheadline)
                             .fontWeight(.semibold)
                             .foregroundColor(.secondary)
                     }
@@ -38,30 +40,30 @@ struct PopularCardView: View {
                     HStack(spacing: 5) {
                         HStack(spacing: 2) {
                             Image(systemName: "circle.hexagongrid.fill")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .foregroundColor(.yellow)
                             Text("\(item.fat)g")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
                         
                         HStack(spacing: 3) {
                             Image(systemName: "bolt.fill")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .foregroundColor(.red)
                             Text("\(item.protein)g")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
                         
                         HStack(spacing: 3) {
                             Image(systemName:"chart.pie.fill")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .foregroundColor(.blue)
                             Text("\(item.carbs)g")
-                                .font(.system(size: 11))
+                                .font(.caption2)
                                 .fontWeight(.medium)
                                 .foregroundColor(.secondary)
                         }
@@ -73,6 +75,8 @@ struct PopularCardView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .grayscale(isAvailable ? 0 : 1)
+        .opacity(isAvailable ? 1 : 0.7)
     }
 }
 
