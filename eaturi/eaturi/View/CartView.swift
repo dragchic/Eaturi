@@ -122,7 +122,15 @@ struct CartView: View {
                     }
                     
                     Button(action: {
-                            saveToHistory()
+                        saveToHistory()
+                        iOSSessionManager.shared.setup()
+                        
+                        let foods = SharedDefaultsManager.fetchTopFoods()
+                        iOSSessionManager.shared.sendTopFoodsToWatch(foods)
+                        
+                        iOSSessionManager.shared.sendNutritionDataToWatch(healthManager: healthManager)
+                        
+                        iOSSessionManager.shared.updateApplicationContext(with: healthManager)
                     }) {
                         Text("Save to History")
                             .font(.system(size: UIFontMetrics.default.scaledValue(for: 20)))
@@ -194,6 +202,12 @@ struct CartView: View {
             modelContext: modelContext,
             foodData: foodData
         )
+        
+        print("📦 Total Calories: \(totalCalories) kcal")
+        print("🥩 Protein: \(totalProtein) g")
+        print("🍞 Carbs: \(totalCarbs) g")
+        print("🌱 Fiber: \(totalFiber) g")
+        print("🧈 Fat: \(totalFat) g")
         
         healthManager.saveNutrition(value: Double(totalCalories), unit: .kilocalorie(), typeIdentifier: .dietaryEnergyConsumed)
         healthManager.saveNutrition(value: Double(totalFat), unit: .gram(), typeIdentifier: .dietaryFatTotal)

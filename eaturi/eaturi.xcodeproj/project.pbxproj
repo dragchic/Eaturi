@@ -6,20 +6,206 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E7C050912DDA5D03004B4DE2 /* EaturiIntents.appex in Embed ExtensionKit Extensions */ = {isa = PBXBuildFile; fileRef = E7C050882DDA5D02004B4DE2 /* EaturiIntents.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E7ECF8462DD50E52007A5687 /* Eaturi_WatchOS Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E7ECF6192DD1B4DD007A5687 /* Eaturi_WatchOS Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E7C0508F2DDA5D03004B4DE2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EBF5B0D2D8BC6D200994724 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7C050872DDA5D02004B4DE2;
+			remoteInfo = EaturiIntents;
+		};
+		E7ECF6292DD1B4DE007A5687 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EBF5B0D2D8BC6D200994724 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7ECF6182DD1B4DD007A5687;
+			remoteInfo = "Eaturi_WatchOS Watch App";
+		};
+		E7ECF6332DD1B4DE007A5687 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EBF5B0D2D8BC6D200994724 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7ECF6182DD1B4DD007A5687;
+			remoteInfo = "Eaturi_WatchOS Watch App";
+		};
+		E7ECF83D2DD50B07007A5687 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4EBF5B0D2D8BC6D200994724 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E7ECF6182DD1B4DD007A5687;
+			remoteInfo = "Eaturi_WatchOS Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E7C050962DDA5D03004B4DE2 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				E7C050912DDA5D03004B4DE2 /* EaturiIntents.appex in Embed ExtensionKit Extensions */,
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF8422DD50BDF007A5687 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				E7ECF8462DD50E52007A5687 /* Eaturi_WatchOS Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		4EC1B3322DA35801007138A7 /* eaturi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = eaturi.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7C050882DDA5D02004B4DE2 /* EaturiIntents.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.extensionkit-extension"; includeInIndex = 0; path = EaturiIntents.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7ECF6192DD1B4DD007A5687 /* Eaturi_WatchOS Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Eaturi_WatchOS Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7ECF6282DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Eaturi_WatchOS Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7ECF6322DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Eaturi_WatchOS Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E7C050952DDA5D03004B4DE2 /* Exceptions for "EaturiIntents" folder in "EaturiIntents" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E7C050872DDA5D02004B4DE2 /* EaturiIntents */;
+		};
+		E7C050972DDA5D3B004B4DE2 /* Exceptions for "EaturiIntents" folder in "eaturi" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ShowTopFoodsIntent.swift,
+			);
+			target = 4EBF5B142D8BC6D200994724 /* eaturi */;
+		};
+		E7C0509A2DDA5DE6004B4DE2 /* Exceptions for "eaturi" folder in "EaturiIntents" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				HealthManager.swift,
+				Model/FoodModel.swift,
+				Model/HistoryRecord.swift,
+				SharedDefaultsManager.swift,
+				View/CalendarView.swift,
+				View/Component/CalorieArcView.swift,
+				View/Component/NutritionBox.swift,
+				View/FoodHighestList.swift,
+				View/NutritionHeaderSection.swift,
+				View/NutritionIntake.swift,
+				View/NutritionOverview.swift,
+				View/ProfileView.swift,
+			);
+			target = E7C050872DDA5D02004B4DE2 /* EaturiIntents */;
+		};
+		E7C297D42DD6C6FD003189AC /* Exceptions for "eaturi" folder in "eaturi" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4EBF5B142D8BC6D200994724 /* eaturi */;
+		};
+		E7ECF6442DD2D5D0007A5687 /* Exceptions for "eaturi" folder in "Eaturi_WatchOS Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				HealthManager.swift,
+				SharedDefaultsManager.swift,
+				View/Component/CalorieArcView.swift,
+				View/Component/NutritionBox.swift,
+				View/NutritionIntake.swift,
+			);
+			target = E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */;
+		};
+		E7ECF6472DD2DD78007A5687 /* Exceptions for "Eaturi_WatchOS Watch App" folder in "Eaturi_WatchOS Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Preview Content/Preview Assets.xcassets",
+			);
+			target = E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4EBF5B172D8BC6D200994724 /* eaturi */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E7C297D42DD6C6FD003189AC /* Exceptions for "eaturi" folder in "eaturi" target */,
+				E7ECF6442DD2D5D0007A5687 /* Exceptions for "eaturi" folder in "Eaturi_WatchOS Watch App" target */,
+				E7C0509A2DDA5DE6004B4DE2 /* Exceptions for "eaturi" folder in "EaturiIntents" target */,
+			);
 			path = eaturi;
+			sourceTree = "<group>";
+		};
+		E7C050892DDA5D02004B4DE2 /* EaturiIntents */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E7C050972DDA5D3B004B4DE2 /* Exceptions for "EaturiIntents" folder in "eaturi" target */,
+				E7C050952DDA5D03004B4DE2 /* Exceptions for "EaturiIntents" folder in "EaturiIntents" target */,
+			);
+			path = EaturiIntents;
+			sourceTree = "<group>";
+		};
+		E7ECF61A2DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E7ECF6472DD2DD78007A5687 /* Exceptions for "Eaturi_WatchOS Watch App" folder in "Eaturi_WatchOS Watch App" target */,
+			);
+			path = "Eaturi_WatchOS Watch App";
+			sourceTree = "<group>";
+		};
+		E7ECF62B2DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Eaturi_WatchOS Watch AppTests";
+			sourceTree = "<group>";
+		};
+		E7ECF6352DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Eaturi_WatchOS Watch AppUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		4EBF5B122D8BC6D200994724 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7C050852DDA5D02004B4DE2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6162DD1B4DD007A5687 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6252DD1B4DE007A5687 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF62F2DD1B4DE007A5687 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -34,7 +220,23 @@
 			children = (
 				4EBF5B172D8BC6D200994724 /* eaturi */,
 				4EC1B3322DA35801007138A7 /* eaturi.app */,
+				E7ECF6192DD1B4DD007A5687 /* Eaturi_WatchOS Watch App.app */,
+				E7ECF61A2DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */,
+				E7ECF6282DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests.xctest */,
+				E7ECF62B2DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests */,
+				E7ECF6322DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests.xctest */,
+				E7ECF6352DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests */,
+				E7C050892DDA5D02004B4DE2 /* EaturiIntents */,
+				E7ECF8452DD50E52007A5687 /* Frameworks */,
+				E7C050882DDA5D02004B4DE2 /* EaturiIntents.appex */,
 			);
+			sourceTree = "<group>";
+		};
+		E7ECF8452DD50E52007A5687 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -47,10 +249,14 @@
 				4EBF5B112D8BC6D200994724 /* Sources */,
 				4EBF5B122D8BC6D200994724 /* Frameworks */,
 				4EBF5B132D8BC6D200994724 /* Resources */,
+				E7ECF8422DD50BDF007A5687 /* Embed Watch Content */,
+				E7C050962DDA5D03004B4DE2 /* Embed ExtensionKit Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				E7ECF83E2DD50B07007A5687 /* PBXTargetDependency */,
+				E7C050902DDA5D03004B4DE2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				4EBF5B172D8BC6D200994724 /* eaturi */,
@@ -61,6 +267,96 @@
 			productName = eaturi;
 			productReference = 4EC1B3322DA35801007138A7 /* eaturi.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E7C050872DDA5D02004B4DE2 /* EaturiIntents */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7C050922DDA5D03004B4DE2 /* Build configuration list for PBXNativeTarget "EaturiIntents" */;
+			buildPhases = (
+				E7C050842DDA5D02004B4DE2 /* Sources */,
+				E7C050852DDA5D02004B4DE2 /* Frameworks */,
+				E7C050862DDA5D02004B4DE2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E7C050892DDA5D02004B4DE2 /* EaturiIntents */,
+			);
+			name = EaturiIntents;
+			packageProductDependencies = (
+			);
+			productName = EaturiIntents;
+			productReference = E7C050882DDA5D02004B4DE2 /* EaturiIntents.appex */;
+			productType = "com.apple.product-type.extensionkit-extension";
+		};
+		E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7ECF63A2DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch App" */;
+			buildPhases = (
+				E7ECF6152DD1B4DD007A5687 /* Sources */,
+				E7ECF6162DD1B4DD007A5687 /* Frameworks */,
+				E7ECF6172DD1B4DD007A5687 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E7ECF61A2DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */,
+			);
+			name = "Eaturi_WatchOS Watch App";
+			packageProductDependencies = (
+			);
+			productName = "Eaturi_WatchOS Watch App";
+			productReference = E7ECF6192DD1B4DD007A5687 /* Eaturi_WatchOS Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E7ECF6272DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7ECF63D2DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch AppTests" */;
+			buildPhases = (
+				E7ECF6242DD1B4DE007A5687 /* Sources */,
+				E7ECF6252DD1B4DE007A5687 /* Frameworks */,
+				E7ECF6262DD1B4DE007A5687 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E7ECF62A2DD1B4DE007A5687 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E7ECF62B2DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests */,
+			);
+			name = "Eaturi_WatchOS Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "Eaturi_WatchOS Watch AppTests";
+			productReference = E7ECF6282DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E7ECF6312DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7ECF6402DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch AppUITests" */;
+			buildPhases = (
+				E7ECF62E2DD1B4DE007A5687 /* Sources */,
+				E7ECF62F2DD1B4DE007A5687 /* Frameworks */,
+				E7ECF6302DD1B4DE007A5687 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E7ECF6342DD1B4DE007A5687 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E7ECF6352DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests */,
+			);
+			name = "Eaturi_WatchOS Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "Eaturi_WatchOS Watch AppUITests";
+			productReference = E7ECF6322DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -74,6 +370,20 @@
 				TargetAttributes = {
 					4EBF5B142D8BC6D200994724 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					E7C050872DDA5D02004B4DE2 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					E7ECF6182DD1B4DD007A5687 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					E7ECF6272DD1B4DE007A5687 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = E7ECF6182DD1B4DD007A5687;
+					};
+					E7ECF6312DD1B4DE007A5687 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = E7ECF6182DD1B4DD007A5687;
 					};
 				};
 			};
@@ -92,12 +402,44 @@
 			projectRoot = "";
 			targets = (
 				4EBF5B142D8BC6D200994724 /* eaturi */,
+				E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */,
+				E7ECF6272DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppTests */,
+				E7ECF6312DD1B4DE007A5687 /* Eaturi_WatchOS Watch AppUITests */,
+				E7C050872DDA5D02004B4DE2 /* EaturiIntents */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4EBF5B132D8BC6D200994724 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7C050862DDA5D02004B4DE2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6172DD1B4DD007A5687 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6262DD1B4DE007A5687 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6302DD1B4DE007A5687 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -114,7 +456,58 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E7C050842DDA5D02004B4DE2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6152DD1B4DD007A5687 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF6242DD1B4DE007A5687 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E7ECF62E2DD1B4DE007A5687 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E7C050902DDA5D03004B4DE2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7C050872DDA5D02004B4DE2 /* EaturiIntents */;
+			targetProxy = E7C0508F2DDA5D03004B4DE2 /* PBXContainerItemProxy */;
+		};
+		E7ECF62A2DD1B4DE007A5687 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */;
+			targetProxy = E7ECF6292DD1B4DE007A5687 /* PBXContainerItemProxy */;
+		};
+		E7ECF6342DD1B4DE007A5687 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */;
+			targetProxy = E7ECF6332DD1B4DE007A5687 /* PBXContainerItemProxy */;
+		};
+		E7ECF83E2DD50B07007A5687 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E7ECF6182DD1B4DD007A5687 /* Eaturi_WatchOS Watch App */;
+			targetProxy = E7ECF83D2DD50B07007A5687 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		4EBF5B212D8BC6D200994724 /* Debug */ = {
@@ -248,6 +641,7 @@
 				DEVELOPMENT_TEAM = C78LH9D7KD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = eaturi/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Store nutritions intake";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -280,6 +674,7 @@
 				DEVELOPMENT_TEAM = C78LH9D7KD;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = eaturi/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Store nutritions intake";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -300,6 +695,202 @@
 			};
 			name = Release;
 		};
+		E7C050932DDA5D03004B4DE2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EaturiIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EaturiIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.EaturiIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E7C050942DDA5D03004B4DE2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EaturiIntents/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EaturiIntents;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.core.challenge.eaturi.EaturiIntents;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E7ECF63B2DD1B4DE007A5687 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-watch";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Eaturi_WatchOS Watch App/Eaturi_WatchOS Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Eaturi_WatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Eaturi-WatchOS-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Eaturi_WatchOS;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Store nutritions intake";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.core.challenge.eaturi;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+			};
+			name = Debug;
+		};
+		E7ECF63C2DD1B4DE007A5687 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-watch";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Eaturi_WatchOS Watch App/Eaturi_WatchOS Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Eaturi_WatchOS Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Eaturi-WatchOS-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Eaturi_WatchOS;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Store nutritions intake";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Store nutritions intake";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.core.challenge.eaturi;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.6;
+			};
+			name = Release;
+		};
+		E7ECF63E2DD1B4DE007A5687 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Eaturi_WatchOS Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Eaturi_WatchOS Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		E7ECF63F2DD1B4DE007A5687 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Eaturi_WatchOS Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Eaturi_WatchOS Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
+		E7ECF6412DD1B4DE007A5687 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Eaturi_WatchOS Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		E7ECF6422DD1B4DE007A5687 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = C78LH9D7KD;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.core.challenge.eaturi.Eaturi-WatchOS-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "Eaturi_WatchOS Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -317,6 +908,42 @@
 			buildConfigurations = (
 				4EBF5B242D8BC6D200994724 /* Debug */,
 				4EBF5B252D8BC6D200994724 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7C050922DDA5D03004B4DE2 /* Build configuration list for PBXNativeTarget "EaturiIntents" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7C050932DDA5D03004B4DE2 /* Debug */,
+				E7C050942DDA5D03004B4DE2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7ECF63A2DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7ECF63B2DD1B4DE007A5687 /* Debug */,
+				E7ECF63C2DD1B4DE007A5687 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7ECF63D2DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7ECF63E2DD1B4DE007A5687 /* Debug */,
+				E7ECF63F2DD1B4DE007A5687 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7ECF6402DD1B4DE007A5687 /* Build configuration list for PBXNativeTarget "Eaturi_WatchOS Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7ECF6412DD1B4DE007A5687 /* Debug */,
+				E7ECF6422DD1B4DE007A5687 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

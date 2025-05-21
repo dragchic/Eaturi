@@ -56,6 +56,7 @@ struct eaturiApp: App {
     }
 }
 
+
 // Function to load JSON from foodData.json (defined outside the App struct)
 func loadFoodData() -> [FoodModel] {
     guard let url = Bundle.main.url(forResource: "foodData", withExtension: "json") else {
