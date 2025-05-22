@@ -698,6 +698,7 @@
 		E7C050932DDA5D03004B4DE2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EaturiIntents/EaturiIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C78LH9D7KD;
@@ -723,6 +724,7 @@
 		E7C050942DDA5D03004B4DE2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EaturiIntents/EaturiIntents.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C78LH9D7KD;

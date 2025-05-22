@@ -8,8 +8,6 @@
 import Foundation
 import WatchConnectivity
 
-import Foundation
-import WatchConnectivity
 
 struct SharedDefaultsManager {
     static let suiteName = "group.com.grachia.eaturi"
@@ -57,4 +55,6 @@ struct SharedDefaultsManager {
 
         return (try? JSONDecoder().decode([FoodItem].self, from: data)) ?? []
     }
+    
+
 }

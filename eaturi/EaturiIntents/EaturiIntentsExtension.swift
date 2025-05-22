@@ -12,7 +12,7 @@ struct EaturiIntentsExtension: AppIntentsExtension {
     static var intentTypes: [any AppIntent.Type] {
         [
             ShowTopFoodsIntent.self,
-     
+            RemainingCaloriesIntent.self
         ]
     }
 }

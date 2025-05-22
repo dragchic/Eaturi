@@ -74,7 +74,7 @@ class HealthManager: ObservableObject {
         getBiologicalSex()
         //        getMostRecentHeight()
         getHeight()
-//        getMostRecentWeight()
+        //        getMostRecentWeight()
         getWeight()
         getActiveEnergyBurnedToday()
         getDateOfBirth()
@@ -82,7 +82,15 @@ class HealthManager: ObservableObject {
         getDailyProtein()
         getDailyFat()
         getDailyCarbs()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            self.calculateTDEE() // ini otomatis akan memanggil sync
+            self.syncToSharedDefaults()
+        }
     }
+    
+    
+    
     
     func fetchDailyData(for date: Date) {
         // Batalkan fetch sebelumnya
@@ -394,6 +402,19 @@ class HealthManager: ObservableObject {
     //
     //    }
     
+    func syncToSharedDefaults() {
+        guard let defaults = UserDefaults(suiteName: SharedDefaultsManager.suiteName) else { return }
+        
+        print("🔄 Syncing to SharedDefaults...")
+        print("TDEE: \(TDEE ?? 0)")
+        print("Calories Consumed: \(dailyCaloriesIntake)")
+        print("Calories Burned: \(dailyCaloriesBurned)")
+        
+        defaults.set(TDEE ?? 0, forKey: "TDEE")
+        defaults.set(dailyCaloriesIntake, forKey: "caloriesConsumed")
+        defaults.set(dailyCaloriesBurned, forKey: "caloriesBurned")
+    }
+    
     private func fetchMostRecentQuantitySample(typeIdentifier: HKQuantityTypeIdentifier, completion: @escaping (HKQuantitySample?) -> Void) {
         guard let quantityType = HKObjectType.quantityType(forIdentifier: typeIdentifier) else {
             completion(nil)
@@ -441,8 +462,9 @@ class HealthManager: ObservableObject {
         }
     }
     
+
     
-    func needsManualInput() -> Bool {
-        return biologicalSex == nil || height == nil || weight == nil
-    }
+//    func needsManualInput() -> Bool {
+//        return biologicalSex == nil || height == nil || weight == nil
+//    }
 }
